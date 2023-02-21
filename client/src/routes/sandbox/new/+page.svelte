@@ -1,24 +1,13 @@
 <script lang="ts">
-	type Unit = {
-		cost: number;
-		id: number;
-		selected: boolean;
-	};
+	import { dummyUnits, units } from '$lib/stores/sandbox/unitStore';
+	import { squads } from '$lib/stores/sandbox/squadStore';
+	import SquadSelection from '$lib/components/sandbox/SquadSelection.svelte';
+
 	let playerTurn = 1;
 	let currentSquad: Set<Unit> = new Set();
 	let totalCost = 0;
 	const maxCost = 15;
 	const maxPlayers = 2;
-
-	let eligibleUnits = [...Array(25).keys()].map((n) => {
-		return {
-			cost: (n % 3) + 2,
-			id: n,
-			selected: false
-		};
-	});
-
-	const squads: Record<number, Array<Unit>> = {};
 
 	const toggleUnitSelected = (unit: Unit) => {
 		if (unit.selected) {
@@ -32,22 +21,15 @@
 				unit.selected = !unit.selected;
 			}
 		}
-		eligibleUnits = eligibleUnits;
+		units.set($units);
 		currentSquad = currentSquad;
 	};
 
 	const selectSquad = () => {
-		squads[playerTurn] = Array.from(currentSquad);
-		console.log(squads);
+		$squads[playerTurn] = Array.from(currentSquad);
 		currentSquad = new Set();
 		totalCost = 0;
-		eligibleUnits = [...Array(25).keys()].map((n) => {
-			return {
-				cost: (n % 3) + 2,
-				id: n,
-				selected: false
-			};
-		});
+		units.set(dummyUnits());
 		playerTurn++;
 	};
 </script>
@@ -66,37 +48,15 @@
 					{/key}
 				</div>
 			</div>
-			<div class="grid grid-cols-5 gap-6 w-3/4 mx-auto mb-6">
-				{#each eligibleUnits as unit}
-					{#if unit.selected}
-						<div
-							class="border border-slate-800 rounded py-6 col-span-1 bg-slate-200"
-							on:click={() => toggleUnitSelected(unit)}
-							on:keypress={() => toggleUnitSelected(unit)}
-						>
-							<p>{unit.id} (selected)</p>
-							<p>Cost: {unit.cost}</p>
-						</div>
-					{:else}
-						<div
-							class="border border-slate-300 rounded py-6 col-span-1"
-							on:click={() => toggleUnitSelected(unit)}
-							on:keypress={() => toggleUnitSelected(unit)}
-						>
-							<p>{unit.id}</p>
-							<p>Cost: {unit.cost}</p>
-						</div>
-					{/if}
-				{/each}
-			</div>
+			<SquadSelection {toggleUnitSelected} />
 			<button on:click={selectSquad} class="border border-slate-400 p-5 rounded"
 				>Select Squad</button
 			>
 		{:else}
 			<div>
 				<h3>Squads</h3>
-				<div>Player 1: {squads[1].map((x) => JSON.stringify(x))}</div>
-				<div>Player 2: {squads[2].map((x) => JSON.stringify(x))}</div>
+				<div>Player 1: {$squads[1].map((x) => JSON.stringify(x))}</div>
+				<div>Player 2: {$squads[2].map((x) => JSON.stringify(x))}</div>
 			</div>
 			<button class="border border-slate-400 p-5 rounded">Start Game!</button>
 		{/if}
