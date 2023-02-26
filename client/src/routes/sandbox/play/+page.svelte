@@ -3,7 +3,10 @@
 	import { onMount } from 'svelte';
 	import Arena from '$lib/components/sandbox/play/Arena.svelte';
 
+	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
+
 	let initSquads: Record<number, Array<Unit>>;
+	const minaArenaClient = new MinaArenaClient();
 
 	onMount(async () => {
 		console.log('here');
