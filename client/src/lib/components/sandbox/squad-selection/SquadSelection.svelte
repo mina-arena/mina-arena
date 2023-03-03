@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { units } from '$lib/stores/sandbox/unitStore';
+	import { playerUnits } from '$lib/stores/sandbox/playerUnitStore';
 	import DraftNewUnits from './DraftNewUnits.svelte';
 	import MyUnits from './MyUnits.svelte';
 
@@ -11,6 +12,12 @@
 <div class="grid grid-cols-5 gap-6 w-3/4 mx-auto">
 	<div class="border border-slate-300 rounded py-6 col-span-1">
 		<div
+			on:click={() => {
+				pageSelected = 'PLAYER_UNIT';
+			}}
+			on:keypress={() => {
+				pageSelected = 'PLAYER_UNIT';
+			}}
 			class={pageSelected === 'PLAYER_UNIT'
 				? 'border border-slate-600 rounded p-1 bg-slate-100'
 				: 'border border-slate-300 rounded p-1'}
@@ -18,6 +25,12 @@
 			My Units
 		</div>
 		<div
+			on:click={() => {
+				pageSelected = 'UNIT';
+			}}
+			on:keypress={() => {
+				pageSelected = 'UNIT';
+			}}
 			class={pageSelected === 'UNIT'
 				? 'border border-slate-600 rounded p-1 bg-slate-100'
 				: 'border border-slate-300 rounded p-1'}

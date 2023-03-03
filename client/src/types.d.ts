@@ -1,17 +1,23 @@
+type Player = {
+  id: number;
+  name: string;
+  minaPublicKey: string;
+}
+
 type Unit = {
-  id: number!;
-  name: string!;
-  attackPower: number!;
-  armor: number!;
-  maxHealth: number!;
-  movementSpeed: number!;
+  id: number;
+  name: string;
+  attackPower: number;
+  armor: number;
+  maxHealth: number;
+  movementSpeed: number;
 };
 
 type PlayerUnit = {
-  id: number!;
-  player: string!;
+  id: number;
+  player: Player;
   name: string;
-  unit: Unit!;
+  unit: Unit;
 };
 
 type Squad = {

@@ -1,6 +1,7 @@
 import { ApolloClient, HttpLink } from '@apollo/client/core/index.js';
 import { InMemoryCache } from '@apollo/client/cache/index.js';
 import { GetUnitsQuery } from './queries/get-units';
+import { GetPlayerUnitsQuery } from './queries/get-player-units';
 
 export class MinaArenaClient {
   client
@@ -13,6 +14,7 @@ export class MinaArenaClient {
     const link = new HttpLink({
       uri: `${import.meta.env.VITE_BACKEND_SERVER_URL}/graphql/`
     });
+
 
     const client = new ApolloClient({
       link,
@@ -33,9 +35,9 @@ export class MinaArenaClient {
 
   async getPlayerUnits(): Promise<PlayerUnit[]> {
     const { data } = await this.client.query({
-      query: GetUnitsQuery,
+      query: GetPlayerUnitsQuery,
     });
 
-    return data;
+    return data.playerUnits;
   }
 }
