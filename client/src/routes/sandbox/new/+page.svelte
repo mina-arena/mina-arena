@@ -7,7 +7,9 @@
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 
 	let playerTurn = 1;
-	let currentSquad: Squad = { units: [], playerUnits: [] };
+	const player1 = 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL';
+	const player2 = 'B62qpq9xPZGJvv2CwhRBsYGb9yHPaar6HWSJ8rC3s54mX7f8X9wX15s';
+
 	let totalCost = 0;
 	const maxCost = 25;
 	const maxPlayers = 2;
@@ -22,15 +24,15 @@
 	});
 
 	const selectSquad = () => {
-		$squads[playerTurn] = currentSquad;
-		currentSquad = { units: [], playerUnits: [] };
-		totalCost = 0;
 		playerTurn++;
+		currentPlayer = player2;
 	};
 
 	const startGame = () => {
 		goto('/sandbox/play');
 	};
+
+	let currentPlayer = player1;
 </script>
 
 <div class="text-center">
@@ -38,16 +40,16 @@
 	<div>
 		{#if playerTurn <= maxPlayers}
 			<h3 class="text-xl">Select your squad</h3>
-			<p>Drafting for Player{playerTurn}</p>
-			<SquadSelection />
+			<p>Drafting for {currentPlayer}</p>
+			<SquadSelection player={currentPlayer} />
 			<button on:click={selectSquad} class="border border-slate-400 p-5 rounded"
 				>Select Squad</button
 			>
 		{:else}
 			<div>
 				<h3>Squads</h3>
-				<div>Player 1: {$squads[1].map((x) => JSON.stringify(x))}</div>
-				<div>Player 2: {$squads[2].map((x) => JSON.stringify(x))}</div>
+				<div>Player 1: {JSON.stringify($squads[player1])}</div>
+				<div>Player 2: {JSON.stringify($squads[player2])}</div>
 			</div>
 			<button class="border border-slate-400 p-5 rounded" on:click={startGame}>Start Game!</button>
 		{/if}

@@ -20,26 +20,16 @@
 		return cost;
 	};
 
-	let player = 1;
-	const player1 = 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL';
-	const player2 = 'B62qpq9xPZGJvv2CwhRBsYGb9yHPaar6HWSJ8rC3s54mX7f8X9wX15s';
-
-	const currentPlayer = () => {
-		if (player === 1) {
-			return player1;
-		} else {
-			return player2;
-		}
-	};
+	export let player: string;
 
 	const currentSquad = (): Squad => {
-		return $squads[currentPlayer()];
+		return $squads[player];
 	};
 </script>
 
 <div>
 	Your Squad:
-	{#key $squads[currentPlayer()]}
+	{#key $squads[player]}
 		<div class="py-10 mb-10">
 			<div class="grid grid-cols-5 gap-6mx-auto">
 				<div class="col-span-1">Total Cost: {totalCost()}</div>
@@ -85,9 +75,9 @@
 
 	<div class="border border-slate-300 rounded py-6 col-span-4 pl-6">
 		{#if pageSelected === 'UNIT'}
-			<DraftNewUnits player={currentPlayer()} />
+			<DraftNewUnits {player} />
 		{:else if pageSelected === 'PLAYER_UNIT'}
-			<MyUnits player={currentPlayer()} />
+			<MyUnits {player} />
 		{/if}
 	</div>
 </div>
