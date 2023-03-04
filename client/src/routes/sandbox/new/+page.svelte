@@ -10,8 +10,6 @@
 	const player1 = 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL';
 	const player2 = 'B62qpq9xPZGJvv2CwhRBsYGb9yHPaar6HWSJ8rC3s54mX7f8X9wX15s';
 
-	let totalCost = 0;
-	const maxCost = 25;
 	const maxPlayers = 2;
 	const minaArenaClient = new MinaArenaClient();
 
@@ -24,8 +22,13 @@
 	});
 
 	const selectSquad = () => {
-		playerTurn++;
-		currentPlayer = player2;
+		if (currentPlayer === player1) {
+			minaArenaClient.createGamePieces(player1, $squads[player1]);
+			playerTurn++;
+			currentPlayer = player2;
+		} else {
+			minaArenaClient.createGamePieces(player2, $squads[player2]);
+		}
 	};
 
 	const startGame = () => {

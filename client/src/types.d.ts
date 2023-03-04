@@ -30,3 +30,12 @@ type Squad = {
   units: Draftee[];
   playerUnits: PlayerUnit[];
 }
+
+type CreateGamePieceInput = {
+  playerUnitId: number
+} | {
+  createPlayerUnit: {
+    unitId: number,
+    name: string
+  }
+}
