@@ -9,7 +9,7 @@
 	let playerTurn = 1;
 	let currentSquad: Squad = { units: [], playerUnits: [] };
 	let totalCost = 0;
-	const maxCost = 15;
+	const maxCost = 25;
 	const maxPlayers = 2;
 	const minaArenaClient = new MinaArenaClient();
 
@@ -39,14 +39,6 @@
 		{#if playerTurn <= maxPlayers}
 			<h3 class="text-xl">Select your squad</h3>
 			<p>Drafting for Player{playerTurn}</p>
-			<div class="py-10 mb-10">
-				<div class="grid grid-cols-5 gap-6mx-auto">
-					<div class="col-span-1">Total Cost: {totalCost}</div>
-					<!-- {#key currentSquad}
-						<div class="col-span-4">Current Squad {Array.from(currentSquad).map((u) => u.id)}</div>
-					{/key} -->
-				</div>
-			</div>
 			<SquadSelection />
 			<button on:click={selectSquad} class="border border-slate-400 p-5 rounded"
 				>Select Squad</button

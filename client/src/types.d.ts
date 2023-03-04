@@ -13,6 +13,12 @@ type Unit = {
   movementSpeed: number;
 };
 
+type Draftee = {
+  unit: Unit;
+  name: string;
+  player: string;
+}
+
 type PlayerUnit = {
   id: number;
   player: Player;
@@ -21,6 +27,6 @@ type PlayerUnit = {
 };
 
 type Squad = {
-  units: Unit[];
-  playerUnits: [];
+  units: Draftee[];
+  playerUnits: PlayerUnit[];
 }
