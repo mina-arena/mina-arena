@@ -13,6 +13,15 @@ type Unit = {
   movementSpeed: number;
 };
 
+<<<<<<< HEAD
+type Draftee = {
+  unit: Unit;
+  name: string;
+  player: string;
+}
+
+=======
+>>>>>>> main
 type PlayerUnit = {
   id: number;
   player: Player;
@@ -21,6 +30,15 @@ type PlayerUnit = {
 };
 
 type Squad = {
-  units: Unit[];
-  playerUnits: [];
+  units: Draftee[];
+  playerUnits: PlayerUnit[];
+}
+
+type CreateGamePieceInput = {
+  playerUnitId: number
+} | {
+  createPlayerUnit: {
+    unitId: number,
+    name: string
+  }
 }

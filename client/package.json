@@ -37,6 +37,7 @@
 	"type": "module",
 	"dependencies": {
 		"@apollo/client": "^3.7.9",
-		"graphql": "^16.6.0"
+		"graphql": "^16.6.0",
+		"svelte-modals": "^1.2.1"
 	}
 }
