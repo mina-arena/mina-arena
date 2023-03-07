@@ -13,6 +13,15 @@ type Unit = {
   movementSpeed: number;
 };
 
+<<<<<<< Updated upstream
+=======
+type Draftee = {
+  unit: Unit;
+  name: string;
+  player: string;
+}
+
+>>>>>>> Stashed changes
 type PlayerUnit = {
   id: number;
   player: Player;
