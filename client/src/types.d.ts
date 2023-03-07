@@ -13,12 +13,15 @@ type Unit = {
   movementSpeed: number;
 };
 
+<<<<<<< HEAD
 type Draftee = {
   unit: Unit;
   name: string;
   player: string;
 }
 
+=======
+>>>>>>> main
 type PlayerUnit = {
   id: number;
   player: Player;
