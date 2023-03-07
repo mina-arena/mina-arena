@@ -13,15 +13,12 @@ type Unit = {
   movementSpeed: number;
 };
 
-<<<<<<< Updated upstream
-=======
 type Draftee = {
   unit: Unit;
   name: string;
   player: string;
 }
 
->>>>>>> Stashed changes
 type PlayerUnit = {
   id: number;
   player: Player;
@@ -30,6 +27,15 @@ type PlayerUnit = {
 };
 
 type Squad = {
-  units: Unit[];
-  playerUnits: [];
+  units: Draftee[];
+  playerUnits: PlayerUnit[];
+}
+
+type CreateGamePieceInput = {
+  playerUnitId: number
+} | {
+  createPlayerUnit: {
+    unitId: number,
+    name: string
+  }
 }

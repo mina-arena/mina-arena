@@ -13,6 +13,10 @@ export const GetPlayerUnitsQuery = gql`
       unit {
         id
         name
+        attackPower
+        armor
+        maxHealth
+        movementSpeed
       }
     }
   }

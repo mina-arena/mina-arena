@@ -20,6 +20,9 @@
 	let lastX = 0;
 	let lastY = 0;
 
+	const player1 = 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL';
+	const player2 = 'B62qpq9xPZGJvv2CwhRBsYGb9yHPaar6HWSJ8rC3s54mX7f8X9wX15s';
+
 	onMount(() => {
 		canvas = document.getElementById('canvas') as HTMLCanvasElement;
 		ctx = canvas.getContext('2d')!;
@@ -28,13 +31,13 @@
 		offsetLeft = canvas.offsetLeft;
 
 		let i = 10;
-		$squads[1].forEach((unit) => {
+		$squads[player1].playerUnits.forEach((unit) => {
 			makePiece(i, 30, 50, 25, 'skyblue');
 			i += 85;
 		});
 
 		i = 10;
-		$squads[2].forEach((unit) => {
+		$squads[player2].playerUnits.forEach((unit) => {
 			makePiece(i, 500, 50, 25, 'pink');
 			i += 85;
 		});
