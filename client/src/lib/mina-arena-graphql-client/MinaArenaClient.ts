@@ -1,7 +1,10 @@
 import { ApolloClient, HttpLink } from '@apollo/client/core/index.js';
 import { InMemoryCache } from '@apollo/client/cache/index.js';
+import { GetGameQuery } from './queries/get-game';
 import { GetUnitsQuery } from './queries/get-units';
 import { GetPlayerUnitsQuery } from './queries/get-player-units';
+import { CreateGameMut } from './queries/mut-create-game';
+import { StartGameMut } from './queries/mut-start-game';
 import { CreateGamePiecesMut } from './queries/mut-create-game-pieces';
 
 export class MinaArenaClient {
@@ -24,8 +27,16 @@ export class MinaArenaClient {
     return client;
   }
 
+  async getGame(gameId: number): Promise<Game> {
+    const { data } = await this.client.query({
+      query: GetGameQuery,
+      variables: { gameId }
+    });
+
+    return data.game;
+  }
+
   async getUnits(): Promise<Unit[]> {
-    console.log("Getting Units...")
     const { data } = await this.client.query({
       query: GetUnitsQuery,
     });
@@ -34,15 +45,48 @@ export class MinaArenaClient {
     return data.units;
   }
 
-  async getPlayerUnits(): Promise<PlayerUnit[]> {
+  async getPlayerUnits(player: string): Promise<PlayerUnit[]> {
     const { data } = await this.client.query({
       query: GetPlayerUnitsQuery,
+      variables: {
+        player
+      }
     });
 
-    return data.playerUnits;
+    return data.player.playerUnits;
   }
 
-  async createGamePieces(player: string, squad: Squad): Promise<number[]> {
+  async createGame(players: Array<string>): Promise<Game> {
+    const { data } = await this.client.mutate({
+      mutation: CreateGameMut,
+      variables: {
+        input: {
+          players: players.map((p, i) => {
+            return { minaPublicKey: p, name: '', playerNumber: i }
+          }),
+          arenaHeight: 550,
+          arenaWidth: 650
+        }
+      }
+    });
+
+    return data.createGame;
+  }
+
+  async startGame(gameId: number): Promise<Game> {
+    const { data } = await this.client.mutate({
+      mutation: StartGameMut,
+      variables: {
+        input: {
+          gameId
+        }
+      }
+    });
+
+    return data.startGame;
+  }
+
+  async createGamePieces(player: string, squad: Squad, gameId: number): Promise<number[]> {
     const { units, playerUnits } = squad;
     const gamePieceInputs: Array<CreateGamePieceInput> = [];
     playerUnits.forEach(playerUnit => {
@@ -53,7 +97,7 @@ export class MinaArenaClient {
     units.forEach(draftee => {
       gamePieceInputs.push({
         createPlayerUnit: {
-          unitId: draftee.unit.id,
+          unitId: Number(draftee.unit.id),
           name: draftee.name
         }
       })
@@ -61,7 +105,7 @@ export class MinaArenaClient {
     console.log({
       variables: {
         minaPublicKey: player,
-        gameId: 1,
+        gameId: gameId,
         gamePieces: gamePieceInputs
       }
     })
@@ -70,7 +114,7 @@ export class MinaArenaClient {
       variables: {
         input: {
           minaPublicKey: player,
-          gameId: 1,
+          gameId: gameId,
           gamePieces: gamePieceInputs
         }
       }

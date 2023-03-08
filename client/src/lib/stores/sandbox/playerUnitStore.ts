@@ -1,4 +1,4 @@
 import { writable } from 'svelte/store';
 
-const initPlayerUnits = new Array<PlayerUnit>;
+const initPlayerUnits: Record<string, Array<PlayerUnit>> = {};
 export const playerUnits = writable(initPlayerUnits);

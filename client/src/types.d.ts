@@ -4,6 +4,11 @@ type Player = {
   minaPublicKey: string;
 }
 
+type Game = {
+  id: number
+  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED'
+}
+
 type Unit = {
   id: number;
   name: string;

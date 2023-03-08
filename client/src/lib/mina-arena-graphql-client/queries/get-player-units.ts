@@ -1,22 +1,21 @@
 import { gql } from "@apollo/client/core/index.js"
 
 export const GetPlayerUnitsQuery = gql`
-  query GetPlayerUnits {
-    playerUnits {
+  query GetPlayerUnits($player: String!) {
+    player(minaPublicKey: $player) {
       id
       name
-      player {
-        id
-        name
-        minaPublicKey
-      }
-      unit {
-        id
-        name
-        attackPower
-        armor
-        maxHealth
-        movementSpeed
+      playerUnits {
+        id,
+        name,
+        unit {
+          id
+          name
+          attackPower
+          armor
+          maxHealth
+          movementSpeed
+        }
       }
     }
   }
