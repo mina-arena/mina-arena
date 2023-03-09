@@ -4,6 +4,11 @@ type Player = {
   minaPublicKey: string;
 }
 
+type Game = {
+  id: number
+  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED'
+}
+
 type Unit = {
   id: number;
   name: string;
@@ -13,15 +18,12 @@ type Unit = {
   movementSpeed: number;
 };
 
-<<<<<<< HEAD
 type Draftee = {
   unit: Unit;
   name: string;
   player: string;
 }
 
-=======
->>>>>>> main
 type PlayerUnit = {
   id: number;
   player: Player;
