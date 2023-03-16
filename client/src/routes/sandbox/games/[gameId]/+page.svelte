@@ -18,7 +18,7 @@
 	};
 
 	const refreshGame = async () => {
-		const game: Game = await minaArenaClient.getGame(currentGame.id);
+		const game: Game = await minaArenaClient.getGameStatus(currentGame.id);
 		currentGame = game;
 	};
 </script>

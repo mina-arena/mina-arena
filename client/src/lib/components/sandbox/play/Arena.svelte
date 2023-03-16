@@ -1,29 +1,33 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { squads } from '$lib/stores/sandbox/squadStore';
+	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
+	import { page } from '$app/stores';
 
-	type DrawnPiece = {
-		x: number;
-		y: number;
-		width: number;
-		height: number;
-		fill: string;
-	};
+	import { makePiece, drawAllPieces } from './utils';
+
+	const minaArenaClient = new MinaArenaClient();
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
 	let pieces: Array<DrawnPiece> = [];
 
+	let arenaWidth: number = 1;
+	let arenaHeight: number = 1;
+
 	let offsetTop: number;
 	let offsetLeft: number;
-	let mouseIsDown = false;
-	let lastX = 0;
-	let lastY = 0;
 
 	const player1 = 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL';
 	const player2 = 'B62qpq9xPZGJvv2CwhRBsYGb9yHPaar6HWSJ8rC3s54mX7f8X9wX15s';
 
-	onMount(() => {
+	let currentGame: Game = { id: Number($page.params.gameId) };
+
+	onMount(async () => {
+		const game: Game = await minaArenaClient.getGame(currentGame.id);
+		console.log(game);
+		arenaWidth = game.arena?.width || 0;
+		arenaHeight = game.arena?.height || 0;
 		canvas = document.getElementById('canvas') as HTMLCanvasElement;
 		ctx = canvas.getContext('2d')!;
 
@@ -41,87 +45,20 @@
 			makePiece(i, 500, 50, 25, 'pink');
 			i += 85;
 		});
-		drawAllPieces();
+		drawAllPieces(canvas, ctx, pieces);
 	});
 
-	const makePiece = (x: number, y: number, width: number, height: number, fill: string) => {
-		const piece = {
-			x: x,
-			y: y,
-			width: width,
-			height: height,
-			right: x + width,
-			bottom: y + height,
-			fill: fill
-		};
-		pieces.push(piece);
-		return piece;
-	};
-
-	const drawAllPieces = () => {
-		ctx.clearRect(0, 0, canvas.width, canvas.height);
-		for (let i = 0; i < pieces.length; i++) {
-			let piece = pieces[i];
-			drawPiece(piece);
-			ctx.fillStyle = piece.fill;
-			ctx.fill();
-			ctx.stroke();
-		}
-	};
-
-	const drawPiece = (piece: DrawnPiece) => {
-		ctx.beginPath();
-		ctx.moveTo(piece.x, piece.y);
-		ctx.lineTo(piece.x + piece.width, piece.y);
-		ctx.lineTo(piece.x + piece.width + 10, piece.y + piece.height / 2);
-		ctx.lineTo(piece.x + piece.width, piece.y + piece.height);
-		ctx.lineTo(piece.x, piece.y + piece.height);
-		ctx.closePath();
-	};
-
-	const onMouseDown = (e: MouseEvent) => {
-		const mouseX = e.clientX - offsetLeft;
-		const mouseY = e.clientY - offsetTop;
-
-		// mousedown stuff here
-		lastX = mouseX;
-		lastY = mouseY;
-		mouseIsDown = true;
-	};
-
-	const onMouseUp = (e: MouseEvent) => {
-		mouseIsDown = false;
-	};
-
-	const onMouseMove = (e: MouseEvent) => {
-		if (!mouseIsDown) {
-			return;
-		}
-
-		const mouseX = e.clientX - offsetLeft;
-		const mouseY = e.clientY - offsetTop;
-
-		// mousemove stuff here
-		for (let i = 0; i < pieces.length; i++) {
-			const piece = pieces[i];
-			drawPiece(piece);
-			if (ctx.isPointInPath(lastX, lastY)) {
-				piece.x += mouseX - lastX;
-				piece.y += mouseY - lastY;
-			}
-		}
-		lastX = mouseX;
-		lastY = mouseY;
-		drawAllPieces();
+	const refreshGame = async () => {
+		const game: Game = await minaArenaClient.getGame(currentGame.id);
+		currentGame = game;
 	};
 </script>
 
-<canvas
-	id="canvas"
-	width="650"
-	height="550"
-	class="border border-slate-400 mx-auto"
-	on:mousedown={onMouseDown}
-	on:mouseup={onMouseUp}
-	on:mousemove={onMouseMove}
-/>
+{#if arenaHeight && arenaWidth}
+	<canvas
+		id="canvas"
+		width={arenaWidth}
+		height={arenaHeight}
+		class="border border-slate-400 mx-auto"
+	/>
+{/if}

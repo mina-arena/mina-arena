@@ -11,6 +11,31 @@ export const GetGameQuery = gql`
           minaPublicKey
         }
       }
+      arena {
+        width
+        height
+      }
+      gamePieces {
+        gamePlayer {
+          player {
+            minaPublicKey
+          }
+        }
+        playerUnit {
+          unit {
+            name
+            attackPower
+            armor
+            maxHealth
+            movementSpeed
+          }
+        }
+        coordinates {
+          x
+          y
+        }
+        health
+      }
     }
   }
 `;
