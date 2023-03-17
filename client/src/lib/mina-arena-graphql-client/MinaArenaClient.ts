@@ -1,6 +1,7 @@
 import { ApolloClient, HttpLink } from '@apollo/client/core/index.js';
 import { InMemoryCache } from '@apollo/client/cache/index.js';
 import { GetGameQuery } from './queries/get-game';
+import { GetGameStatusQuery } from './queries/get-game-status';
 import { GetUnitsQuery } from './queries/get-units';
 import { GetPlayerUnitsQuery } from './queries/get-player-units';
 import { CreateGameMut } from './queries/mut-create-game';
@@ -25,6 +26,15 @@ export class MinaArenaClient {
       cache: new InMemoryCache()
     });
     return client;
+  }
+
+  async getGameStatus(gameId: number): Promise<Game> {
+    const { data } = await this.client.query({
+      query: GetGameStatusQuery,
+      variables: { gameId }
+    });
+
+    return data.game;
   }
 
   async getGame(gameId: number): Promise<Game> {

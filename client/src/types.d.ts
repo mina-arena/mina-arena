@@ -5,8 +5,27 @@ type Player = {
 }
 
 type Game = {
-  id: number
-  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED'
+  id: number;
+  status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
+  turnNumber?: number;
+  gamePlayers?: Array<GamePlayer>;
+  arena?: {
+    width: number;
+    height: number;
+  }
+  gamePieces?: [{
+    gamePlayer: GamePlayer;
+    playerUnit: PlayerUnit;
+    coordinates: {
+      x: number;
+      y: number
+    }
+    health: number;
+  }]
+}
+
+type GamePlayer = {
+  player: Player;
 }
 
 type Unit = {
@@ -44,3 +63,11 @@ type CreateGamePieceInput = {
     name: string
   }
 }
+
+type DrawnPiece = {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  fill: string;
+};
