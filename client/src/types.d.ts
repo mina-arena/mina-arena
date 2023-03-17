@@ -13,7 +13,7 @@ type Game = {
     width: number;
     height: number;
   }
-  gamePieces?: {
+  gamePieces?: [{
     gamePlayer: GamePlayer;
     playerUnit: PlayerUnit;
     coordinates: {
@@ -21,7 +21,7 @@ type Game = {
       y: number
     }
     health: number;
-  }
+  }]
 }
 
 type GamePlayer = {

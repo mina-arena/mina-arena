@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, afterUpdate } from 'svelte';
 	import { squads } from '$lib/stores/sandbox/squadStore';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import { page } from '$app/stores';
@@ -24,27 +24,22 @@
 	let currentGame: Game = { id: Number($page.params.gameId) };
 
 	onMount(async () => {
-		const game: Game = await minaArenaClient.getGame(currentGame.id);
-		console.log(game);
-		arenaWidth = game.arena?.width || 0;
-		arenaHeight = game.arena?.height || 0;
-		canvas = document.getElementById('canvas') as HTMLCanvasElement;
-		ctx = canvas.getContext('2d')!;
-
+		currentGame = await minaArenaClient.getGame(currentGame.id);
+		console.log(currentGame);
+		arenaWidth = currentGame.arena?.width || 0;
+		arenaHeight = currentGame.arena?.height || 0;
 		offsetTop = canvas.offsetTop;
 		offsetLeft = canvas.offsetLeft;
+	});
 
-		let i = 10;
-		$squads[player1].playerUnits.forEach((unit) => {
-			makePiece(i, 30, 50, 25, 'skyblue');
-			i += 85;
-		});
-
-		i = 10;
-		$squads[player2].playerUnits.forEach((unit) => {
-			makePiece(i, 500, 50, 25, 'pink');
-			i += 85;
-		});
+	afterUpdate(() => {
+		canvas = document.getElementById('canvas') as HTMLCanvasElement;
+		ctx = canvas.getContext('2d')!;
+		pieces =
+			currentGame.gamePieces?.map((p) => {
+				return makePiece(p.coordinates.x, p.coordinates.y, 10, 10, 'pink');
+			}) || [];
+		console.log(pieces);
 		drawAllPieces(canvas, ctx, pieces);
 	});
 
