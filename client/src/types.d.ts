@@ -8,11 +8,8 @@ type Game = {
   id: number;
   status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
   turnNumber?: number;
+  currentPhase?: GamePhase;
   gamePlayers?: Array<GamePlayer>;
-  arena?: {
-    width: number;
-    height: number;
-  }
   gamePieces?: [{
     gamePlayer: GamePlayer;
     playerUnit: PlayerUnit;
@@ -22,10 +19,35 @@ type Game = {
     }
     health: number;
   }]
+  arena?: {
+    width: number;
+    height: number;
+  }
+}
+
+type GamePhase = {
+  id: number;
+  name: string;
+  gamePieceActions: {
+    id: number;
+    gamePiece: {
+      id: number;
+    }
+    actionType: 'MOVEMENT'
+  }
 }
 
 type GamePlayer = {
   player: Player;
+  gamePieces?: [{
+    gamePlayer: GamePlayer;
+    playerUnit: PlayerUnit;
+    coordinates: {
+      x: number;
+      y: number
+    }
+    health: number;
+  }]
 }
 
 type Unit = {

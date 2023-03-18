@@ -6,14 +6,21 @@ export const GetGameQuery = gql`
       id
       status
       turnNumber
+      currentPhase {
+        id
+        name
+        gamePieceActions {
+          id
+          gamePiece {
+            id
+          }
+          actionType
+        }
+      }
       gamePlayers {
         player {
           minaPublicKey
         }
-      }
-      arena {
-        width
-        height
       }
       gamePieces {
         gamePlayer {
@@ -35,6 +42,10 @@ export const GetGameQuery = gql`
           y
         }
         health
+      }
+      arena {
+        width
+        height
       }
     }
   }

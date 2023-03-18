@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { onMount, afterUpdate } from 'svelte';
-	import { squads } from '$lib/stores/sandbox/squadStore';
+	import PhaseInput from '../phase-input/PhaseInput.svelte';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import { page } from '$app/stores';
 
@@ -49,11 +49,10 @@
 	};
 </script>
 
-{#if arenaHeight && arenaWidth}
-	<canvas
-		id="canvas"
-		width={arenaWidth}
-		height={arenaHeight}
-		class="border border-slate-400 mx-auto"
-	/>
-{/if}
+<PhaseInput game={currentGame} />
+<canvas
+	id="canvas"
+	width={arenaWidth}
+	height={arenaHeight}
+	class="border border-slate-400 mx-auto"
+/>
