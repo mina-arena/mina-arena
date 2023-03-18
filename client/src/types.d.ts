@@ -10,19 +10,21 @@ type Game = {
   turnNumber?: number;
   currentPhase?: GamePhase;
   gamePlayers?: Array<GamePlayer>;
-  gamePieces?: [{
-    gamePlayer: GamePlayer;
-    playerUnit: PlayerUnit;
-    coordinates: {
-      x: number;
-      y: number
-    }
-    health: number;
-  }]
+  gamePieces?: Array<GamePiece>;
   arena?: {
     width: number;
     height: number;
   }
+}
+
+type GamePiece = {
+  gamePlayer: GamePlayer;
+  playerUnit: PlayerUnit;
+  coordinates: {
+    x: number;
+    y: number
+  }
+  health: number;
 }
 
 type GamePhase = {
