@@ -18,9 +18,12 @@
 
 	const currentPlayer = () => {
 		console.log('players:', currentGame.gamePlayers);
-		const players = currentGame.gamePlayers || [];
+		const players = currentGame.turnPlayerOrder || [];
 		if (players.length > 0) {
-			const idx = (currentGame.turnNumber || 1) - 1;
+			if (currentGame.turnNumber == undefined) {
+				throw new Error('No Turn Numnber');
+			}
+			const idx = currentGame.turnNumber - 1;
 			return players[idx].player.minaPublicKey;
 		}
 		return '';

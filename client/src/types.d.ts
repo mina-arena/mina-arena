@@ -10,6 +10,7 @@ type Game = {
   turnNumber?: number;
   currentPhase?: GamePhase;
   gamePlayers?: Array<GamePlayer>;
+  turnPlayerOrder?: Array<GamePlayer>;
   gamePieces?: Array<GamePiece>;
   arena?: {
     width: number;

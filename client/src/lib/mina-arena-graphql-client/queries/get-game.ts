@@ -22,6 +22,11 @@ export const GetGameQuery = gql`
           minaPublicKey
         }
       }
+      turnPlayerOrder {
+        player {
+          minaPublicKey
+        }
+      }
       gamePieces {
         id
         gamePlayer {
