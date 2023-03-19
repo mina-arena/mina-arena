@@ -18,16 +18,7 @@
 	});
 
 	const currentPlayer = () => {
-		console.log('players:', currentGame.gamePlayers);
-		const players = currentGame.turnPlayerOrder || [];
-		if (players.length > 0) {
-			if (currentGame.turnNumber == undefined) {
-				throw new Error('No Turn Numnber');
-			}
-			const idx = currentGame.turnNumber - 1;
-			return players[idx].player.minaPublicKey;
-		}
-		return '';
+		return currentGame.currentPhase?.gamePlayer.player.minaPublicKey || '';
 	};
 
 	const rerender = async () => {
@@ -37,8 +28,10 @@
 
 <div>
 	{#if loaded}
-		<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
-		<PhaseInput game={currentGame} currentPlayer={currentPlayer()} {rerender} />
-		<Arena game={currentGame} />
+		{#key currentGame}
+			<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
+			<PhaseInput game={currentGame} currentPlayer={currentPlayer()} {rerender} />
+			<Arena game={currentGame} />
+		{/key}
 	{/if}
 </div>

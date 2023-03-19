@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-	import { removeDirectivesFromDocument } from '@apollo/client/utilities';
 
 	export let game: Game;
 	export let currentPlayer: string;
@@ -65,7 +64,7 @@
 			game.currentPhase!.id,
 			Object.values(moves)
 		);
-		rerender();
+		await rerender();
 	};
 
 	const calculateDistance = (p: GamePiece) => {

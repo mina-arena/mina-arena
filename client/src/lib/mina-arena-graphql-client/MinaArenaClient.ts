@@ -44,7 +44,8 @@ export class MinaArenaClient {
   async getGame(gameId: number): Promise<Game> {
     const { data } = await this.client.query({
       query: GetGameQuery,
-      variables: { gameId }
+      variables: { gameId },
+      fetchPolicy: 'no-cache'
     });
 
     return data.game;

@@ -9,6 +9,11 @@ export const GetGameQuery = gql`
       currentPhase {
         id
         name
+        gamePlayer {
+          player {
+            minaPublicKey
+          }
+        }
         gamePieceActions {
           id
           gamePiece {
@@ -18,11 +23,6 @@ export const GetGameQuery = gql`
         }
       }
       gamePlayers {
-        player {
-          minaPublicKey
-        }
-      }
-      turnPlayerOrder {
         player {
           minaPublicKey
         }
