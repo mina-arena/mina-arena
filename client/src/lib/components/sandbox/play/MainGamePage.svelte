@@ -5,6 +5,7 @@
 
 	import PhaseInput from './phase-input/PhaseInput.svelte';
 	import Arena from './Arena.svelte';
+	import { truncateMinaPublicKey } from '$lib/utils';
 
 	let currentGame: Game = { id: Number($page.params.gameId) };
 	const minaArenaClient = new MinaArenaClient();
@@ -28,12 +29,16 @@
 		}
 		return '';
 	};
+
+	const rerender = async () => {
+		currentGame = await minaArenaClient.getGame(currentGame.id);
+	};
 </script>
 
 <div>
 	{#if loaded}
-		<div>It's your turn: {currentPlayer()}</div>
-		<PhaseInput game={currentGame} currentPlayer={currentPlayer()} />
+		<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
+		<PhaseInput game={currentGame} currentPlayer={currentPlayer()} {rerender} />
 		<Arena game={currentGame} />
 	{/if}
 </div>

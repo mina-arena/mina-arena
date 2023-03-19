@@ -22,7 +22,7 @@
 	};
 </script>
 
-<div class="grid grid-cols-5 gap-6 w-3/4">
+<div class="grid grid-cols-3 gap-4 w-3/4">
 	{#each $units as unit}
 		<div
 			on:click={() => {
@@ -31,7 +31,7 @@
 			on:keypress={() => {
 				openUnitDraftModal(unit);
 			}}
-			class="border border-slate-300 rounded py-6 col-span-1"
+			class="border border-slate-300 rounded p-3 col-span-1"
 		>
 			<p>{unit.name}</p>
 			<p>atk: {unit.attackPower}, arm: {unit.armor}</p>

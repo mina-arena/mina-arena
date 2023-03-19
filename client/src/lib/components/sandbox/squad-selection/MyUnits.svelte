@@ -35,17 +35,23 @@
 	};
 </script>
 
-<div class="grid grid-cols-5 gap-6 w-3/4">
+<div class="grid grid-cols-3 gap-4 w-3/4">
 	{#if $playerUnits[player]}
 		{#each $playerUnits[player] as playerUnit}
 			{#if selected.has(playerUnit.id)}
 				<div
 					on:click={() => removeItem(playerUnit)}
 					on:keypress={() => removeItem(playerUnit)}
-					class="border border-slate-300 rounded py-6 col-span-1 bg-slate-100"
+					class="border border-slate-300 rounded p-3 col-span-1 bg-slate-100"
 				>
 					<p>{playerUnit.name}</p>
 					<p>unit: {playerUnit.unit?.name}</p>
+					<p>atk: {playerUnit.unit?.attackPower}, arm: {playerUnit.unit?.armor}</p>
+					<p>
+						Cost: {playerUnit.unit?.attackPower +
+							playerUnit.unit?.armor +
+							playerUnit.unit?.maxHealth}
+					</p>
 				</div>
 			{:else}
 				<div
@@ -55,6 +61,12 @@
 				>
 					<p>{playerUnit.name}</p>
 					<p>unit: {playerUnit.unit?.name}</p>
+					<p>atk: {playerUnit.unit?.attackPower}, arm: {playerUnit.unit?.armor}</p>
+					<p>
+						Cost: {playerUnit.unit?.attackPower +
+							playerUnit.unit?.armor +
+							playerUnit.unit?.maxHealth}
+					</p>
 				</div>
 			{/if}
 		{/each}

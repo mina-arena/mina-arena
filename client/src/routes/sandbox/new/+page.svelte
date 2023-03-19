@@ -15,6 +15,6 @@
 	};
 </script>
 
-<div>
-	<button on:click={createGame}>Start Game</button>
+<div class="container text-center mt-20">
+	<button class="_button" on:click={createGame}>Start Game</button>
 </div>

@@ -1,8 +1,10 @@
 <script lang="ts">
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
+	import { removeDirectivesFromDocument } from '@apollo/client/utilities';
 
 	export let game: Game;
 	export let currentPlayer: string;
+	export let rerender: () => {};
 
 	const minaArenaClient = new MinaArenaClient();
 
@@ -10,7 +12,7 @@
 		return p.gamePlayer.player.minaPublicKey === currentPlayer;
 	});
 
-	const moves: Record<string, MoveAction> = {};
+	let moves: Record<string, MoveAction> = {};
 
 	const updateMoveX = (e: Event, p: GamePiece) => {
 		const target = e.target as HTMLInputElement;
@@ -52,16 +54,30 @@
 				}
 			};
 		}
+
+		moves = moves;
 	};
 
-	const submitPhase = () => {
-		console.log(moves);
-		minaArenaClient.submitMovePhase(
+	const submitPhase = async () => {
+		await minaArenaClient.submitMovePhase(
 			currentPlayer,
 			game.id,
 			game.currentPhase!.id,
 			Object.values(moves)
 		);
+		rerender();
+	};
+
+	const calculateDistance = (p: GamePiece) => {
+		const move = moves[p.id];
+		if (move) {
+			return Math.sqrt(
+				(move.action.moveTo.x - move.action.moveFrom.x) ** 2 +
+					(move.action.moveTo.y - move.action.moveFrom.y) ** 2
+			).toFixed(2);
+		} else {
+			return 0;
+		}
 	};
 </script>
 
@@ -81,10 +97,12 @@
 				<td>{piece.coordinates.x}, {piece.coordinates.y}</td>
 				<td>{piece.playerUnit.unit.movementSpeed}</td>
 				<td>
-					x: <input type="number" on:change={(e) => updateMoveX(e, piece)} />
-					y: <input type="number" on:change={(e) => updateMoveY(e, piece)} />
+					x: <input class="_input w-16" type="number" on:change={(e) => updateMoveX(e, piece)} />
+					y: <input class="_input w-16" type="number" on:change={(e) => updateMoveY(e, piece)} />
 				</td>
-				<td>??</td>
+				<td
+					>{#key moves}{calculateDistance(piece)}{/key}</td
+				>
 			</tr>
 		{/each}
 	</table>
