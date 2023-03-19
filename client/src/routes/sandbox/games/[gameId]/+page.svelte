@@ -3,7 +3,7 @@
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-	import Arena from '$lib/components/sandbox/play/Arena.svelte';
+	import MainGamePage from '$lib/components/sandbox/play/MainGamePage.svelte';
 
 	const minaArenaClient = new MinaArenaClient();
 	let currentGame: Game = { id: Number($page.params.gameId) };
@@ -27,7 +27,7 @@
 	{#if currentGame.status == 'PENDING'}
 		<MainDraftPage {startGame} />
 	{:else if currentGame.status == 'IN_PROGRESS'}
-		<Arena />
+		<MainGamePage />
 	{:else if currentGame.status == 'COMPLETED'}
 		<div>This game is over... stats/recap?</div>
 	{:else}

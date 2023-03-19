@@ -1,59 +1,58 @@
 <script lang="ts">
-	import { onMount, afterUpdate } from 'svelte';
-	import { squads } from '$lib/stores/sandbox/squadStore';
-	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-	import { page } from '$app/stores';
-
+	import { afterUpdate } from 'svelte';
 	import { makePiece, drawAllPieces } from './utils';
 
-	const minaArenaClient = new MinaArenaClient();
+	export let game: Game;
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
 	let pieces: Array<DrawnPiece> = [];
 
-	let arenaWidth: number = 1;
-	let arenaHeight: number = 1;
-
 	let offsetTop: number;
 	let offsetLeft: number;
 
-	const player1 = 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL';
-	const player2 = 'B62qpq9xPZGJvv2CwhRBsYGb9yHPaar6HWSJ8rC3s54mX7f8X9wX15s';
+	const legendConfig = {
+		colors: ['pink', 'lightblue']
+	};
 
-	let currentGame: Game = { id: Number($page.params.gameId) };
-
-	onMount(async () => {
-		currentGame = await minaArenaClient.getGame(currentGame.id);
-		console.log(currentGame);
-		arenaWidth = currentGame.arena?.width || 0;
-		arenaHeight = currentGame.arena?.height || 0;
-		offsetTop = canvas.offsetTop;
-		offsetLeft = canvas.offsetLeft;
-	});
+	const players = game.gamePlayers?.map((p) => p.player.minaPublicKey) || ['', ''];
 
 	afterUpdate(() => {
 		canvas = document.getElementById('canvas') as HTMLCanvasElement;
 		ctx = canvas.getContext('2d')!;
+		offsetTop = canvas.offsetTop;
+		offsetLeft = canvas.offsetLeft;
 		pieces =
-			currentGame.gamePieces?.map((p) => {
-				return makePiece(p.coordinates.x, p.coordinates.y, 10, 10, 'pink');
+			game.gamePieces?.map((p) => {
+				const owner = p.gamePlayer.player.minaPublicKey;
+				const ownerIdx = players?.indexOf(owner) || 0;
+				return makePiece(p.coordinates.x, p.coordinates.y, 20, 20, legendConfig.colors[ownerIdx]);
 			}) || [];
 		console.log(pieces);
 		drawAllPieces(canvas, ctx, pieces);
 	});
-
-	const refreshGame = async () => {
-		const game: Game = await minaArenaClient.getGame(currentGame.id);
-		currentGame = game;
-	};
 </script>
 
-{#if arenaHeight && arenaWidth}
+<div class="flex">
 	<canvas
 		id="canvas"
-		width={arenaWidth}
-		height={arenaHeight}
+		width={game.arena?.width}
+		height={game.arena?.height}
 		class="border border-slate-400 mx-auto"
 	/>
-{/if}
+	<div>
+		<div>Legend:</div>
+		<br />
+		<div>
+			<div>
+				<div class="w-3 h-3 bg-[pink] border border-zinc-600" />
+				Player 1: {players[0]}
+			</div>
+		</div>
+		<br />
+		<div>
+			<div class="w-3 h-3 bg-[lightblue] border border-zinc-600" />
+			Player 2: {players[1]}
+		</div>
+	</div>
+</div>

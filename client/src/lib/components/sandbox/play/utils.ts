@@ -26,7 +26,6 @@ export const drawPiece = (ctx: CanvasRenderingContext2D, piece: DrawnPiece) => {
   ctx.beginPath();
   ctx.moveTo(piece.x, piece.y);
   ctx.lineTo(piece.x + piece.width, piece.y);
-  ctx.lineTo(piece.x + piece.width + 10, piece.y + piece.height / 2);
   ctx.lineTo(piece.x + piece.width, piece.y + piece.height);
   ctx.lineTo(piece.x, piece.y + piece.height);
   ctx.closePath();

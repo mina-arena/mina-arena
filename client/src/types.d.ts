@@ -8,11 +8,41 @@ type Game = {
   id: number;
   status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
   turnNumber?: number;
+  currentPhase?: GamePhase;
   gamePlayers?: Array<GamePlayer>;
+  turnPlayerOrder?: Array<GamePlayer>;
+  gamePieces?: Array<GamePiece>;
   arena?: {
     width: number;
     height: number;
   }
+}
+
+type GamePiece = {
+  id: number;
+  gamePlayer: GamePlayer;
+  playerUnit: PlayerUnit;
+  coordinates: {
+    x: number;
+    y: number
+  }
+  health: number;
+}
+
+type GamePhase = {
+  id: number;
+  name: string;
+  gamePieceActions: {
+    id: number;
+    gamePiece: {
+      id: number;
+    }
+    actionType: 'MOVEMENT'
+  }
+}
+
+type GamePlayer = {
+  player: Player;
   gamePieces?: [{
     gamePlayer: GamePlayer;
     playerUnit: PlayerUnit;
@@ -22,10 +52,6 @@ type Game = {
     }
     health: number;
   }]
-}
-
-type GamePlayer = {
-  player: Player;
 }
 
 type Unit = {
@@ -71,3 +97,17 @@ type DrawnPiece = {
   height: number;
   fill: string;
 };
+
+type MoveAction = {
+  gamePieceId: number
+  action: {
+    moveFrom: {
+      x: number;
+      y: number;
+    },
+    moveTo: {
+      x: number;
+      y: number;
+    }
+  }
+}
