@@ -29,9 +29,9 @@
 			<div>Draft new {unit.name}</div>
 			<div>
 				<label>Name:</label>
-				<input class="border border-stone-300" type="text" bind:value={drafteeName} />
+				<input class="_input" type="text" bind:value={drafteeName} />
 			</div>
-			<button on:click={draft}>Draft Unit</button>
+			<button class="_button" on:click={draft}>Draft Unit</button>
 		</div>
 	</div>
 {/if}

@@ -33,6 +33,7 @@
 		<div class="py-10 mb-10">
 			<div class="grid grid-cols-5 gap-6mx-auto">
 				<div class="col-span-1">Total Cost: {totalCost()}</div>
+				<div class="col-span-1">Max Cost: 25</div>
 			</div>
 		</div>
 		{#each currentSquad().units as unit}

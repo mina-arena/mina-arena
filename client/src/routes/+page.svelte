@@ -7,5 +7,5 @@
 	</div>
 </div>
 <div class="flex">
-	<a href="/enter" class="py-10 px-16 border border-slate-800 mx-auto">Enter the Arena!</a>
+	<a href="/enter" class="py-10 px-16 _button mx-auto">Enter the Arena!</a>
 </div>

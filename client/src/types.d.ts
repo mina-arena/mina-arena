@@ -10,7 +10,6 @@ type Game = {
   turnNumber?: number;
   currentPhase?: GamePhase;
   gamePlayers?: Array<GamePlayer>;
-  turnPlayerOrder?: Array<GamePlayer>;
   gamePieces?: Array<GamePiece>;
   arena?: {
     width: number;
@@ -32,6 +31,11 @@ type GamePiece = {
 type GamePhase = {
   id: number;
   name: string;
+  gamePlayer: {
+    player: {
+      minaPublicKey: string;
+    }
+  }
   gamePieceActions: {
     id: number;
     gamePiece: {

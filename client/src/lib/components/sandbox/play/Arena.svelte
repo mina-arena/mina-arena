@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { truncateMinaPublicKey } from '$lib/utils';
 	import { afterUpdate } from 'svelte';
 	import { makePiece, drawAllPieces } from './utils';
 
@@ -40,19 +41,19 @@
 		height={game.arena?.height}
 		class="border border-slate-400 mx-auto"
 	/>
-	<div>
+	<div class="mr-6">
 		<div>Legend:</div>
 		<br />
 		<div>
 			<div>
 				<div class="w-3 h-3 bg-[pink] border border-zinc-600" />
-				Player 1: {players[0]}
+				Player 1: {truncateMinaPublicKey(players[0])}
 			</div>
 		</div>
 		<br />
 		<div>
 			<div class="w-3 h-3 bg-[lightblue] border border-zinc-600" />
-			Player 2: {players[1]}
+			Player 2: {truncateMinaPublicKey(players[1])}
 		</div>
 	</div>
 </div>

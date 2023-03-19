@@ -6,6 +6,7 @@
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import { page } from '$app/stores';
 	import { playerUnits } from '$lib/stores/sandbox/playerUnitStore';
+	import { truncateMinaPublicKey } from '$lib/utils';
 
 	let playerTurn = 1;
 	const player1 = 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL';
@@ -53,20 +54,16 @@
 	<div>
 		{#if playerTurn <= maxPlayers}
 			<h3 class="text-xl">Select your squad</h3>
-			<p>Drafting for {currentPlayer}</p>
+			<p>Drafting for {truncateMinaPublicKey(currentPlayer)}</p>
 			<SquadSelection player={currentPlayer} />
-			<button on:click={selectSquad} class="border border-slate-400 p-5 rounded"
-				>Select Squad</button
-			>
+			<button on:click={selectSquad} class="_button">Select Squad</button>
 		{:else}
 			<div>
 				<h3>Squads</h3>
 				<div>Player 1: {JSON.stringify($squads[player1])}</div>
 				<div>Player 2: {JSON.stringify($squads[player2])}</div>
 			</div>
-			<button class="border border-slate-400 p-5 rounded" on:click={startGame}
-				>Complete Draft</button
-			>
+			<button class="_button" on:click={startGame}>Complete Draft</button>
 		{/if}
 	</div>
 </div>
