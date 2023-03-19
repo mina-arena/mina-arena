@@ -7,6 +7,8 @@ import { GetPlayerUnitsQuery } from './queries/get-player-units';
 import { CreateGameMut } from './queries/mut-create-game';
 import { StartGameMut } from './queries/mut-start-game';
 import { CreateGamePiecesMut } from './queries/mut-create-game-pieces';
+import { CreateGamePieceActionsMut } from './queries/mut-create-action';
+import { SubmitGamePhaseMut } from './queries/mut-submit-phase';
 
 export class MinaArenaClient {
   client
@@ -19,6 +21,8 @@ export class MinaArenaClient {
     const link = new HttpLink({
       uri: `${import.meta.env.VITE_BACKEND_SERVER_URL}/graphql/`
     });
+
+
 
 
     const client = new ApolloClient({
@@ -50,8 +54,6 @@ export class MinaArenaClient {
     const { data } = await this.client.query({
       query: GetUnitsQuery,
     });
-
-    console.log(`response: ${data}`)
     return data.units;
   }
 
@@ -112,13 +114,6 @@ export class MinaArenaClient {
         }
       })
     })
-    console.log({
-      variables: {
-        minaPublicKey: player,
-        gameId: gameId,
-        gamePieces: gamePieceInputs
-      }
-    })
     const { data } = await this.client.mutate({
       mutation: CreateGamePiecesMut,
       variables: {
@@ -131,5 +126,39 @@ export class MinaArenaClient {
     });
 
     return data.createGamePieces;
+  }
+
+  async submitMovePhase(player: string, gameId: number, phaseId: number, moves: Array<MoveAction>): Promise<number> {
+    const actions = moves.map((move) => {
+      return {
+        actionType: 'MOVE',
+        gamePieceId: move.gamePieceId,
+        moveInput: move.action
+      }
+    });
+    const mutationInput = {
+      minaPublicKey: player,
+      gameId,
+      actions
+    };
+
+    await this.client.mutate({
+      mutation: CreateGamePieceActionsMut,
+      variables: {
+        input: mutationInput
+      }
+    });
+
+    const { data } = await this.client.mutate({
+      mutation: SubmitGamePhaseMut,
+      variables: {
+        input: {
+          minaPublicKey: player,
+          gamePhaseId: phaseId
+        }
+      }
+    });
+
+    return data.id;
   }
 }

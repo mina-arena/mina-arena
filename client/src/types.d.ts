@@ -18,6 +18,7 @@ type Game = {
 }
 
 type GamePiece = {
+  id: number;
   gamePlayer: GamePlayer;
   playerUnit: PlayerUnit;
   coordinates: {
@@ -95,3 +96,17 @@ type DrawnPiece = {
   height: number;
   fill: string;
 };
+
+type MoveAction = {
+  gamePieceId: number
+  action: {
+    moveFrom: {
+      x: number;
+      y: number;
+    },
+    moveTo: {
+      x: number;
+      y: number;
+    }
+  }
+}
