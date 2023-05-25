@@ -24,8 +24,16 @@
     const targetGamePieceId = target.valueAsNumber;
 
     if (rangedAttacks[p.id]) {
-      rangedAttacks[p.id].action.targetGamePieceId = targetGamePieceId;
+      // Overwriting a queued attack
+      if (targetGamePieceId) {
+        // With a new target
+        rangedAttacks[p.id].action.targetGamePieceId = targetGamePieceId;
+      } else {
+        // With no target
+        delete rangedAttacks[p.id];
+      }
     } else {
+      // Creating queued attack
       rangedAttacks[p.id] = {
         gamePieceId: p.id,
         action: {

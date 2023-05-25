@@ -24,8 +24,16 @@
     const targetGamePieceId = target.valueAsNumber;
 
     if (meleeAttacks[p.id]) {
-      meleeAttacks[p.id].action.targetGamePieceId = targetGamePieceId;
+      // Overwriting a queued attack
+      if (targetGamePieceId) {
+        // With a new target
+        meleeAttacks[p.id].action.targetGamePieceId = targetGamePieceId;
+      } else {
+        // With no target
+        delete meleeAttacks[p.id];
+      }
     } else {
+      // Creating queued attack
       meleeAttacks[p.id] = {
         gamePieceId: p.id,
         action: {
