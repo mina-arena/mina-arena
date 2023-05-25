@@ -33,9 +33,13 @@
 			}}
 			class="border border-slate-300 rounded p-3 col-span-1"
 		>
-			<p>{unit.name}</p>
-			<p>atk: {unit.attackPower}, arm: {unit.armor}</p>
-			<p>Cost: {unit.attackPower + unit.armor + unit.maxHealth}</p>
+			<p><b>{unit.name}</b></p>
+			<p>Cost: {unit.pointsCost}</p>
+			<p>HP: {unit.maxHealth}, Armor: {unit.armorSaveRoll}</p>
+			<p>Melee: {unit.meleeHitRoll}+/{unit.meleeWoundRoll}+/{unit.meleeArmorPiercing}/{unit.meleeDamage}</p>
+			{#if unit.rangedNumAttacks}
+				<p>Ranged: {unit.rangedHitRoll}+/{unit.rangedWoundRoll}+/{unit.rangedArmorPiercing}/{unit.rangedDamage}</p>
+			{/if}
 		</div>
 	{/each}
 </div>
