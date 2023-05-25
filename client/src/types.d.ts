@@ -10,7 +10,7 @@ type Game = {
   turnNumber?: number;
   currentPhase?: GamePhase;
   gamePlayers?: Array<GamePlayer>;
-  gamePieces?: Array<GamePiece>;
+  gamePieces: Array<GamePiece>;
   arena?: {
     width: number;
     height: number;
@@ -126,4 +126,28 @@ type MoveAction = {
       y: number;
     }
   }
+}
+
+type RangedAttackAction = {
+  gamePieceId: number;
+  action: {
+    targetGamePieceId: number;
+    diceRoll: DiceRollInput;
+  }
+};
+
+type DiceRollInput = {
+  publicKey: PublicKeyGroup;
+  cipherText: string;
+  signature: Signature;
+};
+
+type PublicKeyGroup = {
+  x: string;
+  y: string;
+};
+
+type Signature = {
+  r: string;
+  s: string;
 }
