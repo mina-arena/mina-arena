@@ -78,6 +78,10 @@
 			<th>Your Piece</th>
 			<th>Current Location</th>
 			<th>Max Range</th>
+      <th>Hit</th>
+      <th>Wound</th>
+      <th>AP</th>
+      <th>Damage</th>
 			<th>Target Piece</th>
 			<th>Distance</th>
 		</tr>
@@ -87,8 +91,16 @@
 				<td>{piece.coordinates.x}, {piece.coordinates.y}</td>
         {#if piece.playerUnit.unit.rangedNumAttacks }
           <td>{piece.playerUnit.unit.rangedRange}</td>
+          <td>{piece.playerUnit.unit.rangedHitRoll}+</td>
+          <td>{piece.playerUnit.unit.rangedWoundRoll}+</td>
+          <td>{piece.playerUnit.unit.rangedArmorPiercing}</td>
+          <td>{piece.playerUnit.unit.rangedDamage}</td>
         {:else}
           <td>No ranged attack</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
         {/if}
 				<td>
           ID: <input class="_input w-16" type="number" on:change={(e) => updateRangedAttackTarget(e, piece)} />
