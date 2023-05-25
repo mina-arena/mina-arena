@@ -24,11 +24,13 @@
 		offsetTop = canvas.offsetTop;
 		offsetLeft = canvas.offsetLeft;
 		pieces =
-			game.gamePieces?.map((p) => {
-				const owner = p.gamePlayer.player.minaPublicKey;
-				const ownerIdx = players?.indexOf(owner) || 0;
-				return makePiece(p.coordinates.x, p.coordinates.y, 20, 20, legendConfig.colors[ownerIdx]);
-			}) || [];
+			game.gamePieces
+				.filter((p) => p.health > 0)
+				.map((p) => {
+					const owner = p.gamePlayer.player.minaPublicKey;
+					const ownerIdx = players?.indexOf(owner) || 0;
+					return makePiece(p.coordinates.x, p.coordinates.y, 20, 20, legendConfig.colors[ownerIdx]);
+				});
 		console.log(pieces);
 		drawAllPieces(canvas, ctx, pieces);
 	});
