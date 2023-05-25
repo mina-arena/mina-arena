@@ -136,6 +136,14 @@ type RangedAttackAction = {
   }
 };
 
+type MeleeAttackAction = {
+  gamePieceId: number;
+  action: {
+    targetGamePieceId: number;
+    diceRoll: DiceRollInput;
+  }
+};
+
 type DiceRollInput = {
   publicKey: PublicKeyGroup;
   cipherText: string;
