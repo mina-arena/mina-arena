@@ -36,9 +36,6 @@
         }
       }
     }
-
-    // ??
-    // rangedAttacks = rangedAttacks;
   }
 
 	const submitPhase = async () => {
