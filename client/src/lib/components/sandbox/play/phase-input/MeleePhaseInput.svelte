@@ -1,6 +1,9 @@
 <script lang="ts">
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 
+	// TODO: Pull from server package
+	const MELEE_ATTACK_RANGE = 24;
+
 	export let game: Game;
 	export let currentPlayer: string;
 	export let rerender: () => {};
@@ -86,7 +89,7 @@
 			<tr>
 				<td>{piece.playerUnit.name || 'Bob'} ({piece.playerUnit.unit.name}, ID: {piece.id})</td>
 				<td>{piece.coordinates.x}, {piece.coordinates.y}</td>
-        <td>5</td>
+        <td>{MELEE_ATTACK_RANGE}</td>
         <td>{piece.playerUnit.unit.meleeHitRoll}+</td>
         <td>{piece.playerUnit.unit.meleeWoundRoll}+</td>
         <td>{piece.playerUnit.unit.meleeArmorPiercing}</td>
