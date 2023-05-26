@@ -109,8 +109,7 @@ type CreateGamePieceInput = {
 type DrawnPiece = {
   x: number;
   y: number;
-  width: number;
-  height: number;
+  radius: number;
   fill: string;
 };
 

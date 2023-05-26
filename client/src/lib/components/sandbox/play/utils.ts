@@ -1,11 +1,8 @@
-export const makePiece = (x: number, y: number, width: number, height: number, fill: string) => {
+export const makePiece = (x: number, y: number, radius: number, fill: string) => {
   const piece = {
     x: x,
     y: y,
-    width: width,
-    height: height,
-    right: x + width,
-    bottom: y + height,
+    radius: radius,
     fill: fill
   };
   return piece;
@@ -23,10 +20,9 @@ export const drawAllPieces = (canvas: HTMLCanvasElement, ctx: CanvasRenderingCon
 };
 
 export const drawPiece = (ctx: CanvasRenderingContext2D, piece: DrawnPiece) => {
+  // TODO: Can different units have different sizes?
+  const radius = 12;
+
   ctx.beginPath();
-  ctx.moveTo(piece.x, piece.y);
-  ctx.lineTo(piece.x + piece.width, piece.y);
-  ctx.lineTo(piece.x + piece.width, piece.y + piece.height);
-  ctx.lineTo(piece.x, piece.y + piece.height);
-  ctx.closePath();
+  ctx.arc(piece.x, piece.y, radius, 0, 2 * Math.PI, false);
 };

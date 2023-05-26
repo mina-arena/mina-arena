@@ -16,6 +16,8 @@
 		colors: ['pink', 'lightblue']
 	};
 
+	export const PIECE_RADIUS = 12;
+
 	const players = game.gamePlayers?.map((p) => p.player.minaPublicKey) || ['', ''];
 
 	afterUpdate(() => {
@@ -29,7 +31,7 @@
 				.map((p) => {
 					const owner = p.gamePlayer.player.minaPublicKey;
 					const ownerIdx = players?.indexOf(owner) || 0;
-					return makePiece(p.coordinates.x, p.coordinates.y, 20, 20, legendConfig.colors[ownerIdx]);
+					return makePiece(p.coordinates.x, p.coordinates.y, PIECE_RADIUS, legendConfig.colors[ownerIdx]);
 				});
 		console.log(pieces);
 		drawAllPieces(canvas, ctx, pieces);
