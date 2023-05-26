@@ -162,4 +162,43 @@ export class MinaArenaClient {
 
     return data.id;
   }
+
+  async submitShootingPhase(
+    player: string,
+    gameId: number,
+    phaseId: number,
+    rangedAttacks: Array<RangedAttackAction>
+  ): Promise<number> {
+    const actions = rangedAttacks.map((rangedAttack) => {
+      return {
+        actionType: 'RANGED_ATTACK',
+        gamePieceId: rangedAttack.gamePieceId,
+        rangedAttackInput: rangedAttack.action
+      }
+    });
+    const mutationInput = {
+      minaPublicKey: player,
+      gameId,
+      actions
+    };
+
+    await this.client.mutate({
+      mutation: CreateGamePieceActionsMut,
+      variables: {
+        input: mutationInput
+      }
+    });
+
+    const { data } = await this.client.mutate({
+      mutation: SubmitGamePhaseMut,
+      variables: {
+        input: {
+          minaPublicKey: player,
+          gamePhaseId: phaseId
+        }
+      }
+    });
+
+    return data.id;
+  }
 }
