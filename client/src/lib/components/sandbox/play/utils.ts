@@ -20,9 +20,6 @@ export const drawAllPieces = (canvas: HTMLCanvasElement, ctx: CanvasRenderingCon
 };
 
 export const drawPiece = (ctx: CanvasRenderingContext2D, piece: DrawnPiece) => {
-  // TODO: Can different units have different sizes?
-  const radius = 12;
-
   ctx.beginPath();
-  ctx.arc(piece.x, piece.y, radius, 0, 2 * Math.PI, false);
+  ctx.arc(piece.x, piece.y, piece.radius, 0, 2 * Math.PI, false);
 };

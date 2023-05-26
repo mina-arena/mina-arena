@@ -16,6 +16,7 @@
 		colors: ['pink', 'lightblue']
 	};
 
+	// TODO: Can different units have different sizes?
 	export const PIECE_RADIUS = 12;
 
 	const players = game.gamePlayers?.map((p) => p.player.minaPublicKey) || ['', ''];
