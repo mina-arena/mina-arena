@@ -1,6 +1,8 @@
 import { gql } from "@apollo/client/core/index.js"
+import { UnitFullFragment } from "../fragments";
 
 export const GetGameQuery = gql`
+  ${UnitFullFragment}
   query GetGame($gameId: ID!) {
     game(id: $gameId) {
       id
@@ -35,12 +37,10 @@ export const GetGameQuery = gql`
           }
         }
         playerUnit {
+          id
+          name
           unit {
-            name
-            attackPower
-            armor
-            maxHealth
-            movementSpeed
+            ...UnitFull
           }
         }
         coordinates {

@@ -61,10 +61,22 @@ type GamePlayer = {
 type Unit = {
   id: number;
   name: string;
-  attackPower: number;
-  armor: number;
   maxHealth: number;
   movementSpeed: number;
+  armorSaveRoll: number;
+  pointsCost: number;
+  meleeNumAttacks: number;
+  meleeHitRoll: number;
+  meleeWoundRoll: number;
+  meleeArmorPiercing: number;
+  meleeDamage: number;
+  rangedRange?: number;
+  rangedNumAttacks?: number;
+  rangedHitRoll?: number;
+  rangedWoundRoll?: number;
+  rangedArmorPiercing?: number;
+  rangedDamage?: number;
+  rangedAmmo?: number;
 };
 
 type Draftee = {
