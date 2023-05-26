@@ -7,8 +7,9 @@
 
 	const minaArenaClient = new MinaArenaClient();
 
-	const playerPieces = game.gamePieces?.filter((p) => {
-		return p.gamePlayer.player.minaPublicKey === currentPlayer;
+	const livingPlayerPieces = game.gamePieces.filter((p) => {
+		return p.gamePlayer.player.minaPublicKey === currentPlayer &&
+					 p.health > 0;
 	});
 
 	let moves: Record<string, MoveAction> = {};
@@ -90,7 +91,7 @@
 			<th>Move To Input</th>
 			<th>Distance</th>
 		</tr>
-		{#each playerPieces || [] as piece}
+		{#each livingPlayerPieces as piece}
 			<tr>
 				<td>{piece.playerUnit.name || 'Bob'} the {piece.playerUnit.unit.name}</td>
 				<td>{piece.coordinates.x}, {piece.coordinates.y}</td>
@@ -99,9 +100,7 @@
 					x: <input class="_input w-16" type="number" on:change={(e) => updateMoveX(e, piece)} />
 					y: <input class="_input w-16" type="number" on:change={(e) => updateMoveY(e, piece)} />
 				</td>
-				<td
-					>{#key moves}{calculateDistance(piece)}{/key}</td
-				>
+				<td>{#key moves}{calculateDistance(piece)}{/key}</td>
 			</tr>
 		{/each}
 	</table>

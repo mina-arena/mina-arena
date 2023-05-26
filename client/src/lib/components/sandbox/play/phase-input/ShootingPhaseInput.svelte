@@ -7,12 +7,14 @@
 
 	const minaArenaClient = new MinaArenaClient();
 
-	const playerPieces = game.gamePieces.filter((p) => {
-		return p.gamePlayer.player.minaPublicKey === currentPlayer;
+	const livingPlayerPieces = game.gamePieces.filter((p) => {
+		return p.gamePlayer.player.minaPublicKey === currentPlayer &&
+           p.health > 0;
 	});
 
-  const enemyPieces = game.gamePieces.filter((p) => {
-		return p.gamePlayer.player.minaPublicKey !== currentPlayer;
+  const livingEnemyPieces = game.gamePieces.filter((p) => {
+		return p.gamePlayer.player.minaPublicKey !== currentPlayer &&
+           p.health > 0;
 	});
 
   let rangedAttacks: Record<string, RangedAttackAction> = {};
@@ -22,8 +24,16 @@
     const targetGamePieceId = target.valueAsNumber;
 
     if (rangedAttacks[p.id]) {
-      rangedAttacks[p.id].action.targetGamePieceId = targetGamePieceId;
+      // Overwriting a queued attack
+      if (targetGamePieceId) {
+        // With a new target
+        rangedAttacks[p.id].action.targetGamePieceId = targetGamePieceId;
+      } else {
+        // With no target
+        delete rangedAttacks[p.id];
+      }
     } else {
+      // Creating queued attack
       rangedAttacks[p.id] = {
         gamePieceId: p.id,
         action: {
@@ -52,7 +62,7 @@
     const rangedAttack = rangedAttacks[p.id];
 		if (rangedAttack) {
       const targetGamePieceId = rangedAttack.action.targetGamePieceId;
-      const targetPiece = enemyPieces.find(enemyPiece => enemyPiece.id.toString() === targetGamePieceId.toString());
+      const targetPiece = livingEnemyPieces.find(enemyPiece => enemyPiece.id.toString() === targetGamePieceId.toString());
 
       if (targetPiece) {
         return Math.sqrt(
@@ -82,7 +92,7 @@
 			<th>Target Piece</th>
 			<th>Distance</th>
 		</tr>
-		{#each playerPieces || [] as piece}
+		{#each livingPlayerPieces as piece}
 			<tr>
 				<td>{piece.playerUnit.name || 'Bob'} ({piece.playerUnit.unit.name}, ID: {piece.id})</td>
 				<td>{piece.coordinates.x}, {piece.coordinates.y}</td>
@@ -114,7 +124,7 @@
       <th>Armor Save</th>
       <th>Health</th>
 		</tr>
-    {#each enemyPieces || [] as piece}
+    {#each livingEnemyPieces as piece}
 			<tr>
 				<td>{piece.playerUnit.name || 'Bob'} ({piece.playerUnit.unit.name}, ID: {piece.id})</td>
 				<td>{piece.coordinates.x}, {piece.coordinates.y}</td>
