@@ -201,4 +201,43 @@ export class MinaArenaClient {
 
     return data.id;
   }
+
+  async submitMeleePhase(
+    player: string,
+    gameId: number,
+    phaseId: number,
+    meleeAttacks: Array<MeleeAttackAction>
+  ): Promise<number> {
+    const actions = meleeAttacks.map((meleeAttack) => {
+      return {
+        actionType: 'MELEE_ATTACK',
+        gamePieceId: meleeAttack.gamePieceId,
+        meleeAttackInput: meleeAttack.action
+      }
+    });
+    const mutationInput = {
+      minaPublicKey: player,
+      gameId,
+      actions
+    };
+
+    await this.client.mutate({
+      mutation: CreateGamePieceActionsMut,
+      variables: {
+        input: mutationInput
+      }
+    });
+
+    const { data } = await this.client.mutate({
+      mutation: SubmitGamePhaseMut,
+      variables: {
+        input: {
+          minaPublicKey: player,
+          gamePhaseId: phaseId
+        }
+      }
+    });
+
+    return data.id;
+  }
 }

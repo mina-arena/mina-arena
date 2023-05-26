@@ -1,6 +1,7 @@
 <script lang="ts">
 	import MovementPhaseInput from './MovementPhaseInput.svelte';
 	import ShootingPhaseInput from './ShootingPhaseInput.svelte';
+	import MeleePhaseInput from './MeleePhaseInput.svelte';
 
 	export let game: Game;
 	export let currentPlayer: string;
@@ -21,5 +22,7 @@
 		<MovementPhaseInput {game} {currentPlayer} {rerender} />
 	{:else if game.currentPhase?.name == 'SHOOTING'}
 		<ShootingPhaseInput {game} {currentPlayer} {rerender} />
+	{:else if game.currentPhase?.name == 'MELEE'}
+		<MeleePhaseInput {game} {currentPlayer} {rerender} />
 	{/if}
 </div>
