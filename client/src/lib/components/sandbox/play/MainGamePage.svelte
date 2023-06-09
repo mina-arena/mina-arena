@@ -30,8 +30,8 @@
 	{#if loaded}
 		{#key currentGame}
 			<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
-			<PhaseInput game={currentGame} currentPlayer={currentPlayer()} {rerender} />
-			<Arena game={currentGame} />
+			<div>Phase: {currentGame.currentPhase.name}</div>
+			<Arena game={currentGame} {rerender} />
 		{/key}
 	{/if}
 </div>

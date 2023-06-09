@@ -114,6 +114,12 @@ type DrawnPiece = {
   fill: string;
 };
 
+type GamePieceOrder = {
+  move?: MoveAction;
+  rangedAttack?: RangedAttackAction;
+  meleeAttack?: MeleeAttackAction;
+};
+
 type MoveAction = {
   gamePieceId: number
   action: {

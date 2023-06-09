@@ -32,6 +32,17 @@
   border: 1px solid black;
   border-radius: 6px;
   padding: 5px;
+  background-color: lightyellow;
+}
+
+#submit-phase-button {
+  background-color: #e5e5e5;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+#submit-phase-button:hover {
+  background-color: #c5c5c5;
 }
 
 @layer utilities {

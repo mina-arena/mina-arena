@@ -2,9 +2,15 @@
 	import { truncateMinaPublicKey } from '$lib/utils';
 	import { afterUpdate, onMount } from 'svelte';
 	import * as Utils from './utils';
+	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
+
+	import { drawMovementPhase } from './phases/movement-phase';
 
 	export let game: Game;
+	let currentPlayerMinaPubKey: string = game.currentPhase?.gamePlayer.player.minaPublicKey || '';
+	let currentPhaseName: string | undefined = game.currentPhase?.name;
 	let gamePieces: Array<GamePiece> = game.gamePieces;
+	let playerGamePieces: Array<GamePiece> = gamePieces.filter((p) => p.gamePlayer.player.minaPublicKey === currentPlayerMinaPubKey)
 
 	let canvas: HTMLCanvasElement;
 	let canvasContext: CanvasRenderingContext2D;
@@ -16,6 +22,10 @@
 	let hoveredPiece: GamePiece | undefined;
 	let selectedPiece: GamePiece | undefined;
 
+	let orders: Record<string, Array<GamePieceOrder>>;
+	let issuingOrder: GamePieceOrder | undefined;
+	const minaArenaClient = new MinaArenaClient();
+
 	const legendConfig = {
 		colors: ['pink', 'lightblue']
 	};
@@ -23,22 +33,56 @@
 	// TODO: Can different units have different sizes?
 	export const PIECE_RADIUS = 12;
 
+	const PHASE_NAME_MOVEMENT = 'MOVEMENT';
+	const PHASE_NAME_SHOOTING = 'SHOOTING';
+	const PHASE_NAME_MELEE = 'MELEE';
+
 	const players = game.gamePlayers?.map((p) => p.player.minaPublicKey) || ['', ''];
+
+	export let rerender: () => {};
 
 	onMount(() => {
 		canvas = document.getElementById('canvas') as HTMLCanvasElement;
 		canvasContext = canvas.getContext('2d')!;
+		initDrawnPieces();
+		initGamePieceOrders();
+	});
+
+	const initDrawnPieces = () => {
 		const livingGamePieces = game.gamePieces.filter((p) => p.health > 0)
 		drawnPieces = livingGamePieces.map((p) => {
 			const owner = p.gamePlayer.player.minaPublicKey;
 			const ownerIdx = players?.indexOf(owner) || 0;
 			return Utils.makePiece(p.id, p.coordinates.x, p.coordinates.y, PIECE_RADIUS, legendConfig.colors[ownerIdx]);
 		});
-	});
+	}
+
+	const initGamePieceOrders = () => {
+		orders = {};
+		playerGamePieces.forEach((piece) => orders[piece.id] = []);
+	}
 
 	afterUpdate(() => {
-		Utils.drawAllPieces(canvas, canvasContext, drawnPieces, hoveredPiece, selectedPiece);
+		clearCanvas();
+		drawPhaseBeforePieces();
+		drawPieces();
 	});
+
+	const clearCanvas = () => {
+		canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+	}
+
+	const drawPhaseBeforePieces = () => {
+		switch(currentPhaseName) {
+			case PHASE_NAME_MOVEMENT:
+				drawMovementPhase(canvas, orders, selectedPiece);
+				break;
+		}
+	}
+
+	const drawPieces = () => {
+		Utils.drawAllPieces(canvas, canvasContext, drawnPieces, hoveredPiece, selectedPiece);
+	}
 
 	const onMouseMove = (e: MouseEvent) => {
 		const mouseAbsolutePoint = { x: e.clientX, y: e.clientY };
@@ -49,11 +93,36 @@
 		} else {
 			hideHoveredPieceTooltip();
 		}
+		if (issuingOrder) {
+			switch(currentPhaseName) {
+				case PHASE_NAME_MOVEMENT:
+					draftMoveOrder(mouseCanvasPoint);
+					break;
+			}
+		}
+	}
+
+	const onMouseDown = (e: MouseEvent) => {
+		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
+		const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+		switch(currentPhaseName) {
+			case PHASE_NAME_MOVEMENT:
+				if (!clickedPiece) draftMoveOrder(mouseCanvasPoint);
+				break;
+		}
 	}
 
 	const onMouseUp = (e: MouseEvent) => {
 		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
-		selectedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+		if (issuingOrder) {
+			switch(currentPhaseName) {
+				case PHASE_NAME_MOVEMENT:
+					finalizeMoveOrder();
+					break;
+			}
+		} else {
+			selectedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+		}
 	}
 
 	const showHoveredPieceTooltip = (absolutePoint: Point) => {
@@ -71,6 +140,84 @@
 		
 		tooltip.style.display = 'none';
 	}
+
+	const draftMoveOrder = (canvasPoint: Point) => {
+		if (!selectedPiece) return;
+
+		issuingOrder = {
+			move: {
+				gamePieceId: selectedPiece.id,
+				action: {
+					moveFrom: { x: selectedPiece.coordinates.x, y: selectedPiece.coordinates.y },
+					moveTo: { x: Math.round(canvasPoint.x), y: Math.round(canvasPoint.y) }
+				}
+			}
+		};
+		orders[selectedPiece.id] = [issuingOrder];
+	}
+
+	const finalizeMoveOrder = () => {
+		if (!selectedPiece || !issuingOrder || !issuingOrder.move) {
+			issuingOrder = undefined;
+			selectedPiece = undefined;
+			return;
+		}
+
+		const moveDistance = Utils.distanceBetweenPoints(selectedPiece.coordinates, issuingOrder.move?.action.moveTo);
+		if (moveDistance <= selectedPiece.playerUnit.unit.movementSpeed) {
+			orders[selectedPiece.id] = [issuingOrder];
+		} else {
+			orders[selectedPiece.id] = [];
+		}
+		issuingOrder = undefined;
+		selectedPiece = undefined;
+	}
+
+	const submitPhase = async () => {
+		switch(currentPhaseName) {
+			case 'MOVEMENT':
+				await submitMovePhase();
+				break;
+			case 'SHOOTING':
+				await submitShootingPhase();
+				break;
+			case 'MELEE':
+				await submitMeleePhase();
+				break;
+		}
+		await rerender();
+	}
+
+	const submitMovePhase = async () => {
+		const moveActions: Array<MoveAction> = [];
+		Object.values(orders).flat().forEach((moveOrder: GamePieceOrder) => {
+			if (moveOrder.move) moveActions.push(moveOrder.move);
+		});
+		await minaArenaClient.submitMovePhase(
+			currentPlayerMinaPubKey,
+			game.id,
+			game.currentPhase!.id,
+			moveActions
+		);
+	}
+
+	const submitShootingPhase = async () => {
+		await minaArenaClient.submitShootingPhase(
+			currentPlayerMinaPubKey,
+			game.id,
+			game.currentPhase!.id,
+			[]
+		);
+	}
+
+	const submitMeleePhase = async () => {
+		await minaArenaClient.submitMeleePhase(
+			currentPlayerMinaPubKey,
+			game.id,
+			game.currentPhase!.id,
+			[]
+		);
+	}
 </script>
 
 <div class="flex">
@@ -80,6 +227,7 @@
 		height={arenaHeight}
 		class="border border-slate-400 mx-auto"
 		on:mousemove={onMouseMove}
+		on:mousedown={onMouseDown}
     on:mouseup={onMouseUp}
 	/>
 	<div class="mr-6">
@@ -110,6 +258,18 @@
 			{#if selectedPiece}
 				<div></div>
 			{/if}
+			{#if orders}
+				<div></div>
+			{/if}
 		{/if}
 	</span>
+</div>
+<div class="flex">
+	<button
+		id="submit-phase-button"
+		class="mx-auto"
+		on:click={submitPhase}
+	>
+		Submit Phase
+	</button>
 </div>
