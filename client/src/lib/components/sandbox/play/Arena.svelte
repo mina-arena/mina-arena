@@ -7,7 +7,7 @@
 	let gamePieces: Array<GamePiece> = game.gamePieces;
 
 	let canvas: HTMLCanvasElement;
-	let ctx: CanvasRenderingContext2D;
+	let canvasContext: CanvasRenderingContext2D;
 	let drawnPieces: Array<DrawnPiece> = [];
 
 	let arenaWidth: number = game.arena.width;
@@ -26,6 +26,8 @@
 	const players = game.gamePlayers?.map((p) => p.player.minaPublicKey) || ['', ''];
 
 	onMount(() => {
+		canvas = document.getElementById('canvas') as HTMLCanvasElement;
+		canvasContext = canvas.getContext('2d')!;
 		const livingGamePieces = game.gamePieces.filter((p) => p.health > 0)
 		drawnPieces = livingGamePieces.map((p) => {
 			const owner = p.gamePlayer.player.minaPublicKey;
@@ -35,9 +37,7 @@
 	});
 
 	afterUpdate(() => {
-		canvas = document.getElementById('canvas') as HTMLCanvasElement;
-		ctx = canvas.getContext('2d')!;
-		Utils.drawAllPieces(canvas, ctx, drawnPieces, hoveredPiece, selectedPiece);
+		Utils.drawAllPieces(canvas, canvasContext, drawnPieces, hoveredPiece, selectedPiece);
 	});
 
 	const onMouseMove = (e: MouseEvent) => {
@@ -54,7 +54,6 @@
 	const onMouseUp = (e: MouseEvent) => {
 		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
 		selectedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
-		// hoveredPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
 	}
 
 	const showHoveredPieceTooltip = (absolutePoint: Point) => {
@@ -109,7 +108,7 @@
 				<div>Missile Range: {hoveredUnit.rangedRange}</div>
 			{/if}
 			{#if selectedPiece}
-				<div>Selected: {selectedPiece.id}</div>
+				<div></div>
 			{/if}
 		{/if}
 	</span>
