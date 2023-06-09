@@ -1,16 +1,20 @@
 <script lang="ts">
 	import { truncateMinaPublicKey } from '$lib/utils';
-	import { afterUpdate } from 'svelte';
-	import { makePiece, drawAllPieces } from './utils';
+	import { afterUpdate, onMount } from 'svelte';
+	import * as Utils from './utils';
 
 	export let game: Game;
+	let gamePieces: Array<GamePiece> = game.gamePieces;
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
-	let pieces: Array<DrawnPiece> = [];
+	let drawnPieces: Array<DrawnPiece> = [];
 
-	let offsetTop: number;
-	let offsetLeft: number;
+	let arenaWidth: number = game.arena.width;
+	let arenaHeight: number = game.arena.height;
+
+	let hoveredPiece: GamePiece | undefined;
+	let selectedPiece: GamePiece | undefined;
 
 	const legendConfig = {
 		colors: ['pink', 'lightblue']
@@ -21,30 +25,63 @@
 
 	const players = game.gamePlayers?.map((p) => p.player.minaPublicKey) || ['', ''];
 
+	onMount(() => {
+		const livingGamePieces = game.gamePieces.filter((p) => p.health > 0)
+		drawnPieces = livingGamePieces.map((p) => {
+			const owner = p.gamePlayer.player.minaPublicKey;
+			const ownerIdx = players?.indexOf(owner) || 0;
+			return Utils.makePiece(p.id, p.coordinates.x, p.coordinates.y, PIECE_RADIUS, legendConfig.colors[ownerIdx]);
+		});
+	});
+
 	afterUpdate(() => {
 		canvas = document.getElementById('canvas') as HTMLCanvasElement;
 		ctx = canvas.getContext('2d')!;
-		offsetTop = canvas.offsetTop;
-		offsetLeft = canvas.offsetLeft;
-		pieces =
-			game.gamePieces
-				.filter((p) => p.health > 0)
-				.map((p) => {
-					const owner = p.gamePlayer.player.minaPublicKey;
-					const ownerIdx = players?.indexOf(owner) || 0;
-					return makePiece(p.coordinates.x, p.coordinates.y, PIECE_RADIUS, legendConfig.colors[ownerIdx]);
-				});
-		console.log(pieces);
-		drawAllPieces(canvas, ctx, pieces);
+		Utils.drawAllPieces(canvas, ctx, drawnPieces, hoveredPiece, selectedPiece);
 	});
+
+	const onMouseMove = (e: MouseEvent) => {
+		const mouseAbsolutePoint = { x: e.clientX, y: e.clientY };
+		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
+		hoveredPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+		if (hoveredPiece) {
+			showHoveredPieceTooltip(mouseAbsolutePoint);
+		} else {
+			hideHoveredPieceTooltip();
+		}
+	}
+
+	const onMouseUp = (e: MouseEvent) => {
+		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
+		selectedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+		// hoveredPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+	}
+
+	const showHoveredPieceTooltip = (absolutePoint: Point) => {
+		var tooltip = document.querySelector('#piece-hover-tooltip') as HTMLElement;
+		if (!tooltip) return;
+		
+		tooltip.style.left = (absolutePoint.x + 20) + 'px';
+		tooltip.style.top = (absolutePoint.y + 20) + 'px';
+		tooltip.style.display = 'block';
+	}
+
+	const hideHoveredPieceTooltip = () => {
+		var tooltip = document.querySelector('#piece-hover-tooltip') as HTMLElement;
+		if (!tooltip) return;
+		
+		tooltip.style.display = 'none';
+	}
 </script>
 
 <div class="flex">
 	<canvas
 		id="canvas"
-		width={game.arena?.width}
-		height={game.arena?.height}
+		width={arenaWidth}
+		height={arenaHeight}
 		class="border border-slate-400 mx-auto"
+		on:mousemove={onMouseMove}
+    on:mouseup={onMouseUp}
 	/>
 	<div class="mr-6">
 		<div>Legend:</div>
@@ -61,4 +98,19 @@
 			Player 2: {truncateMinaPublicKey(players[1])}
 		</div>
 	</div>
+	<span id="piece-hover-tooltip">
+		{#if hoveredPiece}
+			{@const hoveredUnit = hoveredPiece.playerUnit.unit}
+			<div>{hoveredPiece.playerUnit.name} ({hoveredUnit.name})</div>
+			<div>HP: {hoveredPiece.health}/{hoveredUnit.maxHealth}</div>
+			<div>Speed: {hoveredUnit.movementSpeed}</div>
+			<div>Armor: {hoveredUnit.armorSaveRoll}+</div>
+			{#if hoveredUnit.rangedNumAttacks}
+				<div>Missile Range: {hoveredUnit.rangedRange}</div>
+			{/if}
+			{#if selectedPiece}
+				<div>Selected: {selectedPiece.id}</div>
+			{/if}
+		{/if}
+	</span>
 </div>
