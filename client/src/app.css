@@ -25,15 +25,6 @@
   pointer-events: none;
 }
 
-#piece-hover-tooltip {
-  display: none;
-  position: fixed;
-  overflow: hidden;
-  border: 1px solid black;
-  border-radius: 6px;
-  padding: 5px;
-}
-
 @layer utilities {
   ._button {
     border: 1px solid rgb(46, 52, 58);

@@ -97,7 +97,7 @@
 			Player 2: {truncateMinaPublicKey(players[1])}
 		</div>
 	</div>
-	<span id="piece-hover-tooltip">
+	<span id="piece-hover-tooltip" class="p-2 hidden fixed overflow-hidden border border-solid border-black rounded">
 		{#if hoveredPiece}
 			{@const hoveredUnit = hoveredPiece.playerUnit.unit}
 			<div>{hoveredPiece.playerUnit.name} ({hoveredUnit.name})</div>
