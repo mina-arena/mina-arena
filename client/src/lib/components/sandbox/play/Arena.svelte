@@ -37,7 +37,7 @@
 	const PHASE_NAME_SHOOTING = 'SHOOTING';
 	const PHASE_NAME_MELEE = 'MELEE';
 
-	const players = game.gamePlayers?.map((p) => p.player.minaPublicKey) || ['', ''];
+	const playerPublicKeys = (game.gamePlayers || []).map((p) => p.player.minaPublicKey) || ['', ''];
 
 	export let rerender: () => {};
 
@@ -51,9 +51,9 @@
 	const initDrawnPieces = () => {
 		const livingGamePieces = game.gamePieces.filter((p) => p.health > 0)
 		drawnPieces = livingGamePieces.map((p) => {
-			const owner = p.gamePlayer.player.minaPublicKey;
-			const ownerIdx = players?.indexOf(owner) || 0;
-			return Utils.makePiece(p.id, p.coordinates.x, p.coordinates.y, PIECE_RADIUS, legendConfig.colors[ownerIdx]);
+			const playerMinaPublicKey = p.gamePlayer.player.minaPublicKey;
+			const playerColor = Utils.playerColor(playerPublicKeys, playerMinaPublicKey, legendConfig.colors);
+			return Utils.makePiece(p.id, p.coordinates.x, p.coordinates.y, PIECE_RADIUS, playerColor);
 		});
 	}
 
@@ -89,7 +89,7 @@
 		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
 		hoveredPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
 		if (hoveredPiece) {
-			showHoveredPieceTooltip(mouseAbsolutePoint);
+			showHoveredPieceTooltip(mouseAbsolutePoint, hoveredPiece);
 		} else {
 			hideHoveredPieceTooltip();
 		}
@@ -125,13 +125,17 @@
 		}
 	}
 
-	const showHoveredPieceTooltip = (absolutePoint: Point) => {
+	const showHoveredPieceTooltip = (absolutePoint: Point, hoveredPiece: GamePiece) => {
 		var tooltip = document.querySelector('#piece-hover-tooltip') as HTMLElement;
 		if (!tooltip) return;
+
+		const playerMinaPublicKey = hoveredPiece.gamePlayer.player.minaPublicKey;
+		const playerColor = Utils.playerColor(playerPublicKeys, playerMinaPublicKey, legendConfig.colors);
 		
 		tooltip.style.left = (absolutePoint.x + 20) + 'px';
 		tooltip.style.top = (absolutePoint.y + 20) + 'px';
 		tooltip.style.display = 'block';
+		tooltip.style.backgroundColor = playerColor;
 	}
 
 	const hideHoveredPieceTooltip = () => {
@@ -236,16 +240,16 @@
 		<div>
 			<div>
 				<div class="w-3 h-3 bg-[pink] border border-zinc-600" />
-				Player 1: {truncateMinaPublicKey(players[0])}
+				Player 1: {truncateMinaPublicKey(playerPublicKeys[0])}
 			</div>
 		</div>
 		<br />
 		<div>
 			<div class="w-3 h-3 bg-[lightblue] border border-zinc-600" />
-			Player 2: {truncateMinaPublicKey(players[1])}
+			Player 2: {truncateMinaPublicKey(playerPublicKeys[1])}
 		</div>
 	</div>
-	<span id="piece-hover-tooltip">
+	<span id="piece-hover-tooltip" class="p-2 hidden fixed overflow-hidden border border-solid border-black rounded">
 		{#if hoveredPiece}
 			{@const hoveredUnit = hoveredPiece.playerUnit.unit}
 			<div>{hoveredPiece.playerUnit.name} ({hoveredUnit.name})</div>
@@ -267,7 +271,7 @@
 <div class="flex">
 	<button
 		id="submit-phase-button"
-		class="mx-auto"
+		class="mx-auto p-2 rounded-xl bg-gray-200 hover:bg-gray-400"
 		on:click={submitPhase}
 	>
 		Submit Phase

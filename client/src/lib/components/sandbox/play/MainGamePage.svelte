@@ -7,12 +7,13 @@
 	import Arena from './Arena.svelte';
 	import { truncateMinaPublicKey } from '$lib/utils';
 
-	let currentGame: Game = { id: Number($page.params.gameId) };
+	let gameId = Number($page.params.gameId);
+	let currentGame: Game;
 	const minaArenaClient = new MinaArenaClient();
 	let loaded = false;
 
 	onMount(async () => {
-		currentGame = await minaArenaClient.getGame(currentGame.id);
+		currentGame = await minaArenaClient.getGame(gameId);
 		console.log(currentGame);
 		loaded = true;
 	});
@@ -29,8 +30,13 @@
 <div>
 	{#if loaded}
 		{#key currentGame}
-			<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
-			<div>Phase: {currentGame.currentPhase.name}</div>
+			{#if currentGame.status === 'IN_PROGRESS'}
+				<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
+				<div>Phase: {currentGame.currentPhase?.name}</div>
+				<PhaseInput game={currentGame} currentPlayer={currentPlayer()} {rerender} />
+			{:else if currentGame.status === 'COMPLETED'}
+				<div><b>GAME OVER!</b> Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}</div>
+			{/if}
 			<Arena game={currentGame} {rerender} />
 		{/key}
 	{/if}

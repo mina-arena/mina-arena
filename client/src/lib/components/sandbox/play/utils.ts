@@ -134,3 +134,12 @@ export const drawArrow = (
 	ctx.fill();
   ctx.closePath();
 }
+
+export const playerColor = (
+  playerPublicKeys: Array<string>,
+  minaPublicKey: string,
+  colors: Array<string>,
+): string => {
+  const playerIndex = playerPublicKeys.findIndex((key) => key === minaPublicKey) || 0;
+  return colors[playerIndex];
+}
