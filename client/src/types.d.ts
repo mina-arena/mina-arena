@@ -12,7 +12,7 @@ type Game = {
   gamePlayers?: Array<GamePlayer>;
   winningGamePlayer?: GamePlayer;
   gamePieces: Array<GamePiece>;
-  arena?: {
+  arena: {
     width: number;
     height: number;
   }
@@ -108,6 +108,7 @@ type CreateGamePieceInput = {
 }
 
 type DrawnPiece = {
+  gamePieceId: number;
   x: number;
   y: number;
   radius: number;
@@ -158,4 +159,9 @@ type PublicKeyGroup = {
 type Signature = {
   r: string;
   s: string;
+}
+
+type Point = {
+  x: number;
+  y: number;
 }
