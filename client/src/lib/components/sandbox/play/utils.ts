@@ -2,16 +2,24 @@ const PIECE_STROKE_COLOR = '#101010';
 const PIECE_SELECTED_STROKE_COLOR = '#771111';
 const MOVEMENT_ARROW_STROKE_COLOR = 'black';
 const MOVEMENT_ARROW_FILL_COLOR = 'black';
+const MISSILE_RANGE_CIRCLE_FILL_COLOR = '#ffe9f0';
+const MISSILE_RANGE_CIRCLE_STROKE_COLOR = 'lightcoral';
 
-export const makePiece = (gamePieceId: number, x: number, y: number, radius: number, fill: string) => {
-  const piece = {
-    gamePieceId: gamePieceId,
-    x: x,
-    y: y,
-    radius: radius,
-    fill: fill
+const PIECE_RADIUS = 12;
+
+export const clearCanvas = (ctx: CanvasRenderingContext2D) => {
+  const canvas = ctx.canvas;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+export const makePiece = (piece: GamePiece, playerColor: string) => {
+  return {
+    gamePieceId: piece.id,
+    x: piece.coordinates.x,
+    y: piece.coordinates.y,
+    radius: PIECE_RADIUS,
+    fill: playerColor
   };
-  return piece;
 };
 
 export const drawAllPieces = (
@@ -83,6 +91,34 @@ export const pieceAtCanvasPoint = (
     return distanceBetweenPoints(canvasPoint, piecePos) < drawnPiece.radius;
   });
   return drawnPiece ? gamePieceById(drawnPiece.gamePieceId, gamePieces) : undefined;
+}
+
+export const drawMissileRangeCircle = (
+  ctx: CanvasRenderingContext2D,
+  orders: Record<string, Array<GamePieceOrder>>,
+  selectedPiece: GamePiece
+) => {
+  if (!selectedPiece) return;
+  const unit = selectedPiece.playerUnit.unit;
+  if (!unit.rangedRange) return;
+  
+  const selectedPieceOrders = orders[selectedPiece.id];
+  let selectedPieceMovingTo: Point | undefined = undefined;
+  if (selectedPieceOrders.length > 0) {
+    selectedPieceMovingTo = selectedPieceOrders[0].move?.action.moveTo;
+  }
+
+  const missileRangeCircleCenter = selectedPieceMovingTo || selectedPiece.coordinates;
+  
+  ctx.beginPath();
+  const radius = unit.rangedRange;
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = MISSILE_RANGE_CIRCLE_STROKE_COLOR;
+  ctx.fillStyle = MISSILE_RANGE_CIRCLE_FILL_COLOR;
+  ctx.arc(missileRangeCircleCenter.x, missileRangeCircleCenter.y, radius, 0, 2 * Math.PI, false);
+  ctx.fill();
+  ctx.stroke();
+  ctx.closePath();
 }
 
 export const drawArrow = (
