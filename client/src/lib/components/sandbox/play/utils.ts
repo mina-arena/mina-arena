@@ -127,15 +127,15 @@ export const drawArrow = (
   toCanvasPoint: Point
 ) => {
   const xCenter = toCanvasPoint.x;
-	const yCenter = toCanvasPoint.y;
+  const yCenter = toCanvasPoint.y;
   const dx = toCanvasPoint.x - fromCanvasPoint.x;
   const dy = toCanvasPoint.y - fromCanvasPoint.y;
   const r = 6;
-	let x: number;
-	let y: number;
+  let x: number;
+  let y: number;
   let angle: number;
   
-	ctx.beginPath();
+  ctx.beginPath();
   ctx.strokeStyle = MOVEMENT_ARROW_STROKE_COLOR;
   ctx.fillStyle = MOVEMENT_ARROW_FILL_COLOR;
 
@@ -144,30 +144,30 @@ export const drawArrow = (
   ctx.lineTo(toCanvasPoint.x, toCanvasPoint.y);
   ctx.stroke();
   ctx.closePath();
-	
+  
   ctx.beginPath();
   ctx.lineWidth = 1;
-	angle = Math.atan2(dy, dx)
-	x = r*Math.cos(angle) + xCenter;
-	y = r*Math.sin(angle) + yCenter;
+  angle = Math.atan2(dy, dx)
+  x = r*Math.cos(angle) + xCenter;
+  y = r*Math.sin(angle) + yCenter;
   ctx.moveTo(x, y);
-	
-	angle += (1/3)*(2*Math.PI)
-	x = r*Math.cos(angle) + xCenter;
-	y = r*Math.sin(angle) + yCenter;
-	ctx.lineTo(x, y);
-	
-	angle += (1/3)*(2*Math.PI)
-	x = r*Math.cos(angle) + xCenter;
-	y = r*Math.sin(angle) + yCenter;
-	ctx.lineTo(x, y);
+  
+  angle += (1/3)*(2*Math.PI)
+  x = r*Math.cos(angle) + xCenter;
+  y = r*Math.sin(angle) + yCenter;
+  ctx.lineTo(x, y);
+  
+  angle += (1/3)*(2*Math.PI)
+  x = r*Math.cos(angle) + xCenter;
+  y = r*Math.sin(angle) + yCenter;
+  ctx.lineTo(x, y);
 
   angle += (1/3)*(2*Math.PI)
-	x = r*Math.cos(angle) + xCenter;
-	y = r*Math.sin(angle) + yCenter;
-	ctx.lineTo(x, y);
+  x = r*Math.cos(angle) + xCenter;
+  y = r*Math.sin(angle) + yCenter;
+  ctx.lineTo(x, y);
 
-	ctx.fill();
+  ctx.fill();
   ctx.closePath();
 }
 

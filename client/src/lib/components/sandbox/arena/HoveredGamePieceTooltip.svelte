@@ -17,24 +17,24 @@
 
   // const showHoveredPieceTooltip = (absolutePoint: Point, hoveredPiece: GamePiece) => {
   const showHoveredPieceTooltip = () => {
-		var tooltip = document.querySelector('#piece-hover-tooltip') as HTMLElement;
-		if (!tooltip || !hoveredPiece || !tooltipAbsolutePosition) return;
+    var tooltip = document.querySelector('#piece-hover-tooltip') as HTMLElement;
+    if (!tooltip || !hoveredPiece || !tooltipAbsolutePosition) return;
 
-		const playerMinaPublicKey = hoveredPiece.gamePlayer.player.minaPublicKey;
-		const playerColor = Utils.playerColor(playerPublicKeys, playerMinaPublicKey, playerColors);
-		
-		tooltip.style.left = (tooltipAbsolutePosition.x + 20) + 'px';
-		tooltip.style.top = (tooltipAbsolutePosition.y + 20) + 'px';
-		tooltip.style.display = 'block';
-		tooltip.style.backgroundColor = playerColor;
-	}
+    const playerMinaPublicKey = hoveredPiece.gamePlayer.player.minaPublicKey;
+    const playerColor = Utils.playerColor(playerPublicKeys, playerMinaPublicKey, playerColors);
+    
+    tooltip.style.left = (tooltipAbsolutePosition.x + 20) + 'px';
+    tooltip.style.top = (tooltipAbsolutePosition.y + 20) + 'px';
+    tooltip.style.display = 'block';
+    tooltip.style.backgroundColor = playerColor;
+  }
 
-	const hideHoveredPieceTooltip = () => {
-		var tooltip = document.querySelector('#piece-hover-tooltip') as HTMLElement;
-		if (!tooltip) return;
-		
-		tooltip.style.display = 'none';
-	}
+  const hideHoveredPieceTooltip = () => {
+    var tooltip = document.querySelector('#piece-hover-tooltip') as HTMLElement;
+    if (!tooltip) return;
+    
+    tooltip.style.display = 'none';
+  }
 
 </script>
 

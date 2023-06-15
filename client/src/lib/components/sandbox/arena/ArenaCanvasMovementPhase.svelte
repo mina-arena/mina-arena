@@ -13,15 +13,15 @@
   let ctx: CanvasRenderingContext2D;
 
   let currentPlayerMinaPubKey: string = game.currentPhase?.gamePlayer.player.minaPublicKey || '';
-	let gamePieces: Array<GamePiece> = game.gamePieces;
-	let playerGamePieces: Array<GamePiece> = gamePieces.filter((p) => p.gamePlayer.player.minaPublicKey === currentPlayerMinaPubKey);
+  let gamePieces: Array<GamePiece> = game.gamePieces;
+  let playerGamePieces: Array<GamePiece> = gamePieces.filter((p) => p.gamePlayer.player.minaPublicKey === currentPlayerMinaPubKey);
     
-	let drawnPieces: Array<DrawnPiece> = [];
+  let drawnPieces: Array<DrawnPiece> = [];
   let hoveredPiece: GamePiece | undefined;
   let selectedPiece: GamePiece | undefined;
 
   let orders: Record<string, Array<GamePieceOrder>>;
-	let issuingOrder: GamePieceOrder | undefined;
+  let issuingOrder: GamePieceOrder | undefined;
 
   const MOVEMENT_CIRCLE_FILL_COLOR = 'lightgoldenrodyellow';
   const MOVEMENT_CIRCLE_STROKE_COLOR = 'goldenrod';
@@ -31,34 +31,34 @@
 
   onMount(() => {
     canvas = document.getElementById('canvas') as HTMLCanvasElement;
-		ctx = canvas.getContext('2d')!;
-		initDrawnPieces();
-		initGamePieceOrders();
-	});
+    ctx = canvas.getContext('2d')!;
+    initDrawnPieces();
+    initGamePieceOrders();
+  });
 
   const initDrawnPieces = () => {
-		const livingGamePieces = game.gamePieces.filter((p) => p.health > 0)
-		drawnPieces = livingGamePieces.map((p) => {
-			const playerMinaPublicKey = p.gamePlayer.player.minaPublicKey;
-			const playerColor = Utils.playerColor(playerPublicKeys, playerMinaPublicKey, playerColors);
-			return Utils.makePiece(p, playerColor);
-		});
-	}
+    const livingGamePieces = game.gamePieces.filter((p) => p.health > 0)
+    drawnPieces = livingGamePieces.map((p) => {
+      const playerMinaPublicKey = p.gamePlayer.player.minaPublicKey;
+      const playerColor = Utils.playerColor(playerPublicKeys, playerMinaPublicKey, playerColors);
+      return Utils.makePiece(p, playerColor);
+    });
+  }
 
   const initGamePieceOrders = () => {
-		orders = {};
-		playerGamePieces.forEach((piece) => orders[piece.id] = []);
-	};
+    orders = {};
+    playerGamePieces.forEach((piece) => orders[piece.id] = []);
+  };
 
   afterUpdate(() => {
-		Utils.clearCanvas(ctx);
-		drawMovementPhase(canvas, orders, selectedPiece);
-		drawPieces();
-	});
+    Utils.clearCanvas(ctx);
+    drawMovementPhase(canvas, orders, selectedPiece);
+    drawPieces();
+  });
 
-	const drawPieces = () => {
-		Utils.drawAllPieces(canvas, ctx, drawnPieces, hoveredPiece, selectedPiece);
-	}
+  const drawPieces = () => {
+    Utils.drawAllPieces(canvas, ctx, drawnPieces, hoveredPiece, selectedPiece);
+  }
 
   export const drawMovementPhase = (
     canvas: HTMLCanvasElement,
@@ -126,80 +126,80 @@
   }
 
   const onMouseMove = (e: MouseEvent) => {
-		const mouseAbsolutePoint = { x: e.clientX, y: e.clientY };
-		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
-		hoveredPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
-		if (hoveredPiece) {
+    const mouseAbsolutePoint = { x: e.clientX, y: e.clientY };
+    const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
+    hoveredPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+    if (hoveredPiece) {
       pieceHoveredHandler(hoveredPiece, mouseAbsolutePoint);
-		} else {
+    } else {
       pieceUnhoveredHandler();
-		}
-		if (issuingOrder) draftMoveOrder(mouseCanvasPoint);
-	}
+    }
+    if (issuingOrder) draftMoveOrder(mouseCanvasPoint);
+  }
 
-	const onMouseDown = (e: MouseEvent) => {
-		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
-		const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
-		if (selectedPiece && !clickedPiece) draftMoveOrder(mouseCanvasPoint);
-	}
+  const onMouseDown = (e: MouseEvent) => {
+    const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
+    const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+    if (selectedPiece && !clickedPiece) draftMoveOrder(mouseCanvasPoint);
+  }
 
-	const onMouseUp = (e: MouseEvent) => {
-		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
-		if (issuingOrder) {
-			finalizeMoveOrder();
-		} else {
-			selectedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
-		}
-	}
+  const onMouseUp = (e: MouseEvent) => {
+    const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
+    if (issuingOrder) {
+      finalizeMoveOrder();
+    } else {
+      selectedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+    }
+  }
 
   const draftMoveOrder = (canvasPoint: Point) => {
-		if (!selectedPiece) return;
+    if (!selectedPiece) return;
 
     const selectedPiecePlayerKey = selectedPiece.gamePlayer.player.minaPublicKey;
     if (selectedPiecePlayerKey !== currentPlayerMinaPubKey) return;
 
-		issuingOrder = {
-			move: {
-				gamePieceId: selectedPiece.id,
-				action: {
-					moveFrom: { x: selectedPiece.coordinates.x, y: selectedPiece.coordinates.y },
-					moveTo: { x: Math.round(canvasPoint.x), y: Math.round(canvasPoint.y) }
-				}
-			}
-		};
-		orders[selectedPiece.id] = [issuingOrder];
-	}
+    issuingOrder = {
+      move: {
+        gamePieceId: selectedPiece.id,
+        action: {
+          moveFrom: { x: selectedPiece.coordinates.x, y: selectedPiece.coordinates.y },
+          moveTo: { x: Math.round(canvasPoint.x), y: Math.round(canvasPoint.y) }
+        }
+      }
+    };
+    orders[selectedPiece.id] = [issuingOrder];
+  }
 
-	const finalizeMoveOrder = () => {
-		if (!selectedPiece || !issuingOrder || !issuingOrder.move) {
-			issuingOrder = undefined;
-			selectedPiece = undefined;
-			return;
-		}
+  const finalizeMoveOrder = () => {
+    if (!selectedPiece || !issuingOrder || !issuingOrder.move) {
+      issuingOrder = undefined;
+      selectedPiece = undefined;
+      return;
+    }
 
-		const moveDistance = Utils.distanceBetweenPoints(selectedPiece.coordinates, issuingOrder.move?.action.moveTo);
-		if (moveDistance <= selectedPiece.playerUnit.unit.movementSpeed) {
-			orders[selectedPiece.id] = [issuingOrder];
-		} else {
-			orders[selectedPiece.id] = [];
-		}
-		issuingOrder = undefined;
-		selectedPiece = undefined;
-	}
+    const moveDistance = Utils.distanceBetweenPoints(selectedPiece.coordinates, issuingOrder.move?.action.moveTo);
+    if (moveDistance <= selectedPiece.playerUnit.unit.movementSpeed) {
+      orders[selectedPiece.id] = [issuingOrder];
+    } else {
+      orders[selectedPiece.id] = [];
+    }
+    issuingOrder = undefined;
+    selectedPiece = undefined;
+  }
 
   const submitPhase = async () => {
-		const moveActions: Array<MoveAction> = [];
-		Object.values(orders).flat().forEach((moveOrder: GamePieceOrder) => {
-			if (moveOrder.move) moveActions.push(moveOrder.move);
-		});
-		await minaArenaClient.submitMovePhase(
-			currentPlayerMinaPubKey,
-			game.id,
-			game.currentPhase!.id,
-			moveActions
-		);
-		await rerender();
-	}
+    const moveActions: Array<MoveAction> = [];
+    Object.values(orders).flat().forEach((moveOrder: GamePieceOrder) => {
+      if (moveOrder.move) moveActions.push(moveOrder.move);
+    });
+    await minaArenaClient.submitMovePhase(
+      currentPlayerMinaPubKey,
+      game.id,
+      game.currentPhase!.id,
+      moveActions
+    );
+    await rerender();
+  }
 </script>
 
 <table>

@@ -8,16 +8,16 @@
   export let rerender: () => {};
 
   let hoveredPiece: GamePiece | undefined;
-	let hoveredPieceTooltipPosition: Point | undefined;
+  let hoveredPieceTooltipPosition: Point | undefined;
 
   const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {
-		hoveredPiece = piece;
-		hoveredPieceTooltipPosition = mouseAbsolutePoint;
-	}
+    hoveredPiece = piece;
+    hoveredPieceTooltipPosition = mouseAbsolutePoint;
+  }
 
-	const onGamePieceUnhovered = () => {
-		hoveredPiece = undefined;
-	}
+  const onGamePieceUnhovered = () => {
+    hoveredPiece = undefined;
+  }
 </script>
 
 {#if game.currentPhase?.name === 'MOVEMENT'}
