@@ -102,7 +102,7 @@ export const drawMissileRangeCircle = (
   const unit = selectedPiece.playerUnit.unit;
   if (!unit.rangedRange) return;
   
-  const selectedPieceOrders = orders[selectedPiece.id];
+  const selectedPieceOrders = orders[selectedPiece.id] || [];
   let selectedPieceMovingTo: Point | undefined = undefined;
   if (selectedPieceOrders.length > 0) {
     selectedPieceMovingTo = selectedPieceOrders[0].move?.action.moveTo;

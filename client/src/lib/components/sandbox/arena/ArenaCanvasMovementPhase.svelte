@@ -138,11 +138,9 @@
 	}
 
 	const onMouseDown = (e: MouseEvent) => {
-    console.log('mouseUp');
 		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
 		const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
-    console.log(`mouseDown, clickedPiece: ${JSON.stringify(clickedPiece)}`);
-		if (!clickedPiece) draftMoveOrder(mouseCanvasPoint);
+		if (selectedPiece && !clickedPiece) draftMoveOrder(mouseCanvasPoint);
 	}
 
 	const onMouseUp = (e: MouseEvent) => {
@@ -156,6 +154,9 @@
 
   const draftMoveOrder = (canvasPoint: Point) => {
 		if (!selectedPiece) return;
+
+    const selectedPiecePlayerKey = selectedPiece.gamePlayer.player.minaPublicKey;
+    if (selectedPiecePlayerKey !== currentPlayerMinaPubKey) return;
 
 		issuingOrder = {
 			move: {
@@ -201,30 +202,36 @@
 	}
 </script>
 
-<canvas
-  id="canvas"
-  width={game.arena.width}
-  height={game.arena.height}
-  class="border border-slate-400 mx-auto"
-  on:mousemove={onMouseMove}
-  on:mousedown={onMouseDown}
-  on:mouseup={onMouseUp}
-/>
-<div class="flex">
-	<button
-		id="submit-phase-button"
-		class="mx-auto p-2 rounded-l bg-gray-200 hover:bg-gray-400"
-		on:click={submitPhase}
-	>
-		Submit Phase
-	</button>
-  {#if selectedPiece}
-    <div></div>
-  {/if}
-  {#if hoveredPiece}
-    <div></div>
-  {/if}
-  {#if orders}
-    <div></div>
-  {/if}
-</div>
+<table>
+  <tr>
+    <canvas
+      id="canvas"
+      width={game.arena.width}
+      height={game.arena.height}
+      class="border border-slate-400 mx-auto"
+      on:mousemove={onMouseMove}
+      on:mousedown={onMouseDown}
+      on:mouseup={onMouseUp}
+    />
+  </tr>
+  <tr>
+    <div class="flex">
+      <button
+        id="submit-phase-button"
+        class="mx-auto m-2 p-2 rounded-lg border border-slate-900 bg-gray-200 hover:bg-gray-400"
+        on:click={submitPhase}
+      >
+        Submit Phase
+      </button>
+      {#if selectedPiece}
+        <div></div>
+      {/if}
+      {#if hoveredPiece}
+        <div></div>
+      {/if}
+      {#if orders}
+        <div></div>
+      {/if}
+    </div>
+  </tr>
+</table>
