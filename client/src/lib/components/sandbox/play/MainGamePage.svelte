@@ -1,43 +1,47 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-  import { page } from '$app/stores';
+	import { onMount } from 'svelte';
+	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
+	import { page } from '$app/stores';
 
-  import PhaseInput from './phase-input/PhaseInput.svelte';
-  import Arena from './Arena.svelte';
-  import { truncateMinaPublicKey } from '$lib/utils';
+	import { smoke } from '$lib/dice-service-client/snarky-js-smoke-test';
 
-  let gameId = Number($page.params.gameId);
-  let currentGame: Game;
-  const minaArenaClient = new MinaArenaClient();
-  let loaded = false;
+	import PhaseInput from './phase-input/PhaseInput.svelte';
+	import Arena from './Arena.svelte';
+	import { truncateMinaPublicKey } from '$lib/utils';
 
-  onMount(async () => {
-    currentGame = await minaArenaClient.getGame(gameId);
-    console.log(currentGame);
-    loaded = true;
-  });
+	let gameId = Number($page.params.gameId);
+	let currentGame: Game;
+	const minaArenaClient = new MinaArenaClient();
+	let loaded = false;
 
-  const currentPlayer = () => {
-    return currentGame.currentPhase?.gamePlayer.player.minaPublicKey || '';
-  };
+	const smokeCopy = smoke;
 
-  const rerender = async () => {
-    currentGame = await minaArenaClient.getGame(currentGame.id);
-  };
+	onMount(async () => {
+		currentGame = await minaArenaClient.getGame(gameId);
+		console.log(currentGame);
+		loaded = true;
+	});
+
+	const currentPlayer = () => {
+		return currentGame.currentPhase?.gamePlayer.player.minaPublicKey || '';
+	};
+
+	const rerender = async () => {
+		currentGame = await minaArenaClient.getGame(currentGame.id);
+	};
 </script>
 
 <div>
-  {#if loaded}
-    {#key currentGame}
-      {#if currentGame.status === 'IN_PROGRESS'}
-        <div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
-        <div>Phase: {currentGame.currentPhase?.name}</div>
-        <PhaseInput game={currentGame} currentPlayer={currentPlayer()} {rerender} />
-      {:else if currentGame.status === 'COMPLETED'}
-        <div><b>GAME OVER!</b> Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}</div>
-      {/if}
-      <Arena game={currentGame} {rerender} />
-    {/key}
-  {/if}
+	{#if loaded}
+		{#key currentGame}
+			{#if currentGame.status === 'IN_PROGRESS'}
+				<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
+				<div>Phase: {currentGame.currentPhase?.name}</div>
+				<PhaseInput game={currentGame} currentPlayer={currentPlayer()} {rerender} />
+			{:else if currentGame.status === 'COMPLETED'}
+				<div><b>GAME OVER!</b> Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}</div>
+			{/if}
+			<Arena game={currentGame} {rerender} />
+		{/key}
+	{/if}
 </div>
