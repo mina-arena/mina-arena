@@ -2,7 +2,7 @@
   import { afterUpdate, onMount } from 'svelte';
   import * as Utils from '../play/utils';
   import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-	import HoveredGamePieceTooltipMovement from './HoveredGamePieceTooltipMovement.svelte';
+  import HoveredGamePieceTooltipMovement from './HoveredGamePieceTooltipMovement.svelte';
 
   export let game: Game;
   export let playerColors: Array<string>;

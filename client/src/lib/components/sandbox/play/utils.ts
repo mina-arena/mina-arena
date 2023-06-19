@@ -181,7 +181,7 @@ export const drawArrowWithOffset = (
   offset: number,
 ) => {
   const slope = slopeBetweenPoints(fromCanvasPoint, toCanvasPoint);
-  const angle = degreesBetweenLineSlopes(slope, 0);
+  const angle = angleRadiansBetweenLineSlopes(slope, 0);
   const dx = Math.cos(angle) * offset;
   const dy = Math.sin(angle) * offset;
   const x = fromCanvasPoint.x < toCanvasPoint.x ? toCanvasPoint.x - dx : toCanvasPoint.x + dx;
@@ -189,9 +189,8 @@ export const drawArrowWithOffset = (
   drawArrow(ctx, fromCanvasPoint, { x, y }, arrowColor);
 }
 
-export const degreesBetweenLineSlopes = (m1: number, m2: number): number => {
-  const angleRadians = Math.atan(Math.abs((m1 - m2) / (1 + m1 * m2)));
-  return angleRadians;
+export const angleRadiansBetweenLineSlopes = (m1: number, m2: number): number => {
+  return Math.atan(Math.abs((m1 - m2) / (1 + m1 * m2)));
 }
 
 export const slopeBetweenPoints = (p1: Point, p2: Point): number => {
