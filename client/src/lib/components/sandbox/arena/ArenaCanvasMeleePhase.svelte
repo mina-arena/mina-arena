@@ -2,7 +2,7 @@
   import { afterUpdate, onMount } from 'svelte';
   import * as Utils from '../play/utils';
   import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-  import HoveredGamePieceTooltipMovement from './HoveredGamePieceTooltipMovement.svelte';
+  import HoveredGamePieceTooltipMelee from './HoveredGamePieceTooltipMelee.svelte';
 
   export let game: Game;
   export let playerColors: Array<string>;
@@ -23,9 +23,7 @@
   let orders: Record<string, Array<GamePieceOrder>>;
   let issuingOrder: GamePieceOrder | undefined;
 
-  const MOVEMENT_CIRCLE_FILL_COLOR = 'lightgoldenrodyellow';
-  const MOVEMENT_CIRCLE_STROKE_COLOR = 'goldenrod';
-  const MOVEMENT_ARROW_COLOR = 'black';
+  const MELEE_ARROW_COLOR = 'darkred';
 
   const minaArenaClient = new MinaArenaClient();
   const playerPublicKeys = (game.gamePlayers || []).map((p) => p.player.minaPublicKey) || ['', ''];
@@ -53,7 +51,7 @@
 
   afterUpdate(() => {
     Utils.clearCanvas(ctx);
-    drawMovementPhase(canvas, orders, selectedPiece);
+    drawMeleePhase(canvas, orders, selectedPiece);
     drawPieces();
   });
 
@@ -61,74 +59,56 @@
     Utils.drawAllPieces(canvas, ctx, drawnPieces, hoveredPiece, selectedPiece);
   }
 
-  export const drawMovementPhase = (
+  export const drawMeleePhase = (
     canvas: HTMLCanvasElement,
     orders: Record<string, Array<GamePieceOrder>>,
     selectedPiece?: GamePiece,
   ) => {
     const ctx = canvas.getContext('2d')!;
     if (selectedPiece) {
-      const unit = selectedPiece.playerUnit.unit;
-      const moveSpeed = unit.movementSpeed;
-      const missileRange = unit.rangedRange || 0;
-
-      // NOTE: Assuming movement range is always greater than melee range
-      // Draw largest range circles first, then smaller ones on top
-      if (!missileRange) {
-        drawMovementCircle(ctx, selectedPiece);
-      } else {
-        if (moveSpeed > missileRange) {
-          drawMovementCircle(ctx, selectedPiece);
-          Utils.drawMissileRangeCircle(ctx, orders, selectedPiece);
-        } else {
-          Utils.drawMissileRangeCircle(ctx, orders, selectedPiece);
-          drawMovementCircle(ctx, selectedPiece);
-        }
-      }
       Utils.drawMeleeRangeCircle(ctx, orders, selectedPiece);
     }
 
-    drawMoveOrders(ctx, orders);
+    drawMeleeOrders(ctx, orders);
   }
 
-  const drawMovementCircle = (
-    ctx: CanvasRenderingContext2D,
-    selectedPiece: GamePiece
-  ) => {
-    if (!selectedPiece) return;
-
-    ctx.beginPath();
-    const radius = selectedPiece.playerUnit.unit.movementSpeed;
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = MOVEMENT_CIRCLE_STROKE_COLOR;
-    ctx.fillStyle = MOVEMENT_CIRCLE_FILL_COLOR;
-    ctx.arc(selectedPiece.coordinates.x, selectedPiece.coordinates.y, radius, 0, 2 * Math.PI, false);
-    ctx.fill();
-    ctx.stroke();
-    ctx.closePath();
-  }
-
-  const drawMoveOrders = (
+  const drawMeleeOrders = (
     ctx: CanvasRenderingContext2D,
     orders: Record<string, Array<GamePieceOrder>>,
   ) => {
     Object.keys(orders).forEach((gamePieceId) => {
       orders[gamePieceId].forEach((gamePieceOrder: GamePieceOrder) => {
-        const moveAction = gamePieceOrder.move;
-        if (moveAction) drawMovementArrow(ctx, moveAction);
+        const meleeAttackAction = gamePieceOrder.meleeAttack;
+        if (meleeAttackAction) drawMeleeAttackArrow(ctx, meleeAttackAction);
       });
     });
   }
 
-  const drawMovementArrow = (
+  const drawMeleeAttackArrow = (
     ctx: CanvasRenderingContext2D,
-    moveAction: MoveAction,
+    meleeAttackAction: MeleeAttackAction,
   ) => {
-    Utils.drawArrow(
+    const attackingPieceId = meleeAttackAction.gamePieceId;
+    const targetPieceId = meleeAttackAction.action.targetGamePieceId;
+    const attackingPiece = Utils.gamePieceById(attackingPieceId, gamePieces);
+    const targetPiece = Utils.gamePieceById(targetPieceId, gamePieces);
+
+    if (!attackingPiece) {
+      console.log(`ERROR drawing melee orders, no GamePiece found with ID ${attackingPieceId}`);
+      return;
+    }
+
+    if (!targetPiece) {
+      console.log(`ERROR drawing melee orders, no GamePiece found with ID ${targetPieceId}`);
+      return;
+    }
+
+    Utils.drawArrowWithOffset(
       ctx,
-      moveAction.action.moveFrom,
-      moveAction.action.moveTo,
-      MOVEMENT_ARROW_COLOR,
+      attackingPiece.coordinates,
+      targetPiece.coordinates,
+      MELEE_ARROW_COLOR,
+      Utils.PIECE_RADIUS + 6,
     );
   }
 
@@ -138,54 +118,80 @@
     hoveredPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
     if (hoveredPiece) {
       onGamePieceHovered(hoveredPiece, mouseAbsolutePoint);
+      if (issuingOrder) draftMeleeOrder(hoveredPiece);
     } else {
       onGamePieceUnhovered();
     }
-    if (issuingOrder) draftMoveOrder(mouseCanvasPoint);
   }
 
   const onMouseDown = (e: MouseEvent) => {
     const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
     const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
-    if (selectedPiece && !clickedPiece) draftMoveOrder(mouseCanvasPoint);
+    if (selectedPiece && clickedPiece) draftMeleeOrder(clickedPiece);
   }
 
   const onMouseUp = (e: MouseEvent) => {
     const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
-    if (issuingOrder) {
-      finalizeMoveOrder();
+    const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+    if (issuingOrder && clickedPiece) {
+      finalizeMeleeOrder();
     } else {
       selectedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
     }
   }
 
-  const draftMoveOrder = (canvasPoint: Point) => {
+  const draftMeleeOrder = (targetPiece: GamePiece) => {
     if (!selectedPiece) return;
 
     const selectedPiecePlayerKey = selectedPiece.gamePlayer.player.minaPublicKey;
     if (selectedPiecePlayerKey !== currentPlayerMinaPubKey) return;
 
+    // TODO: Fetch dice rolls from dice server
+    const diceRollInput = {
+      publicKey: {
+        x: 'publickeyx',
+        y: 'publickeyy',
+      },
+      cipherText: 'someciphertext',
+      signature: {
+        r: 'signaturer',
+        s: 'signatures',
+      }
+    }
     issuingOrder = {
-      move: {
+      meleeAttack: {
         gamePieceId: selectedPiece.id,
         action: {
-          moveFrom: { x: selectedPiece.coordinates.x, y: selectedPiece.coordinates.y },
-          moveTo: { x: Math.round(canvasPoint.x), y: Math.round(canvasPoint.y) }
+          targetGamePieceId: targetPiece.id,
+          diceRoll: diceRollInput,
         }
       }
     };
     orders[selectedPiece.id] = [issuingOrder];
   }
 
-  const finalizeMoveOrder = () => {
-    if (!selectedPiece || !issuingOrder || !issuingOrder.move) {
+  const finalizeMeleeOrder = () => {
+    if (
+      !selectedPiece ||
+      !issuingOrder ||
+      !issuingOrder.meleeAttack
+    ) {
       issuingOrder = undefined;
       selectedPiece = undefined;
       return;
     }
 
-    const moveDistance = Utils.distanceBetweenPoints(selectedPiece.coordinates, issuingOrder.move?.action.moveTo);
-    if (moveDistance <= selectedPiece.playerUnit.unit.movementSpeed) {
+    const targetPieceId = issuingOrder.meleeAttack.action.targetGamePieceId;
+    const targetPiece = Utils.gamePieceById(targetPieceId, gamePieces);
+
+    if (!targetPiece || targetPiece.gamePlayer.player.minaPublicKey === currentPlayerMinaPubKey) {
+      issuingOrder = undefined;
+      selectedPiece = undefined;
+      return;
+    }
+
+    const attackDistance = Utils.distanceBetweenPoints(selectedPiece.coordinates, targetPiece.coordinates);
+    if (attackDistance <= Utils.MELEE_ATTACK_RANGE) {
       orders[selectedPiece.id] = [issuingOrder];
     } else {
       orders[selectedPiece.id] = [];
@@ -195,15 +201,15 @@
   }
 
   const submitPhase = async () => {
-    const moveActions: Array<MoveAction> = [];
-    Object.values(orders).flat().forEach((moveOrder: GamePieceOrder) => {
-      if (moveOrder.move) moveActions.push(moveOrder.move);
+    const meleeAttackActions: Array<MeleeAttackAction> = [];
+    Object.values(orders).flat().forEach((meleeOrder: GamePieceOrder) => {
+      if (meleeOrder.meleeAttack) meleeAttackActions.push(meleeOrder.meleeAttack);
     });
-    await minaArenaClient.submitMovePhase(
+    await minaArenaClient.submitMeleePhase(
       currentPlayerMinaPubKey,
       game.id,
       game.currentPhase!.id,
-      moveActions
+      meleeAttackActions
     );
     await rerender();
   }
@@ -251,8 +257,10 @@
     </div>
   </tr>
 </table>
-<HoveredGamePieceTooltipMovement
+<HoveredGamePieceTooltipMelee
+  game={game}
   hoveredPiece={hoveredPiece}
+  selectedPiece={selectedPiece}
   tooltipAbsolutePosition={hoveredPieceTooltipPosition}
   playerPublicKeys={playerPublicKeys}
   playerColors={playerColors}

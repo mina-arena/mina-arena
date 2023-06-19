@@ -33,7 +33,6 @@
       {#if currentGame.status === 'IN_PROGRESS'}
         <div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
         <div>Phase: {currentGame.currentPhase?.name}</div>
-        <PhaseInput game={currentGame} currentPlayer={currentPlayer()} {rerender} />
       {:else if currentGame.status === 'COMPLETED'}
         <div><b>GAME OVER!</b> Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}</div>
       {/if}
