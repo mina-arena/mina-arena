@@ -13,16 +13,12 @@
 </script>
 
 <div class="pb-10">
-	<div>
-		Current Phase: {#key game}
-			{currentPhase()}
-		{/key}
-	</div>
-	{#if game.currentPhase?.name == 'MOVEMENT'}
-		<MovementPhaseInput {game} {currentPlayer} {rerender} />
-	{:else if game.currentPhase?.name == 'SHOOTING'}
-		<ShootingPhaseInput {game} {currentPlayer} {rerender} />
-	{:else if game.currentPhase?.name == 'MELEE'}
+	{#if game.currentPhase?.name == 'MELEE'}
+		<div>
+			Current Phase: {#key game}
+				{currentPhase()}
+			{/key}
+		</div>
 		<MeleePhaseInput {game} {currentPlayer} {rerender} />
 	{/if}
 </div>

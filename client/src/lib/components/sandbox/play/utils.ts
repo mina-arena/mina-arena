@@ -1,11 +1,9 @@
 const PIECE_STROKE_COLOR = '#101010';
 const PIECE_SELECTED_STROKE_COLOR = '#771111';
-const MOVEMENT_ARROW_STROKE_COLOR = 'black';
-const MOVEMENT_ARROW_FILL_COLOR = 'black';
 const MISSILE_RANGE_CIRCLE_FILL_COLOR = '#ffe9f0';
 const MISSILE_RANGE_CIRCLE_STROKE_COLOR = 'lightcoral';
 
-const PIECE_RADIUS = 12;
+export const PIECE_RADIUS = 12;
 
 export const clearCanvas = (ctx: CanvasRenderingContext2D) => {
   const canvas = ctx.canvas;
@@ -124,7 +122,8 @@ export const drawMissileRangeCircle = (
 export const drawArrow = (
   ctx: CanvasRenderingContext2D,
   fromCanvasPoint: Point,
-  toCanvasPoint: Point
+  toCanvasPoint: Point,
+  arrowColor: string,
 ) => {
   const xCenter = toCanvasPoint.x;
   const yCenter = toCanvasPoint.y;
@@ -136,8 +135,8 @@ export const drawArrow = (
   let angle: number;
   
   ctx.beginPath();
-  ctx.strokeStyle = MOVEMENT_ARROW_STROKE_COLOR;
-  ctx.fillStyle = MOVEMENT_ARROW_FILL_COLOR;
+  ctx.strokeStyle = arrowColor;
+  ctx.fillStyle = arrowColor;
 
   ctx.lineWidth = 4;
   ctx.moveTo(fromCanvasPoint.x, fromCanvasPoint.y);
@@ -171,6 +170,33 @@ export const drawArrow = (
   ctx.closePath();
 }
 
+// Draw an arrow, but stop the arrow `offset` distance before the
+// destination point. Useful for drawing arrows just touching the
+// edge of a GamePiece, given the position and radius of the GamePiece.
+export const drawArrowWithOffset = (
+  ctx: CanvasRenderingContext2D,
+  fromCanvasPoint: Point,
+  toCanvasPoint: Point,
+  arrowColor: string,
+  offset: number,
+) => {
+  const slope = slopeBetweenPoints(fromCanvasPoint, toCanvasPoint);
+  const angle = angleRadiansBetweenLineSlopes(slope, 0);
+  const dx = Math.cos(angle) * offset;
+  const dy = Math.sin(angle) * offset;
+  const x = fromCanvasPoint.x < toCanvasPoint.x ? toCanvasPoint.x - dx : toCanvasPoint.x + dx;
+  const y = fromCanvasPoint.y < toCanvasPoint.y ? toCanvasPoint.y - dy : toCanvasPoint.y + dy;
+  drawArrow(ctx, fromCanvasPoint, { x, y }, arrowColor);
+}
+
+export const angleRadiansBetweenLineSlopes = (m1: number, m2: number): number => {
+  return Math.atan(Math.abs((m1 - m2) / (1 + m1 * m2)));
+}
+
+export const slopeBetweenPoints = (p1: Point, p2: Point): number => {
+  return ((p2.y - p1.y) * -1) / (p2.x - p1.x);
+}
+
 export const playerColor = (
   playerPublicKeys: Array<string>,
   minaPublicKey: string,
@@ -178,4 +204,34 @@ export const playerColor = (
 ): string => {
   const playerIndex = playerPublicKeys.findIndex((key) => key === minaPublicKey) || 0;
   return colors[playerIndex];
+}
+
+export const estimatedRangedAttackDamage = (
+  selectedUnit: Unit,
+  targetUnit: Unit,
+): number => {
+  if (
+    !selectedUnit.rangedNumAttacks ||
+    !selectedUnit.rangedHitRoll ||
+    !selectedUnit.rangedWoundRoll ||
+    !selectedUnit.rangedDamage
+  ) {
+    return 0;
+  }
+
+  const chanceToHit = (7 - selectedUnit.rangedHitRoll) / 6;
+  const chanceToWound = (7 - selectedUnit.rangedWoundRoll) / 6;
+  const armorPiercing = selectedUnit.rangedArmorPiercing || 0;
+  const modifiedSave = targetUnit.armorSaveRoll + armorPiercing;
+  const chanceToFailSave = 1 - (Math.max(7 - modifiedSave, 0) / 6);
+  const estimatedDamage = selectedUnit.rangedNumAttacks * chanceToHit * chanceToWound * chanceToFailSave * selectedUnit.rangedDamage;
+  return roundToPrecision(estimatedDamage, 1);
+}
+
+export const roundToPrecision = (num: number, precision: number): number => {
+  let coefficient = 1;
+  for (let i = 0; i < precision; i++) {
+    coefficient *= 10;
+  }
+  return Math.round((num + Number.EPSILON) * coefficient) / coefficient;
 }

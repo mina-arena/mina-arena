@@ -2,7 +2,7 @@
   import { afterUpdate, onMount } from 'svelte';
   import * as Utils from '../play/utils';
   import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-  import HoveredGamePieceTooltipMovement from './HoveredGamePieceTooltipMovement.svelte';
+  import HoveredGamePieceTooltipShooting from './HoveredGamePieceTooltipShooting.svelte';
 
   export let game: Game;
   export let playerColors: Array<string>;
@@ -23,9 +23,7 @@
   let orders: Record<string, Array<GamePieceOrder>>;
   let issuingOrder: GamePieceOrder | undefined;
 
-  const MOVEMENT_CIRCLE_FILL_COLOR = 'lightgoldenrodyellow';
-  const MOVEMENT_CIRCLE_STROKE_COLOR = 'goldenrod';
-  const MOVEMENT_ARROW_COLOR = 'black';
+  const SHOOTING_ARROW_COLOR = 'darkred';
 
   const minaArenaClient = new MinaArenaClient();
   const playerPublicKeys = (game.gamePlayers || []).map((p) => p.player.minaPublicKey) || ['', ''];
@@ -53,7 +51,7 @@
 
   afterUpdate(() => {
     Utils.clearCanvas(ctx);
-    drawMovementPhase(canvas, orders, selectedPiece);
+    drawShootingPhase(canvas, orders, selectedPiece);
     drawPieces();
   });
 
@@ -61,7 +59,7 @@
     Utils.drawAllPieces(canvas, ctx, drawnPieces, hoveredPiece, selectedPiece);
   }
 
-  export const drawMovementPhase = (
+  export const drawShootingPhase = (
     canvas: HTMLCanvasElement,
     orders: Record<string, Array<GamePieceOrder>>,
     selectedPiece?: GamePiece,
@@ -69,65 +67,53 @@
     const ctx = canvas.getContext('2d')!;
     if (selectedPiece) {
       const unit = selectedPiece.playerUnit.unit;
-      const moveSpeed = unit.movementSpeed;
       const missileRange = unit.rangedRange || 0;
 
-      if (!missileRange) {
-        drawMovementCircle(ctx, selectedPiece);
-      } else {
-        if (moveSpeed > missileRange) {
-          // Move speed circle is larger, draw that first
-          drawMovementCircle(ctx, selectedPiece);
-          Utils.drawMissileRangeCircle(ctx, orders, selectedPiece);
-        } else {
-          // Missile range circle is larger, draw that first
-          Utils.drawMissileRangeCircle(ctx, orders, selectedPiece);
-          drawMovementCircle(ctx, selectedPiece);
-        }
+      if (missileRange) {
+        Utils.drawMissileRangeCircle(ctx, orders, selectedPiece);
       }
     }
 
-    drawMoveOrders(ctx, orders);
+    drawShootOrders(ctx, orders);
   }
 
-  const drawMovementCircle = (
-    ctx: CanvasRenderingContext2D,
-    selectedPiece: GamePiece
-  ) => {
-    if (!selectedPiece) return;
-
-    ctx.beginPath();
-    const radius = selectedPiece.playerUnit.unit.movementSpeed;
-    ctx.lineWidth = 1;
-    ctx.strokeStyle = MOVEMENT_CIRCLE_STROKE_COLOR;
-    ctx.fillStyle = MOVEMENT_CIRCLE_FILL_COLOR;
-    ctx.arc(selectedPiece.coordinates.x, selectedPiece.coordinates.y, radius, 0, 2 * Math.PI, false);
-    ctx.fill();
-    ctx.stroke();
-    ctx.closePath();
-  }
-
-  const drawMoveOrders = (
+  const drawShootOrders = (
     ctx: CanvasRenderingContext2D,
     orders: Record<string, Array<GamePieceOrder>>,
   ) => {
     Object.keys(orders).forEach((gamePieceId) => {
       orders[gamePieceId].forEach((gamePieceOrder: GamePieceOrder) => {
-        const moveAction = gamePieceOrder.move;
-        if (moveAction) drawMovementArrow(ctx, moveAction);
+        const rangedAttackAction = gamePieceOrder.rangedAttack;
+        if (rangedAttackAction) drawRangedAttackArrow(ctx, rangedAttackAction);
       });
     });
   }
 
-  const drawMovementArrow = (
+  const drawRangedAttackArrow = (
     ctx: CanvasRenderingContext2D,
-    moveAction: MoveAction,
+    rangedAttackAction: RangedAttackAction,
   ) => {
-    Utils.drawArrow(
+    const shootingPieceId = rangedAttackAction.gamePieceId;
+    const targetPieceId = rangedAttackAction.action.targetGamePieceId;
+    const shootingPiece = Utils.gamePieceById(shootingPieceId, gamePieces);
+    const targetPiece = Utils.gamePieceById(targetPieceId, gamePieces);
+
+    if (!shootingPiece) {
+      console.log(`ERROR drawing shooting orders, no GamePiece found with ID ${shootingPieceId}`);
+      return;
+    }
+
+    if (!targetPiece) {
+      console.log(`ERROR drawing shooting orders, no GamePiece found with ID ${targetPieceId}`);
+      return;
+    }
+
+    Utils.drawArrowWithOffset(
       ctx,
-      moveAction.action.moveFrom,
-      moveAction.action.moveTo,
-      MOVEMENT_ARROW_COLOR,
+      shootingPiece.coordinates,
+      targetPiece.coordinates,
+      SHOOTING_ARROW_COLOR,
+      Utils.PIECE_RADIUS + 6,
     );
   }
 
@@ -137,54 +123,81 @@
     hoveredPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
     if (hoveredPiece) {
       onGamePieceHovered(hoveredPiece, mouseAbsolutePoint);
+      if (issuingOrder) draftShootOrder(hoveredPiece);
     } else {
       onGamePieceUnhovered();
     }
-    if (issuingOrder) draftMoveOrder(mouseCanvasPoint);
   }
 
   const onMouseDown = (e: MouseEvent) => {
     const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
     const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
-    if (selectedPiece && !clickedPiece) draftMoveOrder(mouseCanvasPoint);
+    if (selectedPiece && clickedPiece) draftShootOrder(clickedPiece);
   }
 
   const onMouseUp = (e: MouseEvent) => {
     const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
-    if (issuingOrder) {
-      finalizeMoveOrder();
+    const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
+    if (issuingOrder && clickedPiece) {
+      finalizeShootOrder();
     } else {
       selectedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
     }
   }
 
-  const draftMoveOrder = (canvasPoint: Point) => {
+  const draftShootOrder = (targetPiece: GamePiece) => {
     if (!selectedPiece) return;
 
     const selectedPiecePlayerKey = selectedPiece.gamePlayer.player.minaPublicKey;
     if (selectedPiecePlayerKey !== currentPlayerMinaPubKey) return;
 
+    // TODO: Fetch dice rolls from dice server
+    const diceRollInput = {
+      publicKey: {
+        x: 'publickeyx',
+        y: 'publickeyy',
+      },
+      cipherText: 'someciphertext',
+      signature: {
+        r: 'signaturer',
+        s: 'signatures',
+      }
+    }
     issuingOrder = {
-      move: {
+      rangedAttack: {
         gamePieceId: selectedPiece.id,
         action: {
-          moveFrom: { x: selectedPiece.coordinates.x, y: selectedPiece.coordinates.y },
-          moveTo: { x: Math.round(canvasPoint.x), y: Math.round(canvasPoint.y) }
+          targetGamePieceId: targetPiece.id,
+          diceRoll: diceRollInput,
         }
       }
     };
     orders[selectedPiece.id] = [issuingOrder];
   }
 
-  const finalizeMoveOrder = () => {
-    if (!selectedPiece || !issuingOrder || !issuingOrder.move) {
+  const finalizeShootOrder = () => {
+    if (
+      !selectedPiece ||
+      !issuingOrder ||
+      !issuingOrder.rangedAttack ||
+      !selectedPiece.playerUnit.unit.rangedRange
+    ) {
       issuingOrder = undefined;
       selectedPiece = undefined;
       return;
     }
 
-    const moveDistance = Utils.distanceBetweenPoints(selectedPiece.coordinates, issuingOrder.move?.action.moveTo);
-    if (moveDistance <= selectedPiece.playerUnit.unit.movementSpeed) {
+    const targetPieceId = issuingOrder.rangedAttack.action.targetGamePieceId;
+    const targetPiece = Utils.gamePieceById(targetPieceId, gamePieces);
+
+    if (!targetPiece || targetPiece.gamePlayer.player.minaPublicKey === currentPlayerMinaPubKey) {
+      issuingOrder = undefined;
+      selectedPiece = undefined;
+      return;
+    }
+
+    const shootDistance = Utils.distanceBetweenPoints(selectedPiece.coordinates, targetPiece.coordinates);
+    if (shootDistance <= selectedPiece.playerUnit.unit.rangedRange) {
       orders[selectedPiece.id] = [issuingOrder];
     } else {
       orders[selectedPiece.id] = [];
@@ -194,15 +207,15 @@
   }
 
   const submitPhase = async () => {
-    const moveActions: Array<MoveAction> = [];
-    Object.values(orders).flat().forEach((moveOrder: GamePieceOrder) => {
-      if (moveOrder.move) moveActions.push(moveOrder.move);
+    const rangedAttackActions: Array<RangedAttackAction> = [];
+    Object.values(orders).flat().forEach((shootOrder: GamePieceOrder) => {
+      if (shootOrder.rangedAttack) rangedAttackActions.push(shootOrder.rangedAttack);
     });
-    await minaArenaClient.submitMovePhase(
+    await minaArenaClient.submitShootingPhase(
       currentPlayerMinaPubKey,
       game.id,
       game.currentPhase!.id,
-      moveActions
+      rangedAttackActions
     );
     await rerender();
   }
@@ -250,8 +263,10 @@
     </div>
   </tr>
 </table>
-<HoveredGamePieceTooltipMovement
+<HoveredGamePieceTooltipShooting
+  game={game}
   hoveredPiece={hoveredPiece}
+  selectedPiece={selectedPiece}
   tooltipAbsolutePosition={hoveredPieceTooltipPosition}
   playerPublicKeys={playerPublicKeys}
   playerColors={playerColors}

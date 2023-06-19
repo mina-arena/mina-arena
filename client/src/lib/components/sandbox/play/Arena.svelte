@@ -16,7 +16,6 @@
 <div class="flex">
   <ArenaCanvas
     game={game}
-    playerPublicKeys={playerPublicKeys}
     playerColors={legendConfig.colors}
     rerender={rerender}
   />
