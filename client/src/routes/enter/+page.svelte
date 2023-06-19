@@ -1,3 +1,16 @@
+<script lang="ts">
+	import { DiceRollServiceClient } from '$lib/dice-service-client/DiceRollServiceClient';
+	import { onMount } from 'svelte';
+
+	const diceRollServiceClient = new DiceRollServiceClient();
+
+	onMount(async () => {
+		console.log('getting dice rolls');
+		const resp = await diceRollServiceClient.getDiceRolls(2, 6);
+		console.log(JSON.stringify(resp));
+	});
+</script>
+
 <div class="flex">
 	<div class="mt-6 mb-10 h-fit text-center w-1/2 mx-auto">
 		<h2 class="text-2xl font-semibold">Choose your path</h2>
