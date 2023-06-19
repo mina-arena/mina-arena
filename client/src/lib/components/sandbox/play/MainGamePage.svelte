@@ -3,8 +3,6 @@
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import { page } from '$app/stores';
 
-	import { smoke } from '$lib/dice-service-client/snarky-js-smoke-test';
-
 	import PhaseInput from './phase-input/PhaseInput.svelte';
 	import Arena from './Arena.svelte';
 	import { truncateMinaPublicKey } from '$lib/utils';
@@ -13,8 +11,6 @@
 	let currentGame: Game;
 	const minaArenaClient = new MinaArenaClient();
 	let loaded = false;
-
-	const smokeCopy = smoke;
 
 	onMount(async () => {
 		currentGame = await minaArenaClient.getGame(gameId);
