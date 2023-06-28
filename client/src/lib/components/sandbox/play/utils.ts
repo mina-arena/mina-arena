@@ -2,8 +2,11 @@ const PIECE_STROKE_COLOR = '#101010';
 const PIECE_SELECTED_STROKE_COLOR = '#771111';
 const MISSILE_RANGE_CIRCLE_FILL_COLOR = '#ffe9f0';
 const MISSILE_RANGE_CIRCLE_STROKE_COLOR = 'lightcoral';
+const MELEE_RANGE_CIRCLE_STROKE_COLOR = '#6b0000';
+const MELEE_RANGE_CIRCLE_FILL_COLOR = '#ffb0b0';
 
 export const PIECE_RADIUS = 12;
+export const MELEE_ATTACK_RANGE = 50;
 
 export const clearCanvas = (ctx: CanvasRenderingContext2D) => {
   const canvas = ctx.canvas;
@@ -119,6 +122,33 @@ export const drawMissileRangeCircle = (
   ctx.closePath();
 }
 
+export const drawMeleeRangeCircle = (
+  ctx: CanvasRenderingContext2D,
+  orders: Record<string, Array<GamePieceOrder>>,
+  selectedPiece: GamePiece
+) => {
+  if (!selectedPiece) return;
+  const unit = selectedPiece.playerUnit.unit;
+  
+  const selectedPieceOrders = orders[selectedPiece.id] || [];
+  let selectedPieceMovingTo: Point | undefined = undefined;
+  if (selectedPieceOrders.length > 0) {
+    selectedPieceMovingTo = selectedPieceOrders[0].move?.action.moveTo;
+  }
+
+  const meleeRangeCircleCenter = selectedPieceMovingTo || selectedPiece.coordinates;
+  
+  ctx.beginPath();
+  const radius = MELEE_ATTACK_RANGE;
+  ctx.lineWidth = 1;
+  ctx.strokeStyle = MELEE_RANGE_CIRCLE_STROKE_COLOR;
+  ctx.fillStyle = MELEE_RANGE_CIRCLE_FILL_COLOR;
+  ctx.arc(meleeRangeCircleCenter.x, meleeRangeCircleCenter.y, radius, 0, 2 * Math.PI, false);
+  ctx.fill();
+  ctx.stroke();
+  ctx.closePath();
+}
+
 export const drawArrow = (
   ctx: CanvasRenderingContext2D,
   fromCanvasPoint: Point,
@@ -225,6 +255,28 @@ export const estimatedRangedAttackDamage = (
   const modifiedSave = targetUnit.armorSaveRoll + armorPiercing;
   const chanceToFailSave = 1 - (Math.max(7 - modifiedSave, 0) / 6);
   const estimatedDamage = selectedUnit.rangedNumAttacks * chanceToHit * chanceToWound * chanceToFailSave * selectedUnit.rangedDamage;
+  return roundToPrecision(estimatedDamage, 1);
+}
+
+export const estimatedMeleeAttackDamage = (
+  selectedUnit: Unit,
+  targetUnit: Unit,
+): number => {
+  if (
+    !selectedUnit.meleeNumAttacks ||
+    !selectedUnit.meleeHitRoll ||
+    !selectedUnit.meleeWoundRoll ||
+    !selectedUnit.meleeDamage
+  ) {
+    return 0;
+  }
+
+  const chanceToHit = (7 - selectedUnit.meleeHitRoll) / 6;
+  const chanceToWound = (7 - selectedUnit.meleeWoundRoll) / 6;
+  const armorPiercing = selectedUnit.meleeArmorPiercing || 0;
+  const modifiedSave = targetUnit.armorSaveRoll + armorPiercing;
+  const chanceToFailSave = 1 - (Math.max(7 - modifiedSave, 0) / 6);
+  const estimatedDamage = selectedUnit.meleeNumAttacks * chanceToHit * chanceToWound * chanceToFailSave * selectedUnit.meleeDamage;
   return roundToPrecision(estimatedDamage, 1);
 }
 

@@ -28,16 +28,15 @@
 </script>
 
 <div>
-	{#if loaded}
-		{#key currentGame}
-			{#if currentGame.status === 'IN_PROGRESS'}
-				<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
-				<div>Phase: {currentGame.currentPhase?.name}</div>
-				<PhaseInput game={currentGame} currentPlayer={currentPlayer()} {rerender} />
-			{:else if currentGame.status === 'COMPLETED'}
-				<div><b>GAME OVER!</b> Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}</div>
-			{/if}
-			<Arena game={currentGame} {rerender} />
-		{/key}
-	{/if}
+  {#if loaded}
+    {#key currentGame}
+      {#if currentGame.status === 'IN_PROGRESS'}
+        <div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
+        <div>Phase: {currentGame.currentPhase?.name}</div>
+      {:else if currentGame.status === 'COMPLETED'}
+        <div><b>GAME OVER!</b> Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}</div>
+      {/if}
+      <Arena game={currentGame} {rerender} />
+    {/key}
+  {/if}
 </div>
