@@ -132,12 +132,16 @@
   }
 
   const onMouseDown = (e: MouseEvent) => {
+    if (isLoading) return;
+
     const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
     const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
     if (selectedPiece && clickedPiece) draftShootOrder(clickedPiece);
   }
 
   const onMouseUp = (e: MouseEvent) => {
+    if (isLoading) return;
+
     const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
     const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
     if (issuingOrder && clickedPiece) {
@@ -214,13 +218,18 @@
       if (shootOrder.rangedAttack) rangedAttackActions.push(shootOrder.rangedAttack);
     });
     isLoading = true;
-    await minaArenaClient.submitShootingPhase(
-      currentPlayerMinaPubKey,
-      game.id,
-      game.currentPhase!.id,
-      rangedAttackActions
-    );
-    await rerender();
+    try {
+      await minaArenaClient.submitShootingPhase(
+        currentPlayerMinaPubKey,
+        game.id,
+        game.currentPhase!.id,
+        rangedAttackActions
+      );
+      await rerender();
+    } catch(error) {
+      console.log(error);
+      isLoading = false;
+    }
   }
 
   const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {

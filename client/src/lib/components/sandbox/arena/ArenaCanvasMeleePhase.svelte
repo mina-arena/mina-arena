@@ -127,12 +127,16 @@
   }
 
   const onMouseDown = (e: MouseEvent) => {
+    if (isLoading) return;
+
     const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
     const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
     if (selectedPiece && clickedPiece) draftMeleeOrder(clickedPiece);
   }
 
   const onMouseUp = (e: MouseEvent) => {
+    if (isLoading) return;
+
     const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
     const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
     if (issuingOrder && clickedPiece) {
@@ -208,13 +212,18 @@
       if (meleeOrder.meleeAttack) meleeAttackActions.push(meleeOrder.meleeAttack);
     });
     isLoading = true;
-    await minaArenaClient.submitMeleePhase(
-      currentPlayerMinaPubKey,
-      game.id,
-      game.currentPhase!.id,
-      meleeAttackActions
-    );
-    await rerender();
+    try {
+      await minaArenaClient.submitMeleePhase(
+        currentPlayerMinaPubKey,
+        game.id,
+        game.currentPhase!.id,
+        meleeAttackActions
+      );
+      await rerender();
+    } catch(error) {
+      console.log(error);
+      isLoading = false;
+    }
   }
 
   const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {
