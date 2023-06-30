@@ -3,6 +3,7 @@
   import * as Utils from '../play/utils';
   import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
   import HoveredGamePieceTooltipMelee from './HoveredGamePieceTooltipMelee.svelte';
+  import SubmitPhaseButton from './SubmitPhaseButton.svelte';
 
   export let game: Game;
   export let playerColors: Array<string>;
@@ -10,6 +11,7 @@
 
   let canvas: HTMLCanvasElement;
   let ctx: CanvasRenderingContext2D;
+  let isLoading: Boolean = false;
 
   let currentPlayerMinaPubKey: string = game.currentPhase?.gamePlayer.player.minaPublicKey || '';
   let gamePieces: Array<GamePiece> = game.gamePieces;
@@ -205,6 +207,7 @@
     Object.values(orders).flat().forEach((meleeOrder: GamePieceOrder) => {
       if (meleeOrder.meleeAttack) meleeAttackActions.push(meleeOrder.meleeAttack);
     });
+    isLoading = true;
     await minaArenaClient.submitMeleePhase(
       currentPlayerMinaPubKey,
       game.id,
@@ -238,13 +241,7 @@
   </tr>
   <tr>
     <div class="flex">
-      <button
-        id="submit-phase-button"
-        class="mx-auto m-2 p-2 rounded-lg border border-slate-900 bg-gray-200 hover:bg-gray-400"
-        on:click={submitPhase}
-      >
-        Submit Phase
-      </button>
+      <SubmitPhaseButton isLoading={isLoading} submitPhaseCallback={submitPhase} />
       {#if selectedPiece}
         <div></div>
       {/if}
