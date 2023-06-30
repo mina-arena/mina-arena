@@ -2,6 +2,7 @@
   import { afterUpdate, onMount } from 'svelte';
   import * as Utils from '../play/utils';
   import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
+  import { DiceRollServiceClient } from '$lib/dice-service-client/DiceRollServiceClient';
   import HoveredGamePieceTooltipShooting from './HoveredGamePieceTooltipShooting.svelte';
 
   export let game: Game;
@@ -151,24 +152,23 @@
     const selectedPiecePlayerKey = selectedPiece.gamePlayer.player.minaPublicKey;
     if (selectedPiecePlayerKey !== currentPlayerMinaPubKey) return;
 
-    // TODO: Fetch dice rolls from dice server
-    const diceRollInput = {
+    const placeholderDiceRoll = {
       publicKey: {
-        x: 'publickeyx',
-        y: 'publickeyy',
+        x: '',
+        y: '',
       },
-      cipherText: 'someciphertext',
+      cipherText: '',
       signature: {
-        r: 'signaturer',
-        s: 'signatures',
+        r: '',
+        s: '',
       }
-    }
+    };
     issuingOrder = {
       rangedAttack: {
         gamePieceId: selectedPiece.id,
         action: {
           targetGamePieceId: targetPiece.id,
-          diceRoll: diceRollInput,
+          diceRoll: placeholderDiceRoll,
         }
       }
     };
@@ -208,9 +208,14 @@
 
   const submitPhase = async () => {
     const rangedAttackActions: Array<RangedAttackAction> = [];
-    Object.values(orders).flat().forEach((shootOrder: GamePieceOrder) => {
-      if (shootOrder.rangedAttack) rangedAttackActions.push(shootOrder.rangedAttack);
-    });
+
+    await Promise.all(Object.values(orders).flat().map(async (shootOrder: GamePieceOrder) => {
+      if (!shootOrder.rangedAttack) return;
+      
+      const diceRoll = await rollDiceForAttack(shootOrder.rangedAttack);
+      shootOrder.rangedAttack.action.diceRoll = diceRoll;
+      rangedAttackActions.push(shootOrder.rangedAttack);
+    }));
     await minaArenaClient.submitShootingPhase(
       currentPlayerMinaPubKey,
       game.id,
@@ -218,6 +223,16 @@
       rangedAttackActions
     );
     await rerender();
+  }
+
+  const rollDiceForAttack = async(rangedAttack: RangedAttackAction) => {
+    const attackingPieceId = rangedAttack.gamePieceId;
+    const attackingPiece = Utils.gamePieceById(attackingPieceId, gamePieces);
+    const attackingUnit = attackingPiece?.playerUnit.unit;
+    const numAttacks = attackingUnit?.rangedNumAttacks || 1;
+    const numRolls = numAttacks * 3;
+    console.log(`Rolling for ${numAttacks} attacks from Piece ${attackingPiece?.playerUnit.name} (ID: ${attackingPieceId})`);
+    return await new DiceRollServiceClient().getDiceRolls(numRolls, 6);
   }
 
   const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {
