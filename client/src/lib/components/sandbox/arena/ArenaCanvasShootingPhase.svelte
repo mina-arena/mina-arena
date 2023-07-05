@@ -1,9 +1,10 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
 	import * as Utils from '../play/utils';
-	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import { DiceRollServiceClient } from '$lib/dice-service-client/DiceRollServiceClient';
+	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import HoveredGamePieceTooltipShooting from './HoveredGamePieceTooltipShooting.svelte';
+	import SubmitPhaseButton from './SubmitPhaseButton.svelte';
 
 	export let game: Game;
 	export let playerColors: Array<string>;
@@ -11,13 +12,12 @@
 
 	let canvas: HTMLCanvasElement;
 	let ctx: CanvasRenderingContext2D;
+	let isLoading: Boolean = false;
 
 	let currentPlayerMinaPubKey: string = game.currentPhase?.gamePlayer.player.minaPublicKey || '';
 	let gamePieces: Array<GamePiece> = game.gamePieces;
-	let playerGamePieces: Array<GamePiece> = gamePieces.filter(
-		(p) => p.gamePlayer.player.minaPublicKey === currentPlayerMinaPubKey
-	);
-
+	let playerGamePieces: Array<GamePiece> = gamePieces.filter((p) => p.gamePlayer.player.minaPublicKey === currentPlayerMinaPubKey);
+		
 	let drawnPieces: Array<DrawnPiece> = [];
 	let hoveredPiece: GamePiece | undefined;
 	let selectedPiece: GamePiece | undefined;
@@ -39,17 +39,17 @@
 	});
 
 	const initDrawnPieces = () => {
-		const livingGamePieces = game.gamePieces.filter((p) => p.health > 0);
+		const livingGamePieces = game.gamePieces.filter((p) => p.health > 0)
 		drawnPieces = livingGamePieces.map((p) => {
 			const playerMinaPublicKey = p.gamePlayer.player.minaPublicKey;
 			const playerColor = Utils.playerColor(playerPublicKeys, playerMinaPublicKey, playerColors);
 			return Utils.makePiece(p, playerColor);
 		});
-	};
+	}
 
 	const initGamePieceOrders = () => {
 		orders = {};
-		playerGamePieces.forEach((piece) => (orders[piece.id] = []));
+		playerGamePieces.forEach((piece) => orders[piece.id] = []);
 	};
 
 	afterUpdate(() => {
@@ -60,12 +60,12 @@
 
 	const drawPieces = () => {
 		Utils.drawAllPieces(canvas, ctx, drawnPieces, hoveredPiece, selectedPiece);
-	};
+	}
 
 	export const drawShootingPhase = (
 		canvas: HTMLCanvasElement,
 		orders: Record<string, Array<GamePieceOrder>>,
-		selectedPiece?: GamePiece
+		selectedPiece?: GamePiece,
 	) => {
 		const ctx = canvas.getContext('2d')!;
 		if (selectedPiece) {
@@ -78,11 +78,11 @@
 		}
 
 		drawShootOrders(ctx, orders);
-	};
+	}
 
 	const drawShootOrders = (
 		ctx: CanvasRenderingContext2D,
-		orders: Record<string, Array<GamePieceOrder>>
+		orders: Record<string, Array<GamePieceOrder>>,
 	) => {
 		Object.keys(orders).forEach((gamePieceId) => {
 			orders[gamePieceId].forEach((gamePieceOrder: GamePieceOrder) => {
@@ -90,11 +90,11 @@
 				if (rangedAttackAction) drawRangedAttackArrow(ctx, rangedAttackAction);
 			});
 		});
-	};
+	}
 
 	const drawRangedAttackArrow = (
 		ctx: CanvasRenderingContext2D,
-		rangedAttackAction: RangedAttackAction
+		rangedAttackAction: RangedAttackAction,
 	) => {
 		const shootingPieceId = rangedAttackAction.gamePieceId;
 		const targetPieceId = rangedAttackAction.action.targetGamePieceId;
@@ -116,9 +116,9 @@
 			shootingPiece.coordinates,
 			targetPiece.coordinates,
 			SHOOTING_ARROW_COLOR,
-			Utils.PIECE_RADIUS + 6
+			Utils.PIECE_RADIUS + 6,
 		);
-	};
+	}
 
 	const onMouseMove = (e: MouseEvent) => {
 		const mouseAbsolutePoint = { x: e.clientX, y: e.clientY };
@@ -130,13 +130,13 @@
 		} else {
 			onGamePieceUnhovered();
 		}
-	};
+	}
 
 	const onMouseDown = (e: MouseEvent) => {
 		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
 		const clickedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
 		if (selectedPiece && clickedPiece) draftShootOrder(clickedPiece);
-	};
+	}
 
 	const onMouseUp = (e: MouseEvent) => {
 		const mouseCanvasPoint = Utils.getMouseCanvasPoint(e, canvas);
@@ -146,7 +146,7 @@
 		} else {
 			selectedPiece = Utils.pieceAtCanvasPoint(mouseCanvasPoint, drawnPieces, gamePieces);
 		}
-	};
+	}
 
 	const draftShootOrder = (targetPiece: GamePiece) => {
 		if (!selectedPiece) return;
@@ -214,6 +214,7 @@
 	const submitPhase = async () => {
 		const rangedAttackActions: Array<RangedAttackAction> = [];
 
+		isLoading = true;
 		await Promise.all(
 			Object.values(orders)
 				.flat()
@@ -251,11 +252,11 @@
 	const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {
 		hoveredPiece = piece;
 		hoveredPieceTooltipPosition = mouseAbsolutePoint;
-	};
+	}
 
 	const onGamePieceUnhovered = () => {
 		hoveredPiece = undefined;
-	};
+	}
 </script>
 
 <table>
@@ -272,21 +273,15 @@
 	</tr>
 	<tr>
 		<div class="flex">
-			<button
-				id="submit-phase-button"
-				class="mx-auto m-2 p-2 rounded-lg border border-slate-900 bg-gray-200 hover:bg-gray-400"
-				on:click={submitPhase}
-			>
-				Submit Phase
-			</button>
+			<SubmitPhaseButton isLoading={isLoading} submitPhaseCallback={submitPhase} />
 			{#if selectedPiece}
-				<div />
+				<div></div>
 			{/if}
 			{#if hoveredPiece}
-				<div />
+				<div></div>
 			{/if}
 			{#if orders}
-				<div />
+				<div></div>
 			{/if}
 		</div>
 	</tr>
