@@ -211,5 +211,5 @@
 
 </script>
 
-<div id="action-log" contenteditable="true" class="h-96 border border-slate-400 mx-auto p-2 overflow-y-auto">
+<div id="action-log" class="h-96 border border-slate-400 mx-auto p-2 overflow-y-auto">
 </div>
