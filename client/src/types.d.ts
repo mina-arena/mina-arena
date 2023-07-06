@@ -9,6 +9,7 @@ type Game = {
   status?: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'CANCELED';
   turnNumber?: number;
   currentPhase?: GamePhase;
+  previousPhase?: GamePhase;
   gamePlayers?: Array<GamePlayer>;
   winningGamePlayer?: GamePlayer;
   gamePieces: Array<GamePiece>;
@@ -31,19 +32,50 @@ type GamePiece = {
 
 type GamePhase = {
   id: number;
+  turnNumber: number;
   name: string;
   gamePlayer: {
     player: {
       minaPublicKey: string;
     }
   }
-  gamePieceActions: {
-    id: number;
-    gamePiece: {
-      id: number;
+  gamePieceActions: GamePieceAction[];
+}
+
+type GamePieceAction = {
+  id: number;
+  gamePiece: GamePiece;
+  actionType: GamePieceActionType;
+  actionData: {
+    moveFrom?: {
+      x: number;
+      y: number;
     }
-    actionType: 'MOVEMENT'
+    moveTo?: {
+      x: number;
+      y: number;
+    }
+    targetGamePiece?: GamePiece;
+    resolvedAttacks?: ResolvedAttack[];
+    totalDamageDealt?: number;
+    totalDamageAverage?: number;
   }
+}
+
+type GamePieceActionType = 'MOVE' | 'RANGED_ATTACK' | 'MELEE_ATTACK';
+
+type ResolvedAttack = {
+  hitRoll: RollResult;
+  woundRoll: RollResult;
+  saveRoll: RollResult;
+  damageDealt: number;
+  averageDamage: number;
+}
+
+type RollResult = {
+  roll: number;
+  rollNeeded: number;
+  success: Boolean;
 }
 
 type GamePlayer = {
