@@ -1,6 +1,7 @@
 <script lang="ts">
   import ArenaCanvas from '../arena/ArenaCanvas.svelte';
   import ArenaLegend from '../arena/ArenaLegend.svelte';
+  import ArenaActionLog from '../arena/ArenaActionLog.svelte';
 
   export let game: Game;
 
@@ -19,8 +20,19 @@
     playerColors={legendConfig.colors}
     rerender={rerender}
   />
-  <ArenaLegend
-    playerPublicKeys={playerPublicKeys}
-    playerColors={legendConfig.colors}
-  />
+  <table>
+    <tr>
+      <ArenaLegend
+        playerPublicKeys={playerPublicKeys}
+        playerColors={legendConfig.colors}
+      />
+    </tr>
+    <tr>
+      <ArenaActionLog
+        game={game}
+        playerPublicKeys={playerPublicKeys}
+        playerColors={legendConfig.colors}
+      />
+    </tr>
+  </table>
 </div>
