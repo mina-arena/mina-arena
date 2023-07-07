@@ -7,4 +7,4 @@
 	<div slot="backdrop" class="backdrop" on:click={closeModal} on:keypress={closeModal} />
 </Modals>
 
-<slot class="container" />
+<slot class="container bg-light" />
