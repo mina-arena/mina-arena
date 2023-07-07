@@ -171,7 +171,7 @@ type RangedAttackAction = {
   gamePieceId: number;
   action: {
     targetGamePieceId: number;
-    diceRoll: DiceRollInput;
+    diceRolls: DiceRollInput[];
   }
 };
 
@@ -179,7 +179,7 @@ type MeleeAttackAction = {
   gamePieceId: number;
   action: {
     targetGamePieceId: number;
-    diceRoll: DiceRollInput;
+    diceRolls: DiceRollInput[];
   }
 };
 

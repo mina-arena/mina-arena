@@ -9,11 +9,12 @@ export class DiceRollServiceClient {
     this.baseUrl = import.meta.env.VITE_DICE_ROLL_SERVICE_URL;
   }
 
-  async getDiceRolls(n: number, sides: number) {
+  async getDiceRolls(): Promise<DiceRollInput> {
+    // Gets a single instance of a 3D6 roll
     const response = await fetch(
       `${this.baseUrl}/dice/${SERVER_PUBLIC_KEY}?` + new URLSearchParams({
-        'n': String(n),
-        'sides': String(sides),
+        'n': '3',
+        'sides': '6',
       }).toString()
     );
 
