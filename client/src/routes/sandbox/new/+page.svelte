@@ -1,20 +1,9 @@
 <script lang="ts">
-	import { goto } from '$app/navigation';
-	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-	import { dummyPlayer1, dummyPlayer2 } from '$lib/stores/sandbox/playerStore';
+	import { redirect } from '@sveltejs/kit';
 
-	const minaArenaClient = new MinaArenaClient();
+	export let data;
 
-	const createGame = async () => {
-		const game = await minaArenaClient.createGame([dummyPlayer1, dummyPlayer2]);
-		startGame(game);
-	};
-
-	const startGame = (game: Game) => {
-		goto(`/sandbox/games/${game.id}`);
-	};
+	export function load() {
+		throw redirect(302, `/sandbox/games/${data.game.id}`);
+	}
 </script>
-
-<div class="container text-center mt-20">
-	<button class="_button" on:click={createGame}>Start Game</button>
-</div>

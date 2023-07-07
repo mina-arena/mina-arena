@@ -4,6 +4,10 @@
 	</div>
 </div>
 <div class="grid grid-cols-2 gap-20 w-3/4 border border-slate-100 mx-auto">
+	<h3 class="text-xl mb-3">Your games in progress:</h3>
+	<p>TODO</p>
+</div>
+<div class="grid grid-cols-2 gap-20 w-3/4 border border-slate-100 mx-auto">
 	<a href="/sandbox" class="text-center card _button">
 		<h3 class="text-xl mb-3">Sandbox</h3>
 		<p class="text-slate-600">
