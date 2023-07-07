@@ -60,10 +60,58 @@
 		{:else}
 			<div>
 				<h3>Squads</h3>
-				<div>Player 1: {JSON.stringify($squads[player1])}</div>
-				<div>Player 2: {JSON.stringify($squads[player2])}</div>
+				<div class="grid grid-cols-2 gap-6mx-auto">
+					<div class="col-span-1">
+						<h4>Player 1</h4>
+						<table class="mx-auto mt-[20px]">
+							<tr class="[&>*]:px-[15px]">
+								<th>Name</th>
+								<th>Unit</th>
+								<th>Cost</th>
+							</tr>
+							{#each $squads[player1].units as unit}
+								<tr class="[&>*]:px-[15px]">
+									<td>{unit.name}</td>
+									<td>{unit.unit.name}</td>
+									<td>{unit.unit.pointsCost}</td>
+								</tr>
+							{/each}
+							{#each $squads[player1].playerUnits as playerUnit}
+								<tr class="[&>*]:px-[15px]">
+									<td>{playerUnit.name}</td>
+									<td>{playerUnit.unit.name}</td>
+									<td>{playerUnit.unit.pointsCost}</td>
+								</tr>
+							{/each}
+						</table>
+					</div>
+					<div class="col-span-1">
+						<h4>Player 2</h4>
+						<table class="mx-auto mt-[20px]">
+							<tr class="[&>*]:px-[15px]">
+								<th>Name</th>
+								<th>Unit</th>
+								<th>Cost</th>
+							</tr>
+							{#each $squads[player2].units as unit}
+								<tr class="[&>*]:px-[15px]">
+									<td>{unit.name}</td>
+									<td>{unit.unit.name}</td>
+									<td>{unit.unit.pointsCost}</td>
+								</tr>
+							{/each}
+							{#each $squads[player2].playerUnits as playerUnit}
+								<tr class="[&>*]:px-[15px]">
+									<td>{playerUnit.name}</td>
+									<td>{playerUnit.unit.name}</td>
+									<td>{playerUnit.unit.pointsCost}</td>
+								</tr>
+							{/each}
+						</table>
+					</div>
+				</div>
 			</div>
-			<button class="_button" on:click={startGame}>Complete Draft</button>
+			<button class="_button mt-[30px]" on:click={startGame}>Complete Draft</button>
 		{/if}
 	</div>
 </div>
