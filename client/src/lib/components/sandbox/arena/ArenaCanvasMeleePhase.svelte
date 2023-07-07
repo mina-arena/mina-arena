@@ -56,8 +56,8 @@
   afterUpdate(() => {
     Utils.clearCanvas(ctx);
     Utils.drawArenaBackground(ctx);
-    drawMeleePhase(canvas, orders, selectedPiece);
     drawPieces();
+    drawMeleePhase(canvas, orders, selectedPiece);
   });
 
   const drawPieces = () => {
@@ -113,7 +113,7 @@
       attackingPiece.coordinates,
       targetPiece.coordinates,
       MELEE_ARROW_COLOR,
-      Utils.PIECE_RADIUS + 6,
+      Utils.PIECE_RADIUS - 4,
     );
   }
 
