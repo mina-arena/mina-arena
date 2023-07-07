@@ -1,10 +1,13 @@
+const colors = require('tailwindcss/colors')
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {},
     colors: {
-      'light': '#F6E8EA',
+      ...colors,
+      'light': '#F4F4F4',
       'dark': '#22181C',
       'neutral': '#312F2F',
       'primary': '#EF626C',
