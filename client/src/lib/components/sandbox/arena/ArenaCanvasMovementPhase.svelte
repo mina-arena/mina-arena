@@ -35,6 +35,7 @@
   onMount(() => {
     canvas = document.getElementById('canvas') as HTMLCanvasElement;
     ctx = canvas.getContext('2d')!;
+    Utils.drawArenaBackground(ctx);
     initDrawnPieces();
     initGamePieceOrders();
   });
@@ -55,6 +56,7 @@
 
   afterUpdate(() => {
     Utils.clearCanvas(ctx);
+    Utils.drawArenaBackground(ctx);
     drawMovementPhase(canvas, orders, selectedPiece);
     drawPieces();
   });
@@ -103,7 +105,8 @@
     const radius = selectedPiece.playerUnit.unit.movementSpeed;
     ctx.lineWidth = 1;
     ctx.strokeStyle = MOVEMENT_CIRCLE_STROKE_COLOR;
-    ctx.fillStyle = MOVEMENT_CIRCLE_FILL_COLOR;
+    const fill = Utils.hexToRgb(MOVEMENT_CIRCLE_FILL_COLOR) || { r: 255, g: 255, b: 255 };
+    ctx.fillStyle = `rgba(${fill.r}, ${fill.g}, ${fill.b}, 0.2)`;
     ctx.arc(selectedPiece.coordinates.x, selectedPiece.coordinates.y, radius, 0, 2 * Math.PI, false);
     ctx.fill();
     ctx.stroke();
