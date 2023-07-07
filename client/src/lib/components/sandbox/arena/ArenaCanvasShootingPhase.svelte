@@ -56,15 +56,16 @@
   afterUpdate(() => {
     Utils.clearCanvas(ctx);
     Utils.drawArenaBackground(ctx);
-    drawShootingPhase(canvas, orders, selectedPiece);
+    drawShootingPhaseUnderPieces(canvas, orders, selectedPiece);
     drawPieces();
+    drawShootOrders(ctx, orders);
   });
 
   const drawPieces = () => {
     Utils.drawAllPieces(canvas, ctx, drawnPieces, hoveredPiece, selectedPiece);
   }
 
-  export const drawShootingPhase = (
+  export const drawShootingPhaseUnderPieces = (
     canvas: HTMLCanvasElement,
     orders: Record<string, Array<GamePieceOrder>>,
     selectedPiece?: GamePiece,
@@ -78,8 +79,6 @@
         Utils.drawMissileRangeCircle(ctx, orders, selectedPiece);
       }
     }
-
-    drawShootOrders(ctx, orders);
   }
 
   const drawShootOrders = (
@@ -118,7 +117,7 @@
       shootingPiece.coordinates,
       targetPiece.coordinates,
       SHOOTING_ARROW_COLOR,
-      Utils.PIECE_RADIUS + 6,
+      Utils.PIECE_RADIUS - 4,
     );
   }
 
@@ -153,8 +152,26 @@
   const draftShootOrder = (targetPiece: GamePiece) => {
     if (!selectedPiece) return;
 
+    // Validate that the selected piece is owned by the
+    // active player, and the target piece is not.
     const selectedPiecePlayerKey = selectedPiece.gamePlayer.player.minaPublicKey;
-    if (selectedPiecePlayerKey !== currentPlayerMinaPubKey) return;
+    const targetPiecePlayerKey = targetPiece.gamePlayer.player.minaPublicKey;
+    if (
+      selectedPiecePlayerKey !== currentPlayerMinaPubKey ||
+      targetPiecePlayerKey === currentPlayerMinaPubKey
+    ) {
+      return;
+    }
+
+    // Validate that the selected piece can make ranged attacks and is in range
+    const selectedUnit = selectedPiece.playerUnit.unit;
+    if (!selectedUnit.rangedNumAttacks || !selectedUnit.rangedRange) return;
+
+    const shootDistance = Utils.distanceBetweenPoints(
+      selectedPiece.coordinates,
+      targetPiece.coordinates
+    );
+    if (shootDistance > selectedUnit.rangedRange) return;
 
     const placeholderDiceRoll = {
       publicKey: {
