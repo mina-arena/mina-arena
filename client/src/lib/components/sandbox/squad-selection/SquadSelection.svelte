@@ -31,17 +31,33 @@
 	Your Squad:
 	{#key $squads[player]}
 		<div class="py-10 mb-10">
-			<div class="grid grid-cols-5 gap-6mx-auto">
-				<div class="col-span-1">Total Cost: {totalCost()}</div>
-				<div class="col-span-1">Max Cost: 100</div>
-			</div>
+			<table class="mx-auto">
+				<tr class="[&>*]:px-[15px]">
+					<th>Name</th>
+					<th>Unit</th>
+					<th>Cost</th>
+				</tr>
+				{#each currentSquad().units as unit}
+					<tr class="[&>*]:px-[15px]">
+						<td>{unit.name}</td>
+						<td>{unit.unit.name}</td>
+						<td>{unit.unit.pointsCost}</td>
+					</tr>
+				{/each}
+				{#each currentSquad().playerUnits as playerUnit}
+					<tr class="[&>*]:px-[15px]">
+						<td>{playerUnit.name}</td>
+						<td>{playerUnit.unit.name}</td>
+						<td>{playerUnit.unit.pointsCost}</td>
+					</tr>
+				{/each}
+				<tr class="[&>*]:px-[15px]">
+					<td></td>
+					<td></td>
+					<td><span class={totalCost() > 100 ? 'text-red-400' : ''}>{totalCost()}</span>/100</td>
+				</tr>
+			</table>
 		</div>
-		{#each currentSquad().units as unit}
-			{JSON.stringify(unit)}
-		{/each}
-		{#each currentSquad().playerUnits as playerUnit}
-			{JSON.stringify(playerUnit)}
-		{/each}
 	{/key}
 </div>
 <div class="grid grid-cols-5 gap-6 w-3/4 mx-auto">
@@ -54,8 +70,8 @@
 				pageSelected = 'PLAYER_UNIT';
 			}}
 			class={pageSelected === 'PLAYER_UNIT'
-				? 'border border-slate-600 rounded p-1 bg-slate-100'
-				: 'border border-slate-300 rounded p-1'}
+				? 'border border-slate-600 rounded p-1 cursor-pointer bg-slate-100'
+				: 'border border-slate-300 rounded p-1 cursor-pointer'}
 		>
 			My Units
 		</div>
@@ -67,8 +83,8 @@
 				pageSelected = 'UNIT';
 			}}
 			class={pageSelected === 'UNIT'
-				? 'border border-slate-600 rounded p-1 bg-slate-100'
-				: 'border border-slate-300 rounded p-1'}
+				? 'border border-slate-600 rounded p-1 cursor-pointer bg-slate-100'
+				: 'border border-slate-300 rounded p-1 cursor-pointer'}
 		>
 			Draft Units
 		</div>
