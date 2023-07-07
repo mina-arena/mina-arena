@@ -1,6 +1,7 @@
 <script lang="ts">
   import { afterUpdate, onMount } from 'svelte';
   import * as Utils from '../play/utils';
+  import { DiceRollServiceClient } from '$lib/dice-service-client/DiceRollServiceClient';
   import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
   import HoveredGamePieceTooltipMelee from './HoveredGamePieceTooltipMelee.svelte';
   import SubmitPhaseButton from './SubmitPhaseButton.svelte';
@@ -150,24 +151,23 @@
     const selectedPiecePlayerKey = selectedPiece.gamePlayer.player.minaPublicKey;
     if (selectedPiecePlayerKey !== currentPlayerMinaPubKey) return;
 
-    // TODO: Fetch dice rolls from dice server
-    const diceRollInput = {
+    const placeholderDiceRoll = {
       publicKey: {
-        x: 'publickeyx',
-        y: 'publickeyy',
+        x: '',
+        y: ''
       },
-      cipherText: 'someciphertext',
+      cipherText: '',
       signature: {
-        r: 'signaturer',
-        s: 'signatures',
+        r: '',
+        s: ''
       }
-    }
+    };
     issuingOrder = {
       meleeAttack: {
         gamePieceId: selectedPiece.id,
         action: {
           targetGamePieceId: targetPiece.id,
-          diceRoll: diceRollInput,
+          diceRolls: [placeholderDiceRoll],
         }
       }
     };
@@ -206,9 +206,27 @@
 
   const submitPhase = async () => {
     const meleeAttackActions: Array<MeleeAttackAction> = [];
-    Object.values(orders).flat().forEach((meleeOrder: GamePieceOrder) => {
-      if (meleeOrder.meleeAttack) meleeAttackActions.push(meleeOrder.meleeAttack);
-    });
+    await Promise.all(
+      Object.values(orders)
+        .flat()
+        .map(async (meleeOrder: GamePieceOrder) => {
+          if (!meleeOrder.meleeAttack) return;
+          const attackingPieceId = meleeOrder.meleeAttack.gamePieceId;
+          const attackingPiece = Utils.gamePieceById(attackingPieceId, gamePieces);
+          const attackingUnit = attackingPiece?.playerUnit.unit;
+          const numAttacks = attackingUnit?.meleeNumAttacks || 1;
+          const diceRolls: DiceRollInput[] = [];
+          console.log(
+            `Rolling for ${numAttacks} attacks from Piece ${attackingPiece?.playerUnit.name} (ID: ${attackingPieceId})`
+          );
+          for (let i = 0; i < numAttacks; i++) {
+            const diceRoll = await rollDiceForAttack();
+            diceRolls.push(diceRoll);
+          }
+          meleeOrder.meleeAttack.action.diceRolls = diceRolls;
+          meleeAttackActions.push(meleeOrder.meleeAttack);
+        })
+    );
     isLoading = true;
     await minaArenaClient.submitMeleePhase(
       currentPlayerMinaPubKey,
@@ -218,6 +236,10 @@
     );
     await rerender();
   }
+
+  const rollDiceForAttack = async () => {
+    return await new DiceRollServiceClient().getDiceRolls();
+  };
 
   const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {
     hoveredPiece = piece;
