@@ -1,6 +1,6 @@
 // The pub key that Mina Arena server will use to decrypt the message
 // e.g. the address to which to encrypt the message
-const SERVER_PUBLIC_KEY = 'B62qpge4uMq4Vv5Rvc8Gw9qSquUYd6xoW1pz7HQkMSHm6h1o7pvLPAN'
+const SERVER_PUBLIC_KEY = import.meta.env.VITE_SERVER_PUBLIC_KEY;
 
 export class DiceRollServiceClient {
   baseUrl
