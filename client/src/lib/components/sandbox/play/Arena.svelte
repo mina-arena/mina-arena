@@ -36,3 +36,6 @@
     </tr>
   </table>
 </div>
+<div style="display: none;">
+  <img id="arena-bg-img" src="/images/battlefield_dirt_650x550.png" width={game.arena.width} height={game.arena.height} />
+</div>

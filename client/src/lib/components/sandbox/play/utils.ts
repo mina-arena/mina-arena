@@ -13,6 +13,13 @@ export const clearCanvas = (ctx: CanvasRenderingContext2D) => {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
+export const drawArenaBackground = (ctx: CanvasRenderingContext2D) => {
+  const img = document.getElementById('arena-bg-img') as CanvasImageSource;
+  if (!img) return;
+
+  ctx.drawImage(img, 0, 0);
+}
+
 export const makePiece = (piece: GamePiece, playerColor: string) => {
   return {
     gamePieceId: piece.id,
@@ -115,7 +122,8 @@ export const drawMissileRangeCircle = (
   const radius = unit.rangedRange;
   ctx.lineWidth = 1;
   ctx.strokeStyle = MISSILE_RANGE_CIRCLE_STROKE_COLOR;
-  ctx.fillStyle = MISSILE_RANGE_CIRCLE_FILL_COLOR;
+  const fill = hexToRgb(MISSILE_RANGE_CIRCLE_FILL_COLOR) || { r: 255, g: 255, b: 255 };
+  ctx.fillStyle = `rgba(${fill.r}, ${fill.g}, ${fill.b}, 0.2)`;
   ctx.arc(missileRangeCircleCenter.x, missileRangeCircleCenter.y, radius, 0, 2 * Math.PI, false);
   ctx.fill();
   ctx.stroke();
@@ -142,7 +150,8 @@ export const drawMeleeRangeCircle = (
   const radius = MELEE_ATTACK_RANGE;
   ctx.lineWidth = 1;
   ctx.strokeStyle = MELEE_RANGE_CIRCLE_STROKE_COLOR;
-  ctx.fillStyle = MELEE_RANGE_CIRCLE_FILL_COLOR;
+  const fill = hexToRgb(MELEE_RANGE_CIRCLE_FILL_COLOR) || { r: 255, g: 255, b: 255 };
+  ctx.fillStyle = `rgba(${fill.r}, ${fill.g}, ${fill.b}, 0.2)`;
   ctx.arc(meleeRangeCircleCenter.x, meleeRangeCircleCenter.y, radius, 0, 2 * Math.PI, false);
   ctx.fill();
   ctx.stroke();
@@ -286,4 +295,13 @@ export const roundToPrecision = (num: number, precision: number): number => {
     coefficient *= 10;
   }
   return Math.round((num + Number.EPSILON) * coefficient) / coefficient;
+}
+
+export const hexToRgb = (hex: string) => {
+  var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result ? {
+    r: parseInt(result[1], 16),
+    g: parseInt(result[2], 16),
+    b: parseInt(result[3], 16)
+  } : null;
 }

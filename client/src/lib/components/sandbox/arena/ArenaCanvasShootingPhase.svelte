@@ -34,6 +34,7 @@
   onMount(() => {
     canvas = document.getElementById('canvas') as HTMLCanvasElement;
     ctx = canvas.getContext('2d')!;
+    Utils.drawArenaBackground(ctx);
     initDrawnPieces();
     initGamePieceOrders();
   });
@@ -54,6 +55,7 @@
 
   afterUpdate(() => {
     Utils.clearCanvas(ctx);
+    Utils.drawArenaBackground(ctx);
     drawShootingPhase(canvas, orders, selectedPiece);
     drawPieces();
   });
