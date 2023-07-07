@@ -148,8 +148,23 @@
   const draftMeleeOrder = (targetPiece: GamePiece) => {
     if (!selectedPiece) return;
 
+    // Validate that the selected piece is owned by the
+    // active player, and the target piece is not.
     const selectedPiecePlayerKey = selectedPiece.gamePlayer.player.minaPublicKey;
-    if (selectedPiecePlayerKey !== currentPlayerMinaPubKey) return;
+    const targetPiecePlayerKey = targetPiece.gamePlayer.player.minaPublicKey;
+    if (
+      selectedPiecePlayerKey !== currentPlayerMinaPubKey ||
+      targetPiecePlayerKey === currentPlayerMinaPubKey
+    ) {
+      return;
+    }
+
+    // Validate that the selected piece is in range
+    const attackDistance = Utils.distanceBetweenPoints(
+      selectedPiece.coordinates,
+      targetPiece.coordinates
+    );
+    if (attackDistance > Utils.MELEE_ATTACK_RANGE) return;
 
     const placeholderDiceRoll = {
       publicKey: {
