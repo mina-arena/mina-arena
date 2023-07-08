@@ -31,7 +31,7 @@
 				<label>Name:</label>
 				<input class="_input" type="text" bind:value={drafteeName} />
 			</div>
-			<button class="_button" on:click={draft}>Draft Unit</button>
+			<button class="rounded p-2" on:click={draft}>Draft Unit</button>
 		</div>
 	</div>
 {/if}
