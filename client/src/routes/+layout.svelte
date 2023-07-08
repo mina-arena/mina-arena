@@ -10,7 +10,12 @@
 </script>
 
 <Modals>
-	<div slot="backdrop" class="backdrop" on:click={closeModal} on:keypress={closeModal} />
+	<div
+		slot="backdrop"
+		class="fixed top-0 bottom-0 right-0 left-0 bg-dark/75"
+		on:click={closeModal}
+		on:keypress={closeModal}
+	/>
 </Modals>
 
 <Header {openUserModal} />
