@@ -7,10 +7,10 @@
 	</div>
 </div>
 <div class="flex">
-	<a href="/how-to-play" class="py-10 px-16 mb-4 _button mx-auto bg-primary-light"
+	<a href="/how-to-play" class="py-4 px-5 mb-4 rounded mx-auto bg-primary-light"
 		>Learn How to Play</a
 	>
 </div>
 <div class="flex">
-	<a href="/enter" class="py-10 px-16 _button mx-auto bg-primary">Enter the Arena!</a>
+	<a href="/enter" class="py-4 px-5 rounded mx-auto bg-primary">Enter the Arena!</a>
 </div>

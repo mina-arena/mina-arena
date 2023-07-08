@@ -56,7 +56,7 @@
 			<h3 class="text-xl">Select your squad</h3>
 			<p>Drafting for {truncateMinaPublicKey(currentPlayer)}</p>
 			<SquadSelection player={currentPlayer} />
-			<button on:click={selectSquad} class="_button">Select Squad</button>
+			<button on:click={selectSquad} class="rounded p-2">Select Squad</button>
 		{:else}
 			<div>
 				<h3>Squads</h3>
@@ -111,7 +111,7 @@
 					</div>
 				</div>
 			</div>
-			<button class="_button mt-[30px]" on:click={startGame}>Complete Draft</button>
+			<button class="rounded p-2 mt-[30px]" on:click={startGame}>Complete Draft</button>
 		{/if}
 	</div>
 </div>
