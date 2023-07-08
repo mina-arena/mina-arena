@@ -1,13 +1,8 @@
 <script lang="ts">
 	import { closeModal } from 'svelte-modals';
-	import {
-		player1,
-		player1Default,
-		dummyPlayer2,
-		generateKeypair,
-		setFromPrivateKey
-	} from '$lib/stores/sandbox/playerStore';
+	import { player1, player1Default, dummyPlayer2 } from '$lib/stores/sandbox/playerStore';
 	import { truncateMinaPublicKey } from '$lib/utils';
+	import { PrivateKey } from 'snarkyjs';
 
 	// provided by Modals
 	export let isOpen: boolean;
@@ -15,6 +10,16 @@
 	const validatePrivateKey = (key: string) => {
 		const validRegex = /^EKE[A-HJ-NP-Za-km-z1-9]{49}$/;
 		return validRegex.test(key);
+	};
+
+	const generateKeypair = async () => {
+		const privateKey = PrivateKey.random();
+		const publicKey = privateKey.toPublicKey();
+
+		return {
+			publicKey: publicKey.toBase58(),
+			privateKey: privateKey.toBase58()
+		};
 	};
 
 	const generateNewKeypair = async () => {
@@ -29,7 +34,11 @@
 			newPrivateKey = '';
 			return;
 		}
-		setFromPrivateKey(newPrivateKey);
+		const publicKey = PrivateKey.fromBase58(newPrivateKey).toPublicKey().toBase58();
+		player1.set({
+			publicKey,
+			privateKey: newPrivateKey
+		});
 		newPrivateKey = '';
 	};
 
