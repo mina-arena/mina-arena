@@ -75,7 +75,7 @@ type ResolvedAttack = {
 type RollResult = {
   roll: number;
   rollNeeded: number;
-  success: Boolean;
+  success: boolean;
 }
 
 type GamePlayer = {
@@ -202,4 +202,14 @@ type Signature = {
 type Point = {
   x: number;
   y: number;
+}
+
+type Keypair = {
+  publicKey: string;
+  privateKey: string;
+}
+
+type SnarkyKeypairMessage = {
+  msgType: 'request' | 'response';
+  keypair?: Keypair;
 }
