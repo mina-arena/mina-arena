@@ -3,7 +3,7 @@
 <script lang="ts">
   import { afterUpdate } from 'svelte';
   import { onAfterUpdate } from './tooltip-helpers';
-  import { estimatedRangedAttackDamage } from '../play/utils';
+  import { distanceBetweenPoints, estimatedRangedAttackDamage } from '../play/utils';
   import HoveredGamePieceTooltipUnitCard from './HoveredGamePieceTooltipUnitCard.svelte';
 
   export let game: Game;
@@ -42,58 +42,63 @@
           {/if}
         {:else}
           {@const selectedUnit = selectedPiece.playerUnit.unit}
-          {@const estDamage = estimatedRangedAttackDamage(selectedUnit, hoveredUnit)}
-          {@const estHealthAfter = Math.max(hoveredPiece.health - estDamage, 0)}
+          {@const attackDistance = distanceBetweenPoints(selectedPiece.coordinates, hoveredPiece.coordinates)}
 
-          {#if selectedUnit.rangedNumAttacks}
-            <div class="grid grid-cols-3 gap-4mx-auto">
-              <div class="col-span-2 border-r border-black p-[8px]">
-                <div class="text-center">
-                  {selectedPiece.playerUnit.name} 
-                  <i class="fa-solid fa-bow-arrow"></i> 
-                  {hoveredPiece.playerUnit.name}
-                </div>
-      
-                <table class="mx-auto mt-[5px]">
-                  <tr class="[&>*]:px-[4px] [&>*]:text-center">
-                    <th></th>
-                    <th><i class="fa-solid fa-hashtag"></i></th>
-                    <th><i class="fa-solid fa-bullseye-arrow"></i></th>
-                    <th><i class="fa-solid fa-hand-fist"></i></th>
-                    <th><i class="fa-solid fa-shield-slash"></i></th>
-                    <th><i class="fa-solid fa-heart-crack"></i></th>
-                  </tr>
-                  <tr class="[&>*]:px-[4px] [&>*]:text-center">
-                    <td><i class="fa-solid fa-sword"></i></td>
-                    <td>{selectedUnit.rangedNumAttacks}</td>
-                    <td>{selectedUnit.rangedHitRoll}+</td>
-                    <td>{selectedUnit.rangedWoundRoll}+</td>
-                    <td>{selectedUnit.rangedArmorPiercing}</td>
-                    <td>{selectedUnit.rangedDamage}</td>
-                  </tr>
-                </table>
-              </div>
-              <div class="col-span-1 p-[8px]">
-                <div class="text-center mt-[5px]">
-                  <i class="fa-solid fa-calculator mr-[5px]"></i>
-                  <span class="text-xl">{estDamage}</span>
-                  <span class="text-sm"> dmg</span>
-                </div>
-                <div class="text-center mt-[2px]">
-                  <i class="fa-solid fa-heart-crack mr-[5px]"></i>
-                  <span class="text-lg">{hoveredPiece.health}</span>
-                  <i class="fa-solid fa-arrow-right fa-sm"></i>
-                  {#if estHealthAfter > 0}
-                    <span class="text-lg">{estHealthAfter}</span>
-                  {:else}
-                    <i class="fa-solid fa-skull"></i>
-                  {/if}
-                </div>
-                <div class="text-center mt-[10px]">Attack?</div>
-              </div>
-            </div>
+          {#if attackDistance > (selectedUnit.rangedRange || 0)}
+            <div class="text-center">Target out of range</div>
           {:else}
-            <div class="text-center">Selected unit has no ranged attack</div>
+            {@const estDamage = estimatedRangedAttackDamage(selectedUnit, hoveredUnit)}
+            {@const estHealthAfter = Math.max(hoveredPiece.health - estDamage, 0)}
+
+            {#if !selectedUnit.rangedNumAttacks}
+              <div class="text-center">Selected unit has no ranged attack</div>
+            {:else}
+              <div class="grid grid-cols-3 gap-4mx-auto">
+                <div class="col-span-2 border-r border-black p-[8px]">
+                  <div class="text-center">
+                    {selectedPiece.playerUnit.name} 
+                    <i class="fa-solid fa-bow-arrow"></i> 
+                    {hoveredPiece.playerUnit.name}
+                  </div>
+                  <table class="mx-auto mt-[5px]">
+                    <tr class="[&>*]:px-[4px] [&>*]:text-center">
+                      <th></th>
+                      <th><i class="fa-solid fa-hashtag"></i></th>
+                      <th><i class="fa-solid fa-bullseye-arrow"></i></th>
+                      <th><i class="fa-solid fa-hand-fist"></i></th>
+                      <th><i class="fa-solid fa-shield-slash"></i></th>
+                      <th><i class="fa-solid fa-heart-crack"></i></th>
+                    </tr>
+                    <tr class="[&>*]:px-[4px] [&>*]:text-center">
+                      <td><i class="fa-solid fa-sword"></i></td>
+                      <td>{selectedUnit.rangedNumAttacks}</td>
+                      <td>{selectedUnit.rangedHitRoll}+</td>
+                      <td>{selectedUnit.rangedWoundRoll}+</td>
+                      <td>{selectedUnit.rangedArmorPiercing}</td>
+                      <td>{selectedUnit.rangedDamage}</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-span-1 p-[8px]">
+                  <div class="text-center mt-[5px]">
+                    <i class="fa-solid fa-calculator mr-[5px]"></i>
+                    <span class="text-xl">{estDamage}</span>
+                    <span class="text-sm"> dmg</span>
+                  </div>
+                  <div class="text-center mt-[2px]">
+                    <i class="fa-solid fa-heart-crack mr-[5px]"></i>
+                    <span class="text-lg">{hoveredPiece.health}</span>
+                    <i class="fa-solid fa-arrow-right fa-sm"></i>
+                    {#if estHealthAfter > 0}
+                      <span class="text-lg">{estHealthAfter}</span>
+                    {:else}
+                      <i class="fa-solid fa-skull"></i>
+                    {/if}
+                  </div>
+                  <div class="text-center mt-[10px]">Attack?</div>
+                </div>
+              </div>
+            {/if}
           {/if}
         {/if}
       </div>
