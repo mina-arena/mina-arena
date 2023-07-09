@@ -1,7 +1,8 @@
 <script lang="ts">
   import { afterUpdate } from 'svelte';
   import { onAfterUpdate } from './tooltip-helpers';
-  import { estimatedMeleeAttackDamage } from '../play/utils';
+  import { distanceBetweenPoints, estimatedMeleeAttackDamage, MELEE_ATTACK_RANGE } from '../play/utils';
+  import HoveredGamePieceTooltipUnitCard from './HoveredGamePieceTooltipUnitCard.svelte';
 
   export let game: Game;
   export let hoveredPiece: GamePiece | undefined;
@@ -27,31 +28,74 @@
     {@const owner = hoveredPiece.gamePlayer.player.minaPublicKey}
     {@const hoveredUnit = hoveredPiece.playerUnit.unit}
 
-    <div>{hoveredPiece.playerUnit.name} ({hoveredUnit.name})</div>
-    <div>HP: {hoveredPiece.health}/{hoveredUnit.maxHealth}</div>
+    <HoveredGamePieceTooltipUnitCard {hoveredPiece} />
 
-    {#if owner === currentPlayerMinaPubKey}
-      {#if selectedPiece && selectedPiece.id !== hoveredPiece.id}
-        <div>Friendly unit</div>
-      {:else}
-        <div># Attacks: {hoveredUnit.meleeNumAttacks}</div>
-        <div>To Hit: {hoveredUnit.meleeHitRoll}+</div>
-        <div>To Wound: {hoveredUnit.meleeWoundRoll}+</div>
-      {/if}
-    {:else}
-      {#if selectedPiece}
-        {@const selectedUnit = selectedPiece.playerUnit.unit}
-        {@const armorPiercing = selectedUnit.meleeArmorPiercing || 0}
-        {@const modifiedSave = hoveredUnit.armorSaveRoll + armorPiercing}
-        <div># Attacks: {selectedUnit.meleeNumAttacks}</div>
-        <div>To Hit: {selectedUnit.meleeHitRoll}+</div>
-        <div>To Wound: {selectedUnit.meleeWoundRoll}+</div>
-        <div>Armor Save: {modifiedSave}+ ({hoveredUnit.armorSaveRoll}+, AP-{armorPiercing})</div>
-        <div>Dmg / Attack: {selectedUnit.meleeDamage}</div>
-        <div>Est Damage: {estimatedMeleeAttackDamage(selectedUnit, hoveredUnit)}</div>
-      {:else}
-        <div>Armor: {hoveredUnit.armorSaveRoll}+</div>
-      {/if}      
+    {#if selectedPiece}
+      <div class="border-t border-black">
+        {#if owner === currentPlayerMinaPubKey}
+          {#if selectedPiece.id === hoveredPiece.id}
+            <div class="text-center">Selected unit</div>
+          {:else}
+            <div class="text-center">Friendly unit</div>
+          {/if}
+        {:else}
+          {@const attackDistance = distanceBetweenPoints(selectedPiece.coordinates, hoveredPiece.coordinates)}
+          {#if attackDistance > MELEE_ATTACK_RANGE}
+            <div class="text-center">Target out of range</div>
+          {:else}
+            {@const selectedUnit = selectedPiece.playerUnit.unit}
+            {@const estDamage = estimatedMeleeAttackDamage(selectedUnit, hoveredUnit)}
+            {@const estHealthAfter = Math.max(hoveredPiece.health - estDamage, 0)}
+
+            <div class="grid grid-cols-3 gap-4mx-auto">
+              <div class="col-span-2 border-r border-black p-[8px]">
+                <div class="text-center">
+                  {selectedPiece.playerUnit.name} 
+                  <i class="fa-solid fa-sword"></i> 
+                  {hoveredPiece.playerUnit.name}
+                </div>
+      
+                <table class="mx-auto mt-[5px]">
+                  <tr class="[&>*]:px-[4px] [&>*]:text-center">
+                    <th></th>
+                    <th><i class="fa-solid fa-hashtag"></i></th>
+                    <th><i class="fa-solid fa-bullseye-arrow"></i></th>
+                    <th><i class="fa-solid fa-hand-fist"></i></th>
+                    <th><i class="fa-solid fa-shield-slash"></i></th>
+                    <th><i class="fa-solid fa-heart-crack"></i></th>
+                  </tr>
+                  <tr class="[&>*]:px-[4px] [&>*]:text-center">
+                    <td><i class="fa-solid fa-sword"></i></td>
+                    <td>{selectedUnit.meleeNumAttacks}</td>
+                    <td>{selectedUnit.meleeHitRoll}+</td>
+                    <td>{selectedUnit.meleeWoundRoll}+</td>
+                    <td>{selectedUnit.meleeArmorPiercing}</td>
+                    <td>{selectedUnit.meleeDamage}</td>
+                  </tr>
+                </table>
+              </div>
+              <div class="col-span-1 p-[8px]">
+                <div class="text-center mt-[5px]">
+                  <i class="fa-solid fa-calculator mr-[5px]"></i>
+                  <span class="text-xl">{estDamage}</span>
+                  <span class="text-sm"> dmg</span>
+                </div>
+                <div class="text-center mt-[2px]">
+                  <i class="fa-solid fa-heart-crack mr-[5px]"></i>
+                  <span class="text-lg">{hoveredPiece.health}</span>
+                  <i class="fa-solid fa-arrow-right fa-sm"></i>
+                  {#if estHealthAfter > 0}
+                    <span class="text-lg">{estHealthAfter}</span>
+                  {:else}
+                    <i class="fa-solid fa-skull"></i>
+                  {/if}
+                </div>
+                <div class="text-center mt-[10px]">Attack?</div>
+              </div>
+            </div>
+          {/if}
+        {/if}
+      </div>
     {/if}
   {/if}
 </span>

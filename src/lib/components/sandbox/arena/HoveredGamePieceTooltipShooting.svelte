@@ -3,7 +3,8 @@
 <script lang="ts">
   import { afterUpdate } from 'svelte';
   import { onAfterUpdate } from './tooltip-helpers';
-  import { estimatedRangedAttackDamage } from '../play/utils';
+  import { distanceBetweenPoints, estimatedRangedAttackDamage } from '../play/utils';
+  import HoveredGamePieceTooltipUnitCard from './HoveredGamePieceTooltipUnitCard.svelte';
 
   export let game: Game;
   export let hoveredPiece: GamePiece | undefined;
@@ -29,39 +30,78 @@
     {@const owner = hoveredPiece.gamePlayer.player.minaPublicKey}
     {@const hoveredUnit = hoveredPiece.playerUnit.unit}
 
-    <div>{hoveredPiece.playerUnit.name} ({hoveredUnit.name})</div>
-    <div>HP: {hoveredPiece.health}/{hoveredUnit.maxHealth}</div>
+    <HoveredGamePieceTooltipUnitCard {hoveredPiece} />
 
-    {#if owner === currentPlayerMinaPubKey}
-      {#if selectedPiece && selectedPiece.id !== hoveredPiece.id}
-        <div>Friendly unit</div>
-      {:else}
-        {#if hoveredUnit.rangedNumAttacks}
-          <div># Attacks: {hoveredUnit.rangedNumAttacks}</div>
-          <div>To Hit: {hoveredUnit.rangedHitRoll}+</div>
-          <div>To Wound: {hoveredUnit.rangedWoundRoll}+</div>
+    {#if selectedPiece}
+      <div class="border-t border-black">
+        {#if owner === currentPlayerMinaPubKey}
+          {#if selectedPiece.id === hoveredPiece.id}
+            <div class="text-center">Selected unit</div>
+          {:else}
+            <div class="text-center">Friendly unit</div>
+          {/if}
         {:else}
-          <div>No ranged attack</div>
+          {@const selectedUnit = selectedPiece.playerUnit.unit}
+          {@const attackDistance = distanceBetweenPoints(selectedPiece.coordinates, hoveredPiece.coordinates)}
+
+          {#if attackDistance > (selectedUnit.rangedRange || 0)}
+            <div class="text-center">Target out of range</div>
+          {:else}
+            {@const estDamage = estimatedRangedAttackDamage(selectedUnit, hoveredUnit)}
+            {@const estHealthAfter = Math.max(hoveredPiece.health - estDamage, 0)}
+
+            {#if !selectedUnit.rangedNumAttacks}
+              <div class="text-center">Selected unit has no ranged attack</div>
+            {:else}
+              <div class="grid grid-cols-3 gap-4mx-auto">
+                <div class="col-span-2 border-r border-black p-[8px]">
+                  <div class="text-center">
+                    {selectedPiece.playerUnit.name} 
+                    <i class="fa-solid fa-bow-arrow"></i> 
+                    {hoveredPiece.playerUnit.name}
+                  </div>
+                  <table class="mx-auto mt-[5px]">
+                    <tr class="[&>*]:px-[4px] [&>*]:text-center">
+                      <th></th>
+                      <th><i class="fa-solid fa-hashtag"></i></th>
+                      <th><i class="fa-solid fa-bullseye-arrow"></i></th>
+                      <th><i class="fa-solid fa-hand-fist"></i></th>
+                      <th><i class="fa-solid fa-shield-slash"></i></th>
+                      <th><i class="fa-solid fa-heart-crack"></i></th>
+                    </tr>
+                    <tr class="[&>*]:px-[4px] [&>*]:text-center">
+                      <td><i class="fa-solid fa-sword"></i></td>
+                      <td>{selectedUnit.rangedNumAttacks}</td>
+                      <td>{selectedUnit.rangedHitRoll}+</td>
+                      <td>{selectedUnit.rangedWoundRoll}+</td>
+                      <td>{selectedUnit.rangedArmorPiercing}</td>
+                      <td>{selectedUnit.rangedDamage}</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="col-span-1 p-[8px]">
+                  <div class="text-center mt-[5px]">
+                    <i class="fa-solid fa-calculator mr-[5px]"></i>
+                    <span class="text-xl">{estDamage}</span>
+                    <span class="text-sm"> dmg</span>
+                  </div>
+                  <div class="text-center mt-[2px]">
+                    <i class="fa-solid fa-heart-crack mr-[5px]"></i>
+                    <span class="text-lg">{hoveredPiece.health}</span>
+                    <i class="fa-solid fa-arrow-right fa-sm"></i>
+                    {#if estHealthAfter > 0}
+                      <span class="text-lg">{estHealthAfter}</span>
+                    {:else}
+                      <i class="fa-solid fa-skull"></i>
+                    {/if}
+                  </div>
+                  <div class="text-center mt-[10px]">Attack?</div>
+                </div>
+              </div>
+            {/if}
+          {/if}
         {/if}
-      {/if}
-    {:else}
-      {#if selectedPiece}
-        {@const selectedUnit = selectedPiece.playerUnit.unit}
-        {#if selectedUnit.rangedNumAttacks}
-          {@const armorPiercing = selectedUnit.rangedArmorPiercing || 0}
-          {@const modifiedSave = hoveredUnit.armorSaveRoll + armorPiercing}
-          <div># Attacks: {selectedUnit.rangedNumAttacks}</div>
-          <div>To Hit: {selectedUnit.rangedHitRoll}+</div>
-          <div>To Wound: {selectedUnit.rangedWoundRoll}+</div>
-          <div>Armor Save: {modifiedSave}+ ({hoveredUnit.armorSaveRoll}+, AP-{armorPiercing})</div>
-          <div>Dmg / Attack: {selectedUnit.rangedDamage}</div>
-          <div>Est Damage: {estimatedRangedAttackDamage(selectedUnit, hoveredUnit)}</div>
-        {:else}
-          <div>Selected unit has no ranged attack</div>
-        {/if}
-      {:else}
-        <div>Armor: {hoveredUnit.armorSaveRoll}+</div>
-      {/if}      
+      </div>
     {/if}
   {/if}
 </span>
