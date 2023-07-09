@@ -5,17 +5,6 @@ const MISSILE_RANGE_CIRCLE_STROKE_COLOR = 'lightcoral';
 const MELEE_RANGE_CIRCLE_STROKE_COLOR = '#6b0000';
 const MELEE_RANGE_CIRCLE_FILL_COLOR = '#ffb0b0';
 
-const IMAGE_PATH_BY_UNIT_NAME: Record<string, string> = {
-  'Archer': '/images/archer.png',
-  'Peasant': '/images/archer.png',
-  'Swordsman': '/images/archer.png',
-  'Spearman': '/images/archer.png',
-  'Light Cavalry': '/images/archer.png',
-  'Heavy Cavalry': '/images/archer.png',
-  'Ballista': '/images/archer.png',
-  'Hero': '/images/archer.png',
-};
-
 export const PIECE_RADIUS = 12;
 export const MELEE_ATTACK_RANGE = 50;
 
@@ -315,12 +304,4 @@ export const hexToRgb = (hex: string) => {
     g: parseInt(result[2], 16),
     b: parseInt(result[3], 16)
   } : null;
-}
-
-export const imagePathForUnit = (unit: Unit): string => {
-  return IMAGE_PATH_BY_UNIT_NAME[unit.name];
-}
-
-export const imagePathForPiece = (piece: GamePiece): string => {
-  return imagePathForUnit(piece.playerUnit.unit);
 }

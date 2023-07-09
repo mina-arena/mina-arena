@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { imagePathForUnit } from '../play/utils';
+  import { imagePathForUnit } from '$lib/utils';
 
   export let hoveredPiece: GamePiece;
 </script>
