@@ -18,7 +18,9 @@
 	/>
 </Modals>
 
-<Header {openUserModal} />
-<main class="container pt-10 bg-light">
-	<slot />
+<main class="bg-light h-[100vh]">
+	<Header {openUserModal} />
+	<div class="container w-3-4 mx-auto">
+		<slot />
+	</div>
 </main>

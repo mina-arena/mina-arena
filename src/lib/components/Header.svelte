@@ -5,11 +5,16 @@
 </script>
 
 <header>
-	<nav class="flex border-gray-200 px-4 lg:px-6 py-2.5 bg-light">
-		<div class="flex flex-wrap items-center ml-10 w-full">
+	<nav
+		class="flex border border-gray-200 border-solid px-4 lg:px-6 py-2.5 bg-light justify-between"
+	>
+		<div class="flex flex-wrap items-center">
+			<div class="rounded overflow-hidden h-32 w-32">
+				<img src="/images/logo.png" alt="logo" />
+			</div>
 			<NavItem href="/how-to-play">How To Play</NavItem>
 			<NavItem href="/barracks">Barracks</NavItem>
-			<NavItem href="/play">Play</NavItem>
+			<NavItem href="/">Play</NavItem>
 		</div>
 		<div class="mr-10 cursor-pointer" on:click={openUserModal} on:keydown={openUserModal}>
 			<NavItem><i class="_nav_item fa-solid fa-user" /></NavItem>

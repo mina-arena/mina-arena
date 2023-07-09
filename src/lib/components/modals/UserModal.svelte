@@ -2,7 +2,6 @@
 	import { closeModal } from 'svelte-modals';
 	import { player1, player1Default, dummyPlayer2 } from '$lib/stores/sandbox/playerStore';
 	import { truncateMinaPublicKey } from '$lib/utils';
-	import { PrivateKey } from 'snarkyjs';
 
 	// provided by Modals
 	export let isOpen: boolean;
@@ -13,6 +12,8 @@
 	};
 
 	const generateKeypair = async () => {
+		// Importing snarky like this makes it so only this function gets slowed down, not every page load
+		const { PrivateKey } = await import('snarkyjs');
 		const privateKey = PrivateKey.random();
 		const publicKey = privateKey.toPublicKey();
 
@@ -28,6 +29,7 @@
 	};
 
 	const setPrivateKey = async () => {
+		const { PrivateKey } = await import('snarkyjs');
 		const isValid = validatePrivateKey(newPrivateKey);
 		if (!isValid) {
 			alert('Invalid private key, try again');

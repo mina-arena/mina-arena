@@ -14,7 +14,7 @@
 	export let rerender: () => {};
 </script>
 
-<div class="flex">
+<div class="flex justify-between">
 	<ArenaCanvas {game} playerColors={legendConfig.colors} {rerender} />
 	<table>
 		<tr>
