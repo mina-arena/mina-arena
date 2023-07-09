@@ -9,6 +9,9 @@ import { StartGameMut } from './queries/mut-start-game';
 import { CreateGamePiecesMut } from './queries/mut-create-game-pieces';
 import { CreateGamePieceActionsMut } from './queries/mut-create-action';
 import { SubmitGamePhaseMut } from './queries/mut-submit-phase';
+import dotenv from 'dotenv';
+
+dotenv.config();
 
 export class MinaArenaClient {
   client
@@ -19,7 +22,7 @@ export class MinaArenaClient {
 
   setupClient() {
     const link = new HttpLink({
-      uri: `${import.meta.env.VITE_BACKEND_SERVER_URL}/graphql/`
+      uri: `${process.env.VITE_BACKEND_SERVER_URL}/graphql/`
     });
 
 
