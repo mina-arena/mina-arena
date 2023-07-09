@@ -3,7 +3,6 @@
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import { page } from '$app/stores';
 
-	import PhaseInput from './phase-input/PhaseInput.svelte';
 	import Arena from './Arena.svelte';
 	import { truncateMinaPublicKey } from '$lib/utils';
 
