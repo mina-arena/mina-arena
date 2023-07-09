@@ -9,7 +9,6 @@ import { StartGameMut } from './queries/mut-start-game';
 import { CreateGamePiecesMut } from './queries/mut-create-game-pieces';
 import { CreateGamePieceActionsMut } from './queries/mut-create-action';
 import { SubmitGamePhaseMut } from './queries/mut-submit-phase';
-import { VITE_BACKEND_SERVER_URL } from '$env/static/private';
 
 export class MinaArenaClient {
   client
@@ -20,7 +19,7 @@ export class MinaArenaClient {
 
   setupClient() {
     const link = new HttpLink({
-      uri: `${VITE_BACKEND_SERVER_URL}/graphql/`
+      uri: `${import.meta.env.VITE_BACKEND_SERVER_URL}/graphql/`
     });
 
 
