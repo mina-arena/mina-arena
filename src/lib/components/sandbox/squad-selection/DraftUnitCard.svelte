@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { unitImage } from '$lib/utils';
+
 	export let unit: Unit;
 	export let openUnitDraftModal: (unit: Unit) => void;
 </script>
@@ -13,7 +15,7 @@
 	class="border border-slate-300 rounded pb-6 col-span-1 cursor-pointer"
 >
 	<div class="w-full rounded overflow-hidden pb-2">
-		<img alt="archer" src="/images/archer.png" />
+		<img alt="archer" src={unitImage(unit.name)} />
 	</div>
 	<p><b>{unit.name}</b></p>
 	<table class="mx-auto">
