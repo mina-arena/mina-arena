@@ -120,13 +120,13 @@
 		}
 
 		const totalDmg = action.actionData.totalDamageDealt;
-		text += `Damage: ${totalDmg} (avg. ${action.actionData.totalDamageAverage?.toFixed(1)})<br/>`;
+		text += `Damage: ${totalDmg} (avg. ${action.actionData.totalDamageAverage?.toFixed(1)})`;
 
 		if (totalDmg && totalDmg > 0) {
 			if (targetPiece.health > 0) {
-				text += `${targetPieceTitle} is down to ${targetPiece.health}/${targetPlayerUnit.unit.maxHealth} HP`;
+				text += `<br/>${targetPieceTitle} is down to ${targetPiece.health}/${targetPlayerUnit.unit.maxHealth} HP`;
 			} else {
-				text += `${targetPieceTitle} was destroyed!`;
+				text += `<br/>${targetPieceTitle} was destroyed!`;
 			}
 		}
 
