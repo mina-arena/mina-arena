@@ -56,7 +56,7 @@ type GamePieceAction = {
       y: number;
     }
     targetGamePiece?: GamePiece;
-    resolvedAttack?: ResolvedAttack[];
+    resolvedAttack?: ResolvedAttack;
     totalDamageDealt?: number;
     totalDamageAverage?: number;
   }
