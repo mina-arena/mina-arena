@@ -1,12 +1,12 @@
 const IMAGE_PATH_BY_UNIT_NAME: Record<string, string> = {
   'archer': '/images/archer.png',
-  'peasant': '',
-  'swordsman': '',
+  'peasant': '/images/peasant.png',
+  'swordsman': '/images/swordsman.png',
   'spearman': '/images/spearman.png',
-  'light cavalry': '',
-  'heavy cavalry': '/images/heavy_cavalry.png',
-  'ballista': '',
-  'hero': '',
+  'light cavalry': '/images/germanic_cavalry.png',
+  'heavy cavalry': '/images/roman_heavy_cavalry.png',
+  'ballista': '/images/ballista.png',
+  'hero': '/images/hero.png',
 };
 
 const DEFAULT_UNIT_IMAGE_PATH = '/images/archer.png';
