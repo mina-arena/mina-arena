@@ -56,7 +56,7 @@ type GamePieceAction = {
       y: number;
     }
     targetGamePiece?: GamePiece;
-    resolvedAttacks?: ResolvedAttack[];
+    resolvedAttack?: ResolvedAttack[];
     totalDamageDealt?: number;
     totalDamageAverage?: number;
   }
@@ -171,7 +171,7 @@ type RangedAttackAction = {
   gamePieceId: number;
   action: {
     targetGamePieceId: number;
-    diceRolls: DiceRollInput[];
+    diceRolls: DiceRollInput;
   }
 };
 
@@ -179,7 +179,7 @@ type MeleeAttackAction = {
   gamePieceId: number;
   action: {
     targetGamePieceId: number;
-    diceRolls: DiceRollInput[];
+    diceRolls: DiceRollInput;
   }
 };
 

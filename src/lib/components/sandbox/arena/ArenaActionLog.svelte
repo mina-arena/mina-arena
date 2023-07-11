@@ -9,8 +9,8 @@
 	export let playerColors: Array<string>;
 
 	const textColorByPlayerColor: Record<string, string> = {
-		'pink': '#FF3030',
-		'lightblue': '#5050FF',
+		pink: '#FF3030',
+		lightblue: '#5050FF'
 	};
 
 	const colorByPlayerKey: Record<string, string> = playerPublicKeys.reduce((acc, key) => {
@@ -28,8 +28,8 @@
 		actionLogText += `Previous Phase: ${prevPhase.name}<br/><br/>`;
 
 		if (prevPhase.gamePieceActions.length > 0) {
-			prevPhase.gamePieceActions.forEach(action => {
-				switch(action.actionType) {
+			prevPhase.gamePieceActions.forEach((action) => {
+				switch (action.actionType) {
 					case 'MOVE':
 						actionLogText += movementActionLogText(action);
 						break;
@@ -42,9 +42,9 @@
 				}
 			});
 		} else {
-			actionLogText += 'No actions were made.'
+			actionLogText += 'No actions were made.';
 		}
-		
+
 		log.innerHTML += actionLogText;
 	});
 
@@ -55,11 +55,11 @@
 		const playerUnit = action.gamePiece.playerUnit;
 		text += `<span style="color: ${color};">${playerUnit.name} (${playerUnit.unit.name})</span> moves`;
 		return `${text}<br/>`;
-	}
+	};
 
 	const rangedAttackActionLogText = (action: GamePieceAction): string => {
 		let text = '';
-		const attacks = action.actionData.resolvedAttacks;
+		const attacks = action.actionData.resolvedAttack;
 		const attackingPiece = action.gamePiece;
 		const targetPiece = action.actionData.targetGamePiece;
 		if (!targetPiece || !attacks) return '';
@@ -69,8 +69,10 @@
 		const attackingPlayerKey = attackingPiece.gamePlayer.player.minaPublicKey;
 		const targetPlayerKey = targetPiece.gamePlayer.player.minaPublicKey;
 		const attackingPlayerColor = colorByPlayerKey[attackingPlayerKey] || 'black';
-		const targetPlayerColor = targetPlayerKey ? colorByPlayerKey[targetPlayerKey] || 'black' : 'black';
-		
+		const targetPlayerColor = targetPlayerKey
+			? colorByPlayerKey[targetPlayerKey] || 'black'
+			: 'black';
+
 		const attackingPieceTitle = `<span style="color: ${attackingPlayerColor}">${attackingPlayerUnit.name} (${attackingPlayerUnit.unit.name})</span>`;
 		const targetPieceTitle = `<span style="color: ${targetPlayerColor}">${targetPlayerUnit.name} (${targetPlayerUnit.unit.name})</span>`;
 
@@ -83,7 +85,7 @@
 		let saveRollsPassed: number[] = [];
 		let saveRollsFailed: number[] = [];
 
-		attacks.forEach(attack => {
+		attacks.forEach((attack) => {
 			if (attack.hitRoll.success) {
 				hitRollsPassed.push(attack.hitRoll.roll);
 			} else {
@@ -131,11 +133,11 @@
 		}
 
 		return `${text}<br/><br/>`;
-	}
+	};
 
 	const meleeAttackActionLogText = (action: GamePieceAction): string => {
 		let text = '';
-		const attacks = action.actionData.resolvedAttacks;
+		const attacks = action.actionData.resolvedAttack;
 		const attackingPiece = action.gamePiece;
 		const targetPiece = action.actionData.targetGamePiece;
 		if (!targetPiece || !attacks) return '';
@@ -145,8 +147,10 @@
 		const attackingPlayerKey = attackingPiece.gamePlayer.player.minaPublicKey;
 		const targetPlayerKey = targetPiece.gamePlayer.player.minaPublicKey;
 		const attackingPlayerColor = colorByPlayerKey[attackingPlayerKey] || 'black';
-		const targetPlayerColor = targetPlayerKey ? colorByPlayerKey[targetPlayerKey] || 'black' : 'black';
-		
+		const targetPlayerColor = targetPlayerKey
+			? colorByPlayerKey[targetPlayerKey] || 'black'
+			: 'black';
+
 		const attackingPieceTitle = `<span style="color: ${attackingPlayerColor}">${attackingPlayerUnit.name} (${attackingPlayerUnit.unit.name})</span>`;
 		const targetPieceTitle = `<span style="color: ${targetPlayerColor}">${targetPlayerUnit.name} (${targetPlayerUnit.unit.name})</span>`;
 
@@ -159,7 +163,7 @@
 		let saveRollsPassed: number[] = [];
 		let saveRollsFailed: number[] = [];
 
-		attacks.forEach(attack => {
+		attacks.forEach((attack) => {
 			if (attack.hitRoll.success) {
 				hitRollsPassed.push(attack.hitRoll.roll);
 			} else {
@@ -207,9 +211,7 @@
 		}
 
 		return `${text}<br/><br/>`;
-	}
-
+	};
 </script>
 
-<div id="action-log" class="h-96 border border-slate-400 mx-auto p-2 overflow-y-auto">
-</div>
+<div id="action-log" class="h-96 border border-slate-400 mx-auto p-2 overflow-y-auto" />

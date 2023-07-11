@@ -21,10 +21,6 @@ export class MinaArenaClient {
     const link = new HttpLink({
       uri: `${import.meta.env.VITE_BACKEND_SERVER_URL}/graphql/`
     });
-
-
-
-
     const client = new ApolloClient({
       link,
       cache: new InMemoryCache()
