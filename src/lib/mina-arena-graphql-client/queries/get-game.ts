@@ -88,7 +88,7 @@ export const GetGameQuery = gql`
               moveTo { x, y }
             }
             ... on GamePieceRangedAttackAction {
-              resolvedAttacks {
+              resolvedAttack {
                 hitRoll { roll, rollNeeded, success }
                 woundRoll { roll, rollNeeded, success }
                 saveRoll { roll, rollNeeded, success }
@@ -115,7 +115,7 @@ export const GetGameQuery = gql`
               totalDamageAverage
             }
             ... on GamePieceMeleeAttackAction {
-              resolvedAttacks {
+              resolvedAttack {
                 hitRoll { roll, rollNeeded, success }
                 woundRoll { roll, rollNeeded, success }
                 saveRoll { roll, rollNeeded, success }
