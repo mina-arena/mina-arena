@@ -8,6 +8,24 @@ const MELEE_RANGE_CIRCLE_FILL_COLOR = '#ffb0b0';
 export const PIECE_RADIUS = 12;
 export const MELEE_ATTACK_RANGE = 50;
 
+const ICON_BY_UNIT_NAME: Record<string, IconData> = {
+  'archer': { unicode: '\uF6B9', name: 'fa-bow-arrow', xOffset: -7, yOffset: 5 },
+  'peasant': { unicode: '\uF2E3', name: 'fa-fork', xOffset: -7, yOffset: 5 },
+  'swordsman': { unicode: '\uF71C', name: 'fa-sword', xOffset: -7, yOffset: 5 },
+  'spearman': { unicode: '\uF2E4', name: 'fa-knife', xOffset: -7, yOffset: 5 },
+  'light cavalry': { unicode: '\uF7AB', name: 'fa-horse-head', xOffset: -7, yOffset: 5 },
+  'heavy cavalry': { unicode: '\uF441', name: 'fa-chess-knight', xOffset: -6, yOffset: 5 },
+  'ballista': { unicode: '\uF77E', name: 'fa-ball-pile', xOffset: -9, yOffset: 5 },
+  'hero': { unicode: '\uF521', name: 'fa-crown', xOffset: -7, yOffset: 5 },
+};
+
+type IconData = {
+  unicode: string;
+  name: string;
+  xOffset: number;
+  yOffset: number;
+};
+
 export const clearCanvas = (ctx: CanvasRenderingContext2D) => {
   const canvas = ctx.canvas;
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -26,7 +44,8 @@ export const makePiece = (piece: GamePiece, playerColor: string) => {
     x: piece.coordinates.x,
     y: piece.coordinates.y,
     radius: PIECE_RADIUS,
-    fill: playerColor
+    fill: playerColor,
+    unitName: piece.playerUnit.unit.name,
   };
 };
 
@@ -65,6 +84,13 @@ export const drawPiece = (ctx: CanvasRenderingContext2D, piece: DrawnPiece, piec
   ctx.fill();
   ctx.stroke();
   ctx.closePath();
+
+  const iconData = ICON_BY_UNIT_NAME[piece.unitName.toLowerCase()];
+  if (!iconData) return;
+
+  ctx.font = '900 14px "Font Awesome 6 Pro"';
+  ctx.fillStyle = 'black';
+  ctx.fillText(iconData.unicode, piece.x + iconData.xOffset, piece.y + iconData.yOffset);
 };
 
 // Given a MouseEvent and an HTMLCanvasElement, determine at what
