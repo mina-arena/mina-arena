@@ -187,7 +187,7 @@
 					targetGamePieceId: targetPiece.id,
 					diceRolls: placeholderDiceRoll,
 					gamePieceNumber: selectedPiece.gamePieceNumber,
-					targetGamePieceNumber: targetPiece.gamePieceNumber
+					targetGamePieceHash: targetPiece.hash
 				}
 			}
 		};

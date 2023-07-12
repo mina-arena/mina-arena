@@ -28,6 +28,7 @@ type GamePiece = {
     y: number
   }
   gamePieceNumber: number;
+  hash: string;
   health: number;
 }
 
@@ -166,6 +167,7 @@ type MoveAction = {
       y: number;
     };
     gamePieceNumber: number;
+    nonce?: number;
   }
 }
 
@@ -175,7 +177,8 @@ type RangedAttackAction = {
     targetGamePieceId: number;
     diceRolls: DiceRollInput;
     gamePieceNumber: number;
-    targetGamePieceNumber: number;
+    targetGamePieceHash: string;
+    nonce?: number;
   }
 };
 
@@ -185,7 +188,8 @@ type MeleeAttackAction = {
     targetGamePieceId: number;
     diceRolls: DiceRollInput;
     gamePieceNumber: number;
-    targetGamePieceNumber: number;
+    targetGamePieceHash: string;
+    nonce?: number;
   }
 };
 
