@@ -1,4 +1,4 @@
-import * as Utils from '../play/utils';
+import * as Utils from '../../play/utils';
 
 export const onAfterUpdate = (
   playerPublicKeys: Array<string>,
@@ -29,7 +29,7 @@ export const showHoveredPieceTooltip = (
 
   const playerMinaPublicKey = hoveredPiece.gamePlayer.player.minaPublicKey;
   const playerColor = Utils.playerColor(playerPublicKeys, playerMinaPublicKey, playerColors);
-  
+
   tooltip.style.left = (tooltipAbsolutePosition.x + 20) + 'px';
   tooltip.style.top = (tooltipAbsolutePosition.y + 20) + 'px';
   tooltip.style.display = 'block';
@@ -39,6 +39,6 @@ export const showHoveredPieceTooltip = (
 export const hideHoveredPieceTooltip = () => {
   var tooltip = document.querySelector('#piece-hover-tooltip') as HTMLElement;
   if (!tooltip) return;
-  
+
   tooltip.style.display = 'none';
 }

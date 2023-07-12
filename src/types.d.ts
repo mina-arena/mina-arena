@@ -27,6 +27,7 @@ type GamePiece = {
     x: number;
     y: number
   }
+  gamePieceNumber: number;
   health: number;
 }
 
@@ -159,11 +160,12 @@ type MoveAction = {
     moveFrom: {
       x: number;
       y: number;
-    },
+    };
     moveTo: {
       x: number;
       y: number;
-    }
+    };
+    gamePieceNumber: number;
   }
 }
 
@@ -172,6 +174,8 @@ type RangedAttackAction = {
   action: {
     targetGamePieceId: number;
     diceRolls: DiceRollInput;
+    gamePieceNumber: number;
+    targetGamePieceNumber: number;
   }
 };
 
@@ -180,6 +184,8 @@ type MeleeAttackAction = {
   action: {
     targetGamePieceId: number;
     diceRolls: DiceRollInput;
+    gamePieceNumber: number;
+    targetGamePieceNumber: number;
   }
 };
 

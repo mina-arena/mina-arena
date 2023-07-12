@@ -9,6 +9,7 @@ import { StartGameMut } from './queries/mut-start-game';
 import { CreateGamePiecesMut } from './queries/mut-create-game-pieces';
 import { CreateGamePieceActionsMut } from './queries/mut-create-action';
 import { SubmitGamePhaseMut } from './queries/mut-submit-phase';
+import { Action, Position } from 'mina-arena-contracts';
 
 export class MinaArenaClient {
   client
@@ -125,12 +126,27 @@ export class MinaArenaClient {
     return data.createGamePieces;
   }
 
-  async submitMovePhase(player: string, gameId: number, phaseId: number, moves: Array<MoveAction>): Promise<number> {
+  async submitMovePhase(player: string, gameId: number, phaseId: number, moves: Array<MoveAction>, playerPrivateKey: string): Promise<number> {
+    const { Field, PrivateKey } = await import('snarkyjs');
+    let i = 1;
     const actions = moves.map((move) => {
+      const snarkyAction = new Action({
+        nonce: Field(i),
+        actionType: Field(0),
+        actionParams: Position.fromXY(move.action.moveTo.x, move.action.moveTo.y).hash(),
+        piece: Field(move.action.gamePieceNumber)
+      });
+      i++;
+      const signingKey = PrivateKey.fromBase58(playerPrivateKey);
+      const signature = snarkyAction.sign(signingKey);
       return {
         actionType: 'MOVE',
         gamePieceId: move.gamePieceId,
-        moveInput: move.action
+        moveInput: {
+          moveFrom: move.action.moveFrom,
+          moveTo: move.action.moveTo,
+        },
+        signature: signature.toJSON()
       }
     });
     const mutationInput = {
@@ -163,13 +179,29 @@ export class MinaArenaClient {
     player: string,
     gameId: number,
     phaseId: number,
-    rangedAttacks: Array<RangedAttackAction>
+    rangedAttacks: Array<RangedAttackAction>,
+    playerPrivateKey: string
   ): Promise<number> {
+    const { Field, PrivateKey } = await import('snarkyjs');
+    let i = 1;
     const actions = rangedAttacks.map((rangedAttack) => {
+      const snarkyAction = new Action({
+        nonce: Field(i),
+        actionType: Field(1),
+        actionParams: Field(rangedAttack.action.targetGamePieceNumber),
+        piece: Field(rangedAttack.action.gamePieceNumber)
+      });
+      i++;
+      const signingKey = PrivateKey.fromBase58(playerPrivateKey);
+      const signature = snarkyAction.sign(signingKey);
       return {
         actionType: 'RANGED_ATTACK',
         gamePieceId: rangedAttack.gamePieceId,
-        rangedAttackInput: rangedAttack.action
+        rangedAttackInput: {
+          targetGamePieceId: rangedAttack.action.targetGamePieceId,
+          diceRolls: rangedAttack.action.diceRolls,
+        },
+        signature: signature.toJSON()
       }
     });
     const mutationInput = {
@@ -202,13 +234,28 @@ export class MinaArenaClient {
     player: string,
     gameId: number,
     phaseId: number,
-    meleeAttacks: Array<MeleeAttackAction>
+    meleeAttacks: Array<MeleeAttackAction>,
+    playerPrivateKey: string
   ): Promise<number> {
+    const { Field, PrivateKey } = await import('snarkyjs');
     const actions = meleeAttacks.map((meleeAttack) => {
+      let i = 1;
+      const snarkyAction = new Action({
+        nonce: Field(i),
+        actionType: Field(2),
+        actionParams: Field(meleeAttack.action.targetGamePieceNumber),
+        piece: Field(meleeAttack.action.gamePieceNumber)
+      });
+      i++;
+      const signingKey = PrivateKey.fromBase58(playerPrivateKey);
+      const signature = snarkyAction.sign(signingKey);
       return {
         actionType: 'MELEE_ATTACK',
         gamePieceId: meleeAttack.gamePieceId,
-        meleeAttackInput: meleeAttack.action
+        meleeAttackInput: {
+          targetGamePieceId: meleeAttack.action.targetGamePieceId,
+          diceRolls: meleeAttack.action.diceRolls,
+        }
       }
     });
     const mutationInput = {

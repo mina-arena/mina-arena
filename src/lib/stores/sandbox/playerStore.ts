@@ -2,8 +2,13 @@ import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
 export const player1Default = {
-  publicKey: 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL',
-  privateKey: ''
+  publicKey: 'B62qmUvZ59kbvYuy9H8DmaziEPPuBrpJW2FTp3A8Vk7cSnVr7dAK1xC',
+  privateKey: 'EKEfWEgoUiTUuKkHWQeeE3gAZtueLs5tFGuZAjtcXkL4mqj9UM2F'
+}
+
+const dummyPlayerDefault = {
+  publicKey: 'B62qnzWe6wjK4FJLWpBvSDUXtejuf2fVJR8NHdP2VgFu4rrxwwCFM1r',
+  privateKey: 'EKEe1DihaXv5edGhZY1g4a8P6ob18mUsfvwnKnotHmg71n93d4WB'
 }
 
 let player1InitialValue = player1Default;
@@ -14,7 +19,6 @@ if (browser) {
       player1InitialValue = JSON.parse(stringValue);
     } catch (e) {
       window.localStorage.removeItem('player1');
-      window.localStorage.removeItem('theme');
     }
   }
 }
@@ -25,5 +29,4 @@ player1.subscribe((value) => {
     window.localStorage.setItem('player1', JSON.stringify(value));
   }
 });
-export const dummyPlayer1 = 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL';
-export const dummyPlayer2 = 'B62qpq9xPZGJvv2CwhRBsYGb9yHPaar6HWSJ8rC3s54mX7f8X9wX15s';
+export const dummyPlayer = writable<Keypair>(dummyPlayerDefault);

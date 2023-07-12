@@ -7,10 +7,11 @@
 	import { page } from '$app/stores';
 	import { playerUnits } from '$lib/stores/sandbox/playerUnitStore';
 	import { truncateMinaPublicKey } from '$lib/utils';
+	import { dummyPlayer, player1 as player1Store } from '$lib/stores/sandbox/playerStore';
 
 	let playerTurn = 1;
-	const player1 = 'B62qinnN8N4wXLR9K1Ji2HbeTG2k3nVBDD3AHyYP38wUDzPkq4YctHL';
-	const player2 = 'B62qpq9xPZGJvv2CwhRBsYGb9yHPaar6HWSJ8rC3s54mX7f8X9wX15s';
+	const player1 = $player1Store.publicKey;
+	const player2 = $dummyPlayer.publicKey;
 
 	const gameId = $page.params.gameId;
 
