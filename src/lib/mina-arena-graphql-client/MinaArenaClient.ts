@@ -189,7 +189,7 @@ export class MinaArenaClient {
       const snarkyAction = new Action({
         nonce: Field(j),
         actionType: Field(1),
-        actionParams: Field(rangedAttackCopy.action.targetGamePieceHash),
+        actionParams: Field(rangedAttackCopy.action.targetGamePieceNumber),
         piece: Field(rangedAttackCopy.action.gamePieceNumber)
       });
       const signingKey = PrivateKey.fromBase58(playerPrivateKey);
@@ -244,7 +244,7 @@ export class MinaArenaClient {
       const snarkyAction = new Action({
         nonce: Field(j),
         actionType: Field(2),
-        actionParams: Field(meleeAttackCopy.action.targetGamePieceHash),
+        actionParams: Field(meleeAttackCopy.action.targetGamePieceNumber),
         piece: Field(meleeAttackCopy.action.gamePieceNumber)
       });
       const signingKey = PrivateKey.fromBase58(playerPrivateKey);

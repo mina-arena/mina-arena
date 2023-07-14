@@ -177,7 +177,7 @@ type RangedAttackAction = {
     targetGamePieceId: number;
     diceRolls: DiceRollInput;
     gamePieceNumber: number;
-    targetGamePieceHash: string;
+    targetGamePieceNumber: number;
     nonce?: number;
   }
 };
@@ -188,7 +188,7 @@ type MeleeAttackAction = {
     targetGamePieceId: number;
     diceRolls: DiceRollInput;
     gamePieceNumber: number;
-    targetGamePieceHash: string;
+    targetGamePieceNumber: number;
     nonce?: number;
   }
 };
