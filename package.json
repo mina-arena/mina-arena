@@ -42,7 +42,7 @@
 	"dependencies": {
 		"@apollo/client": "^3.7.9",
 		"graphql": "^16.6.0",
-		"mina-arena-contracts": "^0.4.0",
+		"mina-arena-contracts": "^0.4.1",
 		"snarkyjs": "^0.11.4",
 		"svelte-modals": "^1.2.1"
 	}
