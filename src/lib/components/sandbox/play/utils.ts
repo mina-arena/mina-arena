@@ -1,3 +1,5 @@
+import { imagePathForUnit } from "$lib/utils";
+
 const PIECE_STROKE_COLOR = '#101010';
 const PIECE_SELECTED_STROKE_COLOR = '#771111';
 const MISSILE_RANGE_CIRCLE_FILL_COLOR = '#ffe9f0';
@@ -7,6 +9,8 @@ const MELEE_RANGE_CIRCLE_FILL_COLOR = '#ffb0b0';
 
 export const PIECE_RADIUS = 12;
 export const MELEE_ATTACK_RANGE = 50;
+
+export const ARENA_BACKGROUND_IMAGE_PATH = '/images/battlefield_dirt_650x550.png';
 
 const ICON_BY_UNIT_NAME: Record<string, IconData> = {
   'archer': { unicode: '\uF6B9', name: 'fa-bow-arrow', xOffset: -7, yOffset: 5 },
@@ -36,6 +40,34 @@ export const drawArenaBackground = (ctx: CanvasRenderingContext2D) => {
   if (!img) return;
 
   ctx.drawImage(img, 0, 0);
+}
+
+// Load an image given its relative path.
+// Optionally also run some callback when the image is loaded.
+export const loadImage = (imagePath: string, callback?: () => void) => {
+  var img = new Image();
+  if (callback) img.onload = function() { callback() };
+  img.src = imagePath;
+}
+
+// Given an array of GamePieces, ensure the browser has loaded all
+// their images to improve image rendering speed when the tooltip is opened
+export const loadGamePieceImages = (gamePieces: GamePiece[]) => {
+  let loadedImagePaths: string[] = [];
+  gamePieces.forEach(piece => {
+    const unit = piece.playerUnit.unit;
+    if (!unit) return;
+
+    const imagePath = imagePathForUnit(unit);
+    if (loadedImagePaths.includes(imagePath)) return;
+
+    loadedImagePaths.push(imagePath);
+    loadImage(imagePath);
+  });
+}
+
+export const loadArenaBackgroundImage = (callback?: () => void) => {
+  loadImage(ARENA_BACKGROUND_IMAGE_PATH, callback);
 }
 
 export const makePiece = (piece: GamePiece, playerColor: string) => {

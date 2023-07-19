@@ -39,6 +39,8 @@
 		Utils.drawArenaBackground(ctx);
 		initDrawnPieces();
 		initGamePieceOrders();
+		Utils.loadGamePieceImages(gamePieces);
+		Utils.loadArenaBackgroundImage(onUpdate);
 	});
 
 	const initDrawnPieces = () => {
@@ -55,12 +57,14 @@
 		playerGamePieces.forEach((piece) => (orders[piece.id] = []));
 	};
 
-	afterUpdate(() => {
+	const onUpdate = () => {
 		Utils.clearCanvas(ctx);
 		Utils.drawArenaBackground(ctx);
 		drawPieces();
 		drawMeleePhase(canvas, orders, selectedPiece);
-	});
+	}
+
+	afterUpdate(onUpdate);
 
 	const drawPieces = () => {
 		Utils.drawAllPieces(canvas, ctx, drawnPieces, hoveredPiece, selectedPiece);
