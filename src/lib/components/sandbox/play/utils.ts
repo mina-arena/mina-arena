@@ -1,3 +1,5 @@
+import { imagePathForUnit } from "$lib/utils";
+
 const PIECE_STROKE_COLOR = '#101010';
 const PIECE_SELECTED_STROKE_COLOR = '#771111';
 const MISSILE_RANGE_CIRCLE_FILL_COLOR = '#ffe9f0';
@@ -7,6 +9,26 @@ const MELEE_RANGE_CIRCLE_FILL_COLOR = '#ffb0b0';
 
 export const PIECE_RADIUS = 12;
 export const MELEE_ATTACK_RANGE = 50;
+
+export const ARENA_BACKGROUND_IMAGE_PATH = '/images/battlefield_dirt_650x550.png';
+
+const ICON_BY_UNIT_NAME: Record<string, IconData> = {
+  'archer': { unicode: '\uF6B9', name: 'fa-bow-arrow', xOffset: -7, yOffset: 5 },
+  'peasant': { unicode: '\uF2E3', name: 'fa-fork', xOffset: -7, yOffset: 5 },
+  'swordsman': { unicode: '\uF71C', name: 'fa-sword', xOffset: -7, yOffset: 5 },
+  'spearman': { unicode: '\uF2E4', name: 'fa-knife', xOffset: -7, yOffset: 5 },
+  'light cavalry': { unicode: '\uF7AB', name: 'fa-horse-head', xOffset: -7, yOffset: 5 },
+  'heavy cavalry': { unicode: '\uF441', name: 'fa-chess-knight', xOffset: -6, yOffset: 5 },
+  'ballista': { unicode: '\uF77E', name: 'fa-ball-pile', xOffset: -9, yOffset: 5 },
+  'hero': { unicode: '\uF521', name: 'fa-crown', xOffset: -7, yOffset: 5 },
+};
+
+type IconData = {
+  unicode: string;
+  name: string;
+  xOffset: number;
+  yOffset: number;
+};
 
 export const clearCanvas = (ctx: CanvasRenderingContext2D) => {
   const canvas = ctx.canvas;
@@ -20,13 +42,42 @@ export const drawArenaBackground = (ctx: CanvasRenderingContext2D) => {
   ctx.drawImage(img, 0, 0);
 }
 
+// Load an image given its relative path.
+// Optionally also run some callback when the image is loaded.
+export const loadImage = (imagePath: string, callback?: () => void) => {
+  var img = new Image();
+  if (callback) img.onload = function() { callback() };
+  img.src = imagePath;
+}
+
+// Given an array of GamePieces, ensure the browser has loaded all
+// their images to improve image rendering speed when the tooltip is opened
+export const loadGamePieceImages = (gamePieces: GamePiece[]) => {
+  let loadedImagePaths: string[] = [];
+  gamePieces.forEach(piece => {
+    const unit = piece.playerUnit.unit;
+    if (!unit) return;
+
+    const imagePath = imagePathForUnit(unit);
+    if (loadedImagePaths.includes(imagePath)) return;
+
+    loadedImagePaths.push(imagePath);
+    loadImage(imagePath);
+  });
+}
+
+export const loadArenaBackgroundImage = (callback?: () => void) => {
+  loadImage(ARENA_BACKGROUND_IMAGE_PATH, callback);
+}
+
 export const makePiece = (piece: GamePiece, playerColor: string) => {
   return {
     gamePieceId: piece.id,
     x: piece.coordinates.x,
     y: piece.coordinates.y,
     radius: PIECE_RADIUS,
-    fill: playerColor
+    fill: playerColor,
+    unitName: piece.playerUnit.unit.name,
   };
 };
 
@@ -65,6 +116,13 @@ export const drawPiece = (ctx: CanvasRenderingContext2D, piece: DrawnPiece, piec
   ctx.fill();
   ctx.stroke();
   ctx.closePath();
+
+  const iconData = ICON_BY_UNIT_NAME[piece.unitName.toLowerCase()];
+  if (!iconData) return;
+
+  ctx.font = '900 14px "Font Awesome 6 Pro"';
+  ctx.fillStyle = 'black';
+  ctx.fillText(iconData.unicode, piece.x + iconData.xOffset, piece.y + iconData.yOffset);
 };
 
 // Given a MouseEvent and an HTMLCanvasElement, determine at what

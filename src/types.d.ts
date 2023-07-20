@@ -147,6 +147,7 @@ type DrawnPiece = {
   y: number;
   radius: number;
   fill: string;
+  unitName: string;
 };
 
 type GamePieceOrder = {
