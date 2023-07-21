@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { closeModal } from 'svelte-modals';
-	import { player1, player1Default, dummyPlayer2 } from '$lib/stores/sandbox/playerStore';
+	import { player1 } from '$lib/stores/sandbox/playerStore';
 	import { truncateMinaPublicKey } from '$lib/utils';
 
 	// provided by Modals

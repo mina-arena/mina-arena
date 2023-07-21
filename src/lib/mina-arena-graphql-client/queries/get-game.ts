@@ -53,6 +53,8 @@ export const GetGameQuery = gql`
           x
           y
         }
+        gamePieceNumber
+        hash
         health
       }
       arena {

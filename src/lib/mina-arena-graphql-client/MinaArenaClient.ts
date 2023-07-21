@@ -9,6 +9,7 @@ import { StartGameMut } from './queries/mut-start-game';
 import { CreateGamePiecesMut } from './queries/mut-create-game-pieces';
 import { CreateGamePieceActionsMut } from './queries/mut-create-action';
 import { SubmitGamePhaseMut } from './queries/mut-submit-phase';
+import { Action, Position } from 'mina-arena-contracts';
 
 export class MinaArenaClient {
   client
@@ -125,12 +126,25 @@ export class MinaArenaClient {
     return data.createGamePieces;
   }
 
-  async submitMovePhase(player: string, gameId: number, phaseId: number, moves: Array<MoveAction>): Promise<number> {
+  async submitMovePhase(player: string, gameId: number, phaseId: number, moves: Array<MoveAction>, playerPrivateKey: string): Promise<number> {
+    const { Field, PrivateKey } = await import('snarkyjs');
+    let i = 0;
     const actions = moves.map((move) => {
+      i++;
+      const snarkyAction = new Action({
+        nonce: Field(i),
+        actionType: Field(0),
+        actionParams: Position.fromXY(move.action.moveTo.x, move.action.moveTo.y).hash(),
+        piece: Field(move.action.gamePieceNumber)
+      });
+      const signingKey = PrivateKey.fromBase58(playerPrivateKey);
+      const signature = snarkyAction.sign(signingKey);
+      move.action.nonce = i;
       return {
         actionType: 'MOVE',
         gamePieceId: move.gamePieceId,
-        moveInput: move.action
+        moveInput: move.action,
+        signature: signature.toJSON()
       }
     });
     const mutationInput = {
@@ -163,15 +177,32 @@ export class MinaArenaClient {
     player: string,
     gameId: number,
     phaseId: number,
-    rangedAttacks: Array<RangedAttackAction>
+    rangedAttacks: Array<RangedAttackAction>,
+    playerPrivateKey: string
   ): Promise<number> {
-    const actions = rangedAttacks.map((rangedAttack) => {
-      return {
+    const { Field, PrivateKey } = await import('snarkyjs');
+    let i = 0;
+    const actions = [];
+    for (let i = 0; i < rangedAttacks.length; i++) {
+      const rangedAttackCopy = JSON.parse(JSON.stringify(rangedAttacks[i]));
+      const j = i + 1;
+      const snarkyAction = new Action({
+        nonce: Field(j),
+        actionType: Field(1),
+        actionParams: Field(rangedAttackCopy.action.targetGamePieceNumber),
+        piece: Field(rangedAttackCopy.action.gamePieceNumber)
+      });
+      const signingKey = PrivateKey.fromBase58(playerPrivateKey);
+      const signature = snarkyAction.sign(signingKey);
+      rangedAttackCopy.action.nonce = j;
+      actions.push({
         actionType: 'RANGED_ATTACK',
-        gamePieceId: rangedAttack.gamePieceId,
-        rangedAttackInput: rangedAttack.action
-      }
-    });
+        gamePieceId: rangedAttackCopy.gamePieceId,
+        rangedAttackInput: rangedAttackCopy.action,
+        signature: signature.toJSON()
+      });
+    };
+    console.log(actions);
     const mutationInput = {
       minaPublicKey: player,
       gameId,
@@ -202,15 +233,30 @@ export class MinaArenaClient {
     player: string,
     gameId: number,
     phaseId: number,
-    meleeAttacks: Array<MeleeAttackAction>
+    meleeAttacks: Array<MeleeAttackAction>,
+    playerPrivateKey: string
   ): Promise<number> {
-    const actions = meleeAttacks.map((meleeAttack) => {
-      return {
+    const { Field, PrivateKey } = await import('snarkyjs');
+    const actions = [];
+    for (let i = 0; i < meleeAttacks.length; i++) {
+      const meleeAttackCopy = JSON.parse(JSON.stringify(meleeAttacks[i]));
+      const j = i + 1;
+      const snarkyAction = new Action({
+        nonce: Field(j),
+        actionType: Field(2),
+        actionParams: Field(meleeAttackCopy.action.targetGamePieceNumber),
+        piece: Field(meleeAttackCopy.action.gamePieceNumber)
+      });
+      const signingKey = PrivateKey.fromBase58(playerPrivateKey);
+      const signature = snarkyAction.sign(signingKey);
+      meleeAttackCopy.action.nonce = j;
+      actions.push({
         actionType: 'MELEE_ATTACK',
-        gamePieceId: meleeAttack.gamePieceId,
-        meleeAttackInput: meleeAttack.action
-      }
-    });
+        gamePieceId: meleeAttackCopy.gamePieceId,
+        meleeAttackInput: meleeAttackCopy.action,
+        signature: signature.toJSON(),
+      });
+    };
     const mutationInput = {
       minaPublicKey: player,
       gameId,

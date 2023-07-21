@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
-	import * as Utils from '../play/utils';
+	import * as Utils from '../../play/utils';
 	import { DiceRollServiceClient } from '$lib/dice-service-client/DiceRollServiceClient';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-	import HoveredGamePieceTooltipShooting from './HoveredGamePieceTooltipShooting.svelte';
-	import SubmitPhaseButton from './SubmitPhaseButton.svelte';
+	import HoveredGamePieceTooltipShooting from '../tooltip/HoveredGamePieceTooltipShooting.svelte';
+	import SubmitPhaseButton from '../SubmitPhaseButton.svelte';
+	import { player1, dummyPlayer } from '$lib/stores/sandbox/playerStore';
 
 	export let game: Game;
 	export let playerColors: Array<string>;
@@ -195,7 +196,9 @@
 				gamePieceId: selectedPiece.id,
 				action: {
 					targetGamePieceId: targetPiece.id,
-					diceRolls: placeholderDiceRoll
+					diceRolls: placeholderDiceRoll,
+					gamePieceNumber: selectedPiece.gamePieceNumber,
+					targetGamePieceNumber: targetPiece.gamePieceNumber
 				}
 			}
 		};
@@ -265,11 +268,13 @@
 					}
 				})
 		);
+		const player = currentPlayerMinaPubKey === $player1.publicKey ? $player1 : $dummyPlayer;
 		await minaArenaClient.submitShootingPhase(
-			currentPlayerMinaPubKey,
+			player.publicKey,
 			game.id,
 			game.currentPhase!.id,
-			rangedAttackActions
+			rangedAttackActions,
+			player.privateKey
 		);
 		await rerender();
 	};

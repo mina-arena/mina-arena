@@ -23,6 +23,13 @@
 	export let player: string;
 
 	const currentSquad = (): Squad => {
+		const existingSquad = $squads[player];
+		if (!existingSquad) {
+			$squads[player] = {
+				units: [],
+				playerUnits: []
+			};
+		}
 		return $squads[player];
 	};
 </script>
@@ -52,8 +59,8 @@
 					</tr>
 				{/each}
 				<tr class="[&>*]:px-[15px]">
-					<td></td>
-					<td></td>
+					<td />
+					<td />
 					<td><span class={totalCost() > 100 ? 'text-red-400' : ''}>{totalCost()}</span>/100</td>
 				</tr>
 			</table>
