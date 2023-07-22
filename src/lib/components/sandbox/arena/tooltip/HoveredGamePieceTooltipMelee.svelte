@@ -18,7 +18,7 @@
 	let currentPlayerMinaPubKey: string = game.currentPhase?.gamePlayer.player.minaPublicKey || '';
 
 	afterUpdate(() => {
-		onAfterUpdate(playerPublicKeys, playerColors, hoveredPiece, tooltipAbsolutePosition);
+		onAfterUpdate(playerPublicKeys, playerColors, hoveredPiece, selectedPiece, tooltipAbsolutePosition);
 	});
 </script>
 

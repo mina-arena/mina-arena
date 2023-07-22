@@ -4,6 +4,7 @@ export const onAfterUpdate = (
   playerPublicKeys: Array<string>,
   playerColors: Array<string>,
   hoveredPiece?: GamePiece,
+  selectedPiece?: GamePiece,
   tooltipAbsolutePosition?: Point,
 ) => {
   if (hoveredPiece) {
@@ -11,6 +12,7 @@ export const onAfterUpdate = (
       playerPublicKeys,
       playerColors,
       hoveredPiece,
+      selectedPiece,
       tooltipAbsolutePosition,
     );
   } else {
@@ -22,6 +24,7 @@ export const showHoveredPieceTooltip = (
   playerPublicKeys: Array<string>,
   playerColors: Array<string>,
   hoveredPiece?: GamePiece,
+  selectedPiece?: GamePiece,
   tooltipAbsolutePosition?: Point,
 ) => {
   var tooltip = document.querySelector('#piece-hover-tooltip') as HTMLElement;
@@ -30,8 +33,21 @@ export const showHoveredPieceTooltip = (
   const playerMinaPublicKey = hoveredPiece.gamePlayer.player.minaPublicKey;
   const playerColor = Utils.playerColor(playerPublicKeys, playerMinaPublicKey, playerColors);
 
+  // If the mouse is near the bottom of the canvas,
+  // draw the tooltip above the mouse instead of below it
+  let yOffset = 0;
+  if (tooltipAbsolutePosition.y < 400) {
+    yOffset = 0;
+  } else {
+    if (selectedPiece) {
+      yOffset = -260;
+    } else {
+      yOffset = -230;
+    }
+  }
+  tooltip.style.top = (tooltipAbsolutePosition.y + 20 + yOffset) + 'px';
   tooltip.style.left = (tooltipAbsolutePosition.x + 20) + 'px';
-  tooltip.style.top = (tooltipAbsolutePosition.y + 20) + 'px';
+  
   tooltip.style.display = 'block';
   tooltip.style.backgroundColor = playerColor;
 }
