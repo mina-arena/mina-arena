@@ -9,7 +9,7 @@
 	export let playerColors: Array<string>;
 
 	afterUpdate(() => {
-		onAfterUpdate(playerPublicKeys, playerColors, hoveredPiece, tooltipAbsolutePosition);
+		onAfterUpdate(playerPublicKeys, playerColors, hoveredPiece, undefined, tooltipAbsolutePosition);
 	});
 </script>
 
