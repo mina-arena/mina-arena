@@ -252,19 +252,15 @@
 					const attackingPiece = Utils.gamePieceById(attackingPieceId, gamePieces);
 					const attackingUnit = attackingPiece?.playerUnit.unit;
 					const numAttacks = attackingUnit?.rangedNumAttacks || 1;
-					const diceRolls: DiceRollInput[] = [];
 					console.log(
 						`Rolling for ${numAttacks} attacks from Piece ${attackingPiece?.playerUnit.name} (ID: ${attackingPieceId})`
 					);
 					for (let i = 0; i < numAttacks; i++) {
-						const order = {
-							...shootOrder
-						};
-						if (!order.rangedAttack) return;
+						if (!shootOrder.rangedAttack) return;
 						const diceRoll = await rollDiceForAttack();
-						diceRolls.push(diceRoll);
-						order.rangedAttack.action.diceRolls = diceRoll;
-						rangedAttackActions.push(order.rangedAttack);
+						let attack = JSON.parse(JSON.stringify(shootOrder.rangedAttack));
+						attack.action.diceRolls = diceRoll;
+						rangedAttackActions.push(attack);
 					}
 				})
 		);
