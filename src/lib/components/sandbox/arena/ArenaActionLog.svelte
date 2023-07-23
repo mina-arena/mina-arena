@@ -21,14 +21,15 @@
 
 	onMount(() => {
 		const log = document.getElementById('action-log') as HTMLDivElement;
-		const prevPhase = game.previousPhase;
-		if (!log || !prevPhase) return;
+		const gameOver = ['COMPLETED', 'CANCELED'].includes(game.status || '');
+		const loggedPhase = gameOver ? game.currentPhase : game.previousPhase;
+		if (!log || !loggedPhase) return;
 
 		let actionLogText = '';
-		actionLogText += `Previous Phase: ${prevPhase.name}<br/><br/>`;
+		actionLogText += `Previous Phase: ${loggedPhase.name}<br/><br/>`;
 
-		if (prevPhase.gamePieceActions.length > 0) {
-			const actionsByPieceId = prevPhaseActionsByPieceId(prevPhase.gamePieceActions);
+		if (loggedPhase.gamePieceActions.length > 0) {
+			const actionsByPieceId = phaseActionsByPieceId(loggedPhase.gamePieceActions);
 
 			// Iterate over actions for each piece
 			Object.keys(actionsByPieceId).forEach((pieceId: string) => {
@@ -62,7 +63,7 @@
 		log.innerHTML += actionLogText;
 	});
 
-	const prevPhaseActionsByPieceId = (actions: GamePieceAction[]): Record<string, GamePieceAction[]> => {
+	const phaseActionsByPieceId = (actions: GamePieceAction[]): Record<string, GamePieceAction[]> => {
 		let actionsByPieceId: Record<string, GamePieceAction[]> = {};
 		actions.forEach((action) => {
 			const pieceId = action.gamePiece.id;
