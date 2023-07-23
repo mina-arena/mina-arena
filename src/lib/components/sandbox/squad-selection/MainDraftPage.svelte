@@ -2,6 +2,7 @@
 	import { units } from '$lib/stores/sandbox/unitStore';
 	import { squads } from '$lib/stores/sandbox/squadStore';
 	import SquadSelection from '$lib/components/sandbox/squad-selection/SquadSelection.svelte';
+	import CompleteDraft from './CompleteDraft.svelte';
 	import { onMount } from 'svelte';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import { page } from '$app/stores';
@@ -24,7 +25,17 @@
 				$units = resp;
 			});
 		}
+		resetSquad(player1);
+		resetSquad(player2);
 	});
+
+	const resetSquad = (playerKey: string) => {
+		$squads[playerKey] = { units: [], playerUnits: [] };
+	}
+
+	const resetSquadForCurrentPlayer = () => {
+		resetSquad(currentPlayer);
+	}
 
 	const selectSquad = async () => {
 		if (currentPlayer === player1) {
@@ -56,63 +67,9 @@
 		{#if playerTurn <= maxPlayers}
 			<h3 class="text-xl">Select your squad</h3>
 			<p>Drafting for {truncateMinaPublicKey(currentPlayer)}</p>
-			<SquadSelection player={currentPlayer} />
-			<button on:click={selectSquad} class="rounded p-2">Select Squad</button>
+			<SquadSelection player={currentPlayer} {selectSquad} resetSquad={resetSquadForCurrentPlayer} />
 		{:else}
-			<div>
-				<h3>Squads</h3>
-				<div class="grid grid-cols-2 gap-6mx-auto">
-					<div class="col-span-1">
-						<h4>Player 1</h4>
-						<table class="mx-auto mt-[20px]">
-							<tr class="[&>*]:px-[15px]">
-								<th>Name</th>
-								<th>Unit</th>
-								<th>Cost</th>
-							</tr>
-							{#each $squads[player1].units as unit}
-								<tr class="[&>*]:px-[15px]">
-									<td>{unit.name}</td>
-									<td>{unit.unit.name}</td>
-									<td>{unit.unit.pointsCost}</td>
-								</tr>
-							{/each}
-							{#each $squads[player1].playerUnits as playerUnit}
-								<tr class="[&>*]:px-[15px]">
-									<td>{playerUnit.name}</td>
-									<td>{playerUnit.unit.name}</td>
-									<td>{playerUnit.unit.pointsCost}</td>
-								</tr>
-							{/each}
-						</table>
-					</div>
-					<div class="col-span-1">
-						<h4>Player 2</h4>
-						<table class="mx-auto mt-[20px]">
-							<tr class="[&>*]:px-[15px]">
-								<th>Name</th>
-								<th>Unit</th>
-								<th>Cost</th>
-							</tr>
-							{#each $squads[player2].units as unit}
-								<tr class="[&>*]:px-[15px]">
-									<td>{unit.name}</td>
-									<td>{unit.unit.name}</td>
-									<td>{unit.unit.pointsCost}</td>
-								</tr>
-							{/each}
-							{#each $squads[player2].playerUnits as playerUnit}
-								<tr class="[&>*]:px-[15px]">
-									<td>{playerUnit.name}</td>
-									<td>{playerUnit.unit.name}</td>
-									<td>{playerUnit.unit.pointsCost}</td>
-								</tr>
-							{/each}
-						</table>
-					</div>
-				</div>
-			</div>
-			<button class="rounded p-2 mt-[30px]" on:click={startGame}>Complete Draft</button>
+			<CompleteDraft startGame={startGame} />
 		{/if}
 	</div>
 </div>

@@ -6,7 +6,6 @@
 	export let playerUnit: PlayerUnit;
 	export let selected = false;
 
-	const cardBg = selected ? 'bg-slate-300' : '';
 	const addOrRemoveItem = (playerUnit: PlayerUnit) => {
 		if (selected) {
 			removeItem(playerUnit);
@@ -19,7 +18,7 @@
 <div
 	on:click={() => addOrRemoveItem(playerUnit)}
 	on:keypress={() => addOrRemoveItem(playerUnit)}
-	class="border border-slate-300 rounded pb-6 col-span-1 cursor-pointer {cardBg}"
+	class="border border-slate-300 rounded pb-6 col-span-1 cursor-pointer {selected ? 'bg-slate-300' : ''}"
 >
 	<div class="w-full rounded overflow-hidden pb-2">
 		<img alt="archer" src={imagePathForUnit(playerUnit.unit)} />
