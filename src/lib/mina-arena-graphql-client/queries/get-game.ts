@@ -1,29 +1,19 @@
 import { gql } from "@apollo/client/core/index.js"
-import { UnitFullFragment } from "../fragments";
+import { UnitFullFragment, GamePhaseFullFragment } from "../fragments";
 
 export const GetGameQuery = gql`
   ${UnitFullFragment}
+  ${GamePhaseFullFragment}
   query GetGame($gameId: Int!) {
     game(id: $gameId) {
       id
       status
       turnNumber
+      previousPhase {
+        ...GamePhaseFull
+      }
       currentPhase {
-        id
-        turnNumber
-        name
-        gamePlayer {
-          player {
-            minaPublicKey
-          }
-        }
-        gamePieceActions {
-          id
-          gamePiece {
-            id
-          }
-          actionType
-        }
+        ...GamePhaseFull
       }
       gamePlayers {
         player {
@@ -60,91 +50,6 @@ export const GetGameQuery = gql`
       arena {
         width
         height
-      }
-      previousPhase {
-        name
-        gamePlayer {
-          player {
-            minaPublicKey
-          }
-        }
-        gamePieceActions {
-          gamePiece {
-            id
-            playerUnit {
-              name
-              unit {
-                name
-              }
-            }
-            gamePlayer {
-              player {
-                minaPublicKey
-              }
-            }
-          }
-          actionType
-          actionData {
-            ... on GamePieceMoveAction {
-              moveFrom { x, y }
-              moveTo { x, y }
-            }
-            ... on GamePieceRangedAttackAction {
-              resolvedAttack {
-                hitRoll { roll, rollNeeded, success }
-                woundRoll { roll, rollNeeded, success }
-                saveRoll { roll, rollNeeded, success }
-                damageDealt
-                averageDamage
-              }
-              targetGamePiece {
-                id
-                health
-                playerUnit {
-                  name
-                  unit {
-                    name
-                    maxHealth
-                  }
-                }
-                gamePlayer {
-                  player {
-                    minaPublicKey
-                  }
-                }
-              }
-              totalDamageDealt
-              totalDamageAverage
-            }
-            ... on GamePieceMeleeAttackAction {
-              resolvedAttack {
-                hitRoll { roll, rollNeeded, success }
-                woundRoll { roll, rollNeeded, success }
-                saveRoll { roll, rollNeeded, success }
-                damageDealt
-                averageDamage
-              }
-              targetGamePiece {
-                id
-                health
-                playerUnit {
-                  name
-                  unit {
-                    name
-                    maxHealth
-                  }
-                }
-                gamePlayer {
-                  player {
-                    minaPublicKey
-                  }
-                }
-              }
-              totalDamageDealt
-              totalDamageAverage
-            }
-          }
-        }
       }
     }
   }
