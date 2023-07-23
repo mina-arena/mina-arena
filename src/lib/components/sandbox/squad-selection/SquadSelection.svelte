@@ -77,7 +77,7 @@
 		</div>
 	</div>
 	<div class="col-span-1">
-		<div>
+		<div class="fixed">
 			Your Squad:
 			{#key $squads[player]}
 				<div class="py-10 mb-10">
