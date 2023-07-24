@@ -14,7 +14,8 @@ module.exports = {
         '4xl': '3rem'
       },
       backgroundImage: {
-        'paper-pattern': 'url("/images/backgrounds/white-paper.jpg")'
+        'paper-pattern': 'url("/images/backgrounds/white-paper.jpg")',
+        'arena-landscape': 'url("/images/backgrounds/arena-landscape.webp")'
       }
     },
     colors: {
@@ -27,7 +28,8 @@ module.exports = {
       'primary-dark': '#BB111D',
       'secondary': '#84DCCF',
       'secondary-light': '#DFF6F3',
-      'secondary-dark': '#247F73'
+      'secondary-dark': '#247F73',
+      'gold': '#eeb119'
     }
   },
   plugins: [],

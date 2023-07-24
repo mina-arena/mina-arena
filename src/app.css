@@ -65,6 +65,27 @@
   pointer-events: none;
 }
 
+
+/*
+ * Home page title
+ */
+.home-title {
+  position: relative;
+  background: center / contain url('/images/title-mina-arena.png') no-repeat;
+  height: 134px;
+  text-indent: -1000em;
+}
+
+
+.text-gold {
+  text-shadow: 0 2px 0 rgba(255,255,255,0.25);
+}
+
+
+.instructions {
+  text-shadow: 0 0 8px rgb(0,0,0,0.2), 0 1px 0 rgb(255,255,255,1);
+}
+
 @layer utilities {
   ._input {
     border: 1px solid lightgrey;
