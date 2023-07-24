@@ -20,7 +20,7 @@
 
 <main class="h-[100vh]">
 	<Header {openUserModal} />
-	<div class="container w-3-4 mx-auto">
+	<div class="w-3-4">
 		<slot />
 	</div>
 </main>
