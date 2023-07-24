@@ -4,7 +4,19 @@ const colors = require('tailwindcss/colors')
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'almendra-regular': ['Almendra Regular'],
+        'almendra-bold': ['Almendra Bold']
+      },
+      fontSize: {
+        '3xl': '2rem',
+        '4xl': '3rem'
+      },
+      backgroundImage: {
+        'paper-pattern': 'url("/images/backgrounds/white-paper.jpg")'
+      }
+    },
     colors: {
       ...colors,
       'light': '#F4F4F4',
