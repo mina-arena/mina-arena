@@ -1,5 +1,5 @@
 <div class="bg-black text-white">
-	<div class="flex w-screen bg-arena-landscape bg-bottom min-h-[400px] h-screen bg-cover items-center justify-center">
+	<div class="flex w-screen bg-arena-landscape bg-bottom min-h-[400px] md:min-h-[500px] lg:min-h-[600px] xl:min-h-[700px] bg-cover items-center justify-center">
 		<h1 class="home-title w-[75vw] lg:w-[50vw]">Mina Arena</h1>
 	</div>
 	<div class="pt-8 pb-32 px-8 flex flex-col items-center text-center">
