@@ -49,7 +49,7 @@
 
 {#if isOpen}
 	<div class="modal">
-		<div class="w-[650px] h-[550px] rounded-md p-4 bg-light flex flex-col pointer-events-auto">
+		<div class="w-[650px] max-h-screen overflow-y-scroll rounded-md p-4 bg-light flex flex-col pointer-events-auto">
 			<div class="mx-auto [&>*]:p-4">
 				<div><h2 class="text-center text-xl font-semibold">User Management</h2></div>
 				<div>
