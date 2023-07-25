@@ -61,8 +61,8 @@
 	let currentPlayer = player1;
 </script>
 
-<div class="text-center">
-	<h2 class="text-2xl font-semibold mb-10">Sandbox Mode</h2>
+<div class="p-12 text-center">
+	<h1 class="font-almendra-bold text-4xl uppercase">Sandbox mode</h1>
 	<div>
 		{#if playerTurn <= maxPlayers}
 			<h3 class="text-xl">Select your squad</h3>

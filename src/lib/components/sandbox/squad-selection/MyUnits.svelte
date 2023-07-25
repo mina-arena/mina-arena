@@ -36,7 +36,7 @@
 	};
 </script>
 
-<div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-16">
+<div class="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-16">
 	{#if $playerUnits[player]}
 		{#if $squads && $squads[player]}
 			{#each $playerUnits[player] as playerUnit}

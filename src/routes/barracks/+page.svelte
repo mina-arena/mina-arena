@@ -6,7 +6,7 @@
 	const player = $player1.publicKey;
 </script>
 
-<div class="p-12">
+<div class="p-12 sm:px-16 xl:px-24 xl:pb-24">
 	<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase">Your units</h1>
 	<MyUnits {player} />
 
