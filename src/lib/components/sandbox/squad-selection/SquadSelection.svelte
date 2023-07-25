@@ -66,16 +66,20 @@
 </div>
 
 <div class="grid grid-cols-12 mx-auto gap-16">
-	<div class="col-span-9">
+	<div class="col-span-6 lg:col-span-9">
 		<div class="py-6 col-span-3">
 			{#if pageSelected === 'UNIT'}
-				<DraftNewUnits {player} />
+				<div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-16">
+					<DraftNewUnits {player} />
+				</div>
 			{:else if pageSelected === 'PLAYER_UNIT'}
-				<MyUnits {player} />
+				<div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-16">
+					<MyUnits {player} />
+				</div>
 			{/if}
 		</div>
 	</div>
-	<div class="col-span-3">
+	<div class="col-span-6 lg:col-span-3">
 		<div class="fixed">
 			Your Squad:
 			{#key $squads[player]}
