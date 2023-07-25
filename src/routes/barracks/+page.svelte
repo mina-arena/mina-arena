@@ -6,11 +6,10 @@
 	const player = $player1.publicKey;
 </script>
 
-<div>
-	<h2>Your Units:</h2>
+<div class="p-12">
+	<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase">Your units</h1>
 	<MyUnits {player} />
-</div>
-<div>
-	<h2>Available to Draft:</h2>
+
+	<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase">Available to draft</h1>
 	<DraftNewUnits {player} />
 </div>
