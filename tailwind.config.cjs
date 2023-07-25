@@ -4,7 +4,13 @@ const colors = require('tailwindcss/colors')
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      dropShadow: {
+        'lg': [
+          '0 10px 20px rgba(0, 0, 0, 0.75)'
+        ]
+      }
+    },
     colors: {
       ...colors,
       'light': '#F4F4F4',
