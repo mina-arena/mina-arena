@@ -2,8 +2,49 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  @font-face {
+    font-family: 'Almendra Regular';
+    src: url('/fonts/Almendra/Almendra-Regular.ttf');
+    font-weight: normal;
+    font-display: swap;
+  }
+
+  @font-face {
+    font-family: 'Almendra Bold';
+    src: url('/fonts/Almendra/Almendra-Bold.ttf');
+    font-weight: bold;
+    font-display: swap;
+  }
+
+  body {
+    font-size: 20px;
+  }
+
+  h1, h2, h3, h4 {
+    line-height: 100%;
+    margin-bottom: 0.25em;
+  }
+
+  h1:not(:first-child),
+  h2:not(:first-child),
+  h3:not(:first-child),
+  h4:not(:first-child) {
+    margin-top: 2em;
+  }
+
+  h1, h2 {
+    text-transform: uppercase;
+  }
+
+  p {
+    margin-bottom: 1em;
+  }
+}
+
 .backdrop {
   position: fixed;
+  z-index: 1;
   top: 0;
   bottom: 0;
   right: 0;
@@ -13,6 +54,7 @@
 
 .modal {
   position: fixed;
+  z-index: 2;
   top: 0;
   bottom: 0;
   right: 0;
@@ -23,6 +65,46 @@
 
   /* allow click-through to backdrop */
   pointer-events: none;
+}
+
+
+/*
+ * Home page title
+ */
+.home-title {
+  position: relative;
+  background: center / contain url('/images/title-mina-arena.png') no-repeat;
+  height: 134px;
+  text-indent: -1000em;
+}
+
+.home-button {
+  background-color: rgba(223,39,0,1);
+  background-image: linear-gradient(0deg, rgba(158,28,3,1) 0%, rgba(223,39,0,1) 100%);
+  box-shadow: inset 0 0 20px rgba(0,0,0,0.25),
+              inset 0 2px 4px rgba(0,0,0,0.25),
+                    0 2px 10px rgba(0,0,0,0.5);
+  color: #eeb119; /* Gold */
+  text-shadow: 0 -1px 0 rgba(0,0,0,0.5), 0 1px 0 #ca5841;
+  border-width: 4px;
+  border-color: #eeb119;
+  border-style: ridge;
+
+  transition: transform 150ms ease-in-out;
+}
+
+.home-button:focus,
+.home-button:hover {
+  transform: scale(1.03);
+}
+
+.text-gold {
+  text-shadow: 0 2px 0 rgba(255,255,255,0.25);
+}
+
+
+.instructions {
+  text-shadow: 0 0 8px rgb(0,0,0,0.2), 0 1px 0 rgb(255,255,255,1);
 }
 
 @layer utilities {

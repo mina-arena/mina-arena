@@ -1,49 +1,35 @@
-<div class="container">
-	<div class="flex">
-		<div class="mt-6 mb-10 h-fit text-center mx-auto">
-			<h1 class="text-2xl font-semibold">How to play Mina Arena</h1>
-		</div>
-	</div>
-	<div class="flex">
-		<div class="mt-6 mb-10 h-fit text-center mx-auto">
-			<h2 class="text-xl font-semibold">Squad Draft</h2>
-			Before starting a game, you will draft your squad. Each unit in your squad has certain stats, strengths
-			and weaknesses. Each unit also has a cost, and the total cost of your team cannot exceed 100.
-		</div>
-	</div>
-	<div class="flex">
-		<div class="mt-6 mb-10 h-fit text-center mx-auto">
-			<h2 class="text-xl font-semibold">Gameplay</h2>
-			Mina Arena is inspired by tabletop games like Warhammer and Axis and Allies. The game proceeds
-			in<b>Turns</b>, and each turn is made up of <b>Phases</b>
-		</div>
-	</div>
-	<div>
-		<div class="mt-6 mb-10 h-fit text-center mx-auto">
-			<h2 class="text-xl font-semibold">Phase</h2>
-			Mina Arena is inspired by tabletop games like Warhammer and Axis and Allies. The game proceeds
-			in<b>Turns</b>, and each turn is made up of <b>Phases</b>
-		</div>
-		<div class="flex">
-			<div class="mt-6 mb-10 h-fit text-center mx-auto">
-				<h2 class="text-xl font-semibold">Move</h2>
-				In the movement phase, each unit may move once up to their max movement speed.
-			</div>
-			<div class="mt-6 mb-10 h-fit text-center mx-auto">
-				<h2 class="text-xl font-semibold">Shoot</h2>
-				In the shooting phase, each unit with a ranged attack may shoot at an enemy in range.
-			</div>
-			<div class="mt-6 mb-10 h-fit text-center mx-auto">
-				<h2 class="text-xl font-semibold">Melee</h2>
-				In the melee phase, each unit may attack an enemy which is in melee range/
-			</div>
-		</div>
-	</div>
-	<div>
-		<div class="mt-6 mb-10 h-fit text-center mx-auto">
-			<h2 class="text-xl font-semibold">Turn</h2>
-			Turns alternate back and forth between players. Players sign their actions so that the authenticity
-			of the turns are guaranteed.
-		</div>
-	</div>
+<div class="instructions bg-paper-pattern text-stone-800">
+  <div class="p-16 lg:p-24 xl:max-w-[60vw] mx-auto text-center">
+    <h1 class="font-almendra-bold text-4xl uppercase">How to play Mina Arena</h1>
+
+    <h2 class="font-almendra-bold text-3xl uppercase">Squad Draft</h2>
+    <p class="">Before starting a game, you will draft your squad. Each unit in your squad has certain stats, strengths and weaknesses. Each unit also has a cost, and the total cost of your team cannot exceed 100.</p>
+
+    <h2 class="font-almendra-bold text-3xl">Gameplay</h2>
+    <p class="">Mina Arena is inspired by tabletop games like Warhammer and Axis and Allies. The game proceeds in <strong>Turns</strong>, and each turn is made up of <strong>Phases</strong>.</p>
+
+    <h2 class="font-almendra-bold text-3xl">Phases</h2>
+
+    <div class="md:grid md:grid-cols-3 md:gap-8 mt-6">
+      <div>
+        <h2 class="text-2xl font-almendra-bold">Move</h2>
+        <p>In the movement phase, each unit may move once up to their max movement speed.</p>
+      </div>
+      <div>
+        <h2 class="text-2xl font-almendra-bold">Shoot</h2>
+        <p>In the shooting phase, each unit with a ranged attack may shoot at an enemy in range.</p>
+      </div>
+      <div>
+        <h2 class="text-2xl font-almendra-bold">Melee</h2>
+        <p>In the melee phase, each unit may attack an enemy which is in melee range.</p>
+      </div>
+    </div>
+    <div>
+      <div class="mt-6 mb-10 h-fit text-center mx-auto">
+        <h2 class="text-3xl font-almendra-bold">Turns</h2>
+        Turns alternate back and forth between players. Players sign their actions so that the authenticity
+        of the turns are guaranteed.
+      </div>
+    </div>
+  </div>
 </div>

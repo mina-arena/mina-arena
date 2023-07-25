@@ -4,7 +4,20 @@ const colors = require('tailwindcss/colors')
 module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'almendra-regular': ['Almendra Regular'],
+        'almendra-bold': ['Almendra Bold']
+      },
+      fontSize: {
+        '3xl': '2rem',
+        '4xl': '3rem'
+      },
+      backgroundImage: {
+        'paper-pattern': 'url("/images/backgrounds/white-paper.jpg")',
+        'arena-landscape': 'url("/images/backgrounds/arena-landscape.webp")'
+      }
+    },
     colors: {
       ...colors,
       'light': '#F4F4F4',
@@ -15,7 +28,8 @@ module.exports = {
       'primary-dark': '#BB111D',
       'secondary': '#84DCCF',
       'secondary-light': '#DFF6F3',
-      'secondary-dark': '#247F73'
+      'secondary-dark': '#247F73',
+      'gold': '#eeb119'
     }
   },
   plugins: [],

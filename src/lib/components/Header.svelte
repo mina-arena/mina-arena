@@ -6,18 +6,17 @@
 
 <header>
 	<nav
-		class="flex border border-gray-200 border-solid px-4 lg:px-6 py-2.5 bg-light justify-between"
+		class="flex bg-stone-800 px-4 py-2.5 justify-between items-center"
 	>
-		<div class="flex flex-wrap items-center">
-			<div class="rounded overflow-hidden h-32 w-32">
-				<img src="/images/logo.png" alt="logo" />
-			</div>
-			<NavItem href="/how-to-play">How To Play</NavItem>
+		<div class="flex flex-wrap justify-center content-center w-full">
+			<NavItem href="/">Home</NavItem>
+			<NavItem href="/how-to-play">Guide</NavItem>
+			<a href="/" class="h-24 w-24 -mt-2 -mb-8"><img src="/images/king-logo.png" alt="logo" /></a>
 			<NavItem href="/barracks">Barracks</NavItem>
-			<NavItem href="/">Play</NavItem>
+			<NavItem href="/enter">Play</NavItem>
 		</div>
-		<div class="mr-10 cursor-pointer" on:click={openUserModal} on:keydown={openUserModal}>
-			<NavItem><i class="_nav_item fa-solid fa-user" /></NavItem>
+		<div class="absolute right-0 mr-10 cursor-pointer" on:click={openUserModal} on:keydown={openUserModal}>
+			<NavItem><i class="_nav_item fa-solid fa-user text-stone-400" /></NavItem>
 		</div>
 	</nav>
 </header>
