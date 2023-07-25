@@ -38,8 +38,19 @@
 
 <div class="grid grid-cols-3 gap-4 mx-4">
 	{#if $playerUnits[player]}
-		{#each $playerUnits[player] as playerUnit}
-			<MyUnitCard {playerUnit} {removeItem} {addItem} selected={!!$squads[player].playerUnits.find(pu => pu.id === playerUnit.id)} />
-		{/each}
+		{#if $squads && $squads[player]}
+			{#each $playerUnits[player] as playerUnit}
+				<MyUnitCard
+					{playerUnit}
+					{removeItem}
+					{addItem}
+					selected={!!$squads[player].playerUnits.find((pu) => pu.id === playerUnit.id)}
+				/>
+			{/each}
+		{:else}
+			{#each $playerUnits[player] as playerUnit}
+				<MyUnitCard {playerUnit} viewOnly={true} />
+			{/each}
+		{/if}
 	{/if}
 </div>
