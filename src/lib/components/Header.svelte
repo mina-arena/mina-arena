@@ -11,7 +11,7 @@
 		<div class="flex flex-wrap justify-center content-center w-full">
 			<NavItem href="/">Home</NavItem>
 			<NavItem href="/how-to-play">Guide</NavItem>
-			<a href="/" class="h-32 w-32 -mb-16"><img src="/images/king-logo.png" alt="logo" /></a>
+			<a href="/" class="h-24 w-24 -mt-2 -mb-8"><img src="/images/king-logo.png" alt="logo" /></a>
 			<NavItem href="/barracks">Barracks</NavItem>
 			<NavItem href="/enter">Play</NavItem>
 		</div>
