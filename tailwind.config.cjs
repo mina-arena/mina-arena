@@ -5,6 +5,18 @@ module.exports = {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
+      fontFamily: {
+        'almendra-regular': ['Almendra Regular'],
+        'almendra-bold': ['Almendra Bold']
+      },
+      fontSize: {
+        '3xl': '2rem',
+        '4xl': '3rem'
+      },
+      backgroundImage: {
+        'paper-pattern': 'url("/images/backgrounds/white-paper.jpg")',
+        'arena-landscape': 'url("/images/backgrounds/arena-landscape.webp")'
+      },
       dropShadow: {
         'lg': [
           '0 10px 20px rgba(0, 0, 0, 0.75)'
@@ -21,7 +33,8 @@ module.exports = {
       'primary-dark': '#BB111D',
       'secondary': '#84DCCF',
       'secondary-light': '#DFF6F3',
-      'secondary-dark': '#247F73'
+      'secondary-dark': '#247F73',
+      'gold': '#eeb119'
     }
   },
   plugins: [],
