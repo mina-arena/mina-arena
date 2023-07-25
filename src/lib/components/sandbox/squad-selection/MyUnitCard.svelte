@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { imagePathForUnit } from '$lib/utils';
 
-	export let addItem: (playerUnit: PlayerUnit) => void;
-	export let removeItem: (playerUnit: PlayerUnit) => void;
+	export let addItem: (playerUnit: PlayerUnit) => void = () => {};
+	export let removeItem: (playerUnit: PlayerUnit) => void = () => {};
 	export let playerUnit: PlayerUnit;
 	export let selected = false;
+	export let viewOnly = false;
 
 	const addOrRemoveItem = (playerUnit: PlayerUnit) => {
 		if (selected) {
@@ -18,7 +19,9 @@
 <div
 	on:click={() => addOrRemoveItem(playerUnit)}
 	on:keypress={() => addOrRemoveItem(playerUnit)}
-	class="border border-slate-300 rounded pb-6 col-span-1 cursor-pointer {selected ? 'bg-slate-300' : ''}"
+	class="border border-slate-300 rounded pb-6 col-span-1 {viewOnly
+		? ''
+		: 'cursor-pointer'} {selected ? 'bg-slate-300' : ''}"
 >
 	<div class="w-full rounded overflow-hidden pb-2">
 		<img alt="archer" src={imagePathForUnit(playerUnit.unit)} />
