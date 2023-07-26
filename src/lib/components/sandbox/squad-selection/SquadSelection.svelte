@@ -36,47 +36,50 @@
 	};
 </script>
 
-<div class="grid grid-cols-5 mx-auto">
-	<div class="col-span-4">
-		<div class="grid grid-cols-5 gap-6 w-3/4 mx-auto">
-			<div class="border border-slate-300 rounded py-6 col-span-1">
-				<div
-					on:click={() => {
+<div class="flex">
+	<div
+			on:click={() => {
 						pageSelected = 'PLAYER_UNIT';
 					}}
-					on:keypress={() => {
+			on:keypress={() => {
 						pageSelected = 'PLAYER_UNIT';
 					}}
-					class={pageSelected === 'PLAYER_UNIT'
+			class={pageSelected === 'PLAYER_UNIT'
 						? 'border border-slate-600 rounded p-1 cursor-pointer bg-slate-100'
 						: 'border border-slate-300 rounded p-1 cursor-pointer'}
-				>
-					My Units
-				</div>
-				<div
-					on:click={() => {
+	>
+		My Units
+	</div>
+	<div
+			on:click={() => {
 						pageSelected = 'UNIT';
 					}}
-					on:keypress={() => {
+			on:keypress={() => {
 						pageSelected = 'UNIT';
 					}}
-					class={pageSelected === 'UNIT'
+			class={pageSelected === 'UNIT'
 						? 'border border-slate-600 rounded p-1 cursor-pointer bg-slate-100'
 						: 'border border-slate-300 rounded p-1 cursor-pointer'}
-				>
-					Draft Units
-				</div>
-			</div>
-			<div class="border border-slate-300 rounded py-6 col-span-4 pl-6">
-				{#if pageSelected === 'UNIT'}
+	>
+		Draft Units
+	</div>
+</div>
+
+<div class="grid grid-cols-12 mx-auto gap-16">
+	<div class="col-span-6 lg:col-span-9">
+		<div class="py-6 col-span-3">
+			{#if pageSelected === 'UNIT'}
+				<div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-16">
 					<DraftNewUnits {player} />
-				{:else if pageSelected === 'PLAYER_UNIT'}
+				</div>
+			{:else if pageSelected === 'PLAYER_UNIT'}
+				<div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-16">
 					<MyUnits {player} />
-				{/if}
-			</div>
+				</div>
+			{/if}
 		</div>
 	</div>
-	<div class="col-span-1">
+	<div class="col-span-6 lg:col-span-3">
 		<div class="fixed">
 			Your Squad:
 			{#key $squads[player]}

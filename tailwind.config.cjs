@@ -16,6 +16,11 @@ module.exports = {
       backgroundImage: {
         'paper-pattern': 'url("/images/backgrounds/white-paper.jpg")',
         'arena-landscape': 'url("/images/backgrounds/arena-landscape.webp")'
+      },
+      dropShadow: {
+        'lg': [
+          '0 10px 20px rgba(0, 0, 0, 0.75)'
+        ]
       }
     },
     colors: {

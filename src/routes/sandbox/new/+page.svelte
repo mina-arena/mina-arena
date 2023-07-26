@@ -12,8 +12,10 @@
 	};
 </script>
 
-{#if isDummyPlayer}
-	<div>
+<div class="p-16 lg:p-24 xl:max-w-[60vw] mx-auto text-center">
+	<h1 class="font-almendra-bold text-4xl uppercase">Sandbox mode</h1>
+
+	{#if isDummyPlayer}
 		<p>
 			Currently logged in as the "dummy player". This is a keypair that Mina Arena created as a
 			default. You can play a round using this key, but be advised that other players will be able
@@ -23,17 +25,15 @@
 			If you would like to generate a new keypair before starting the game, then you can do so by
 			clicking the user icon in the top right.
 		</p>
-	</div>
-{:else}
-	<div>
-		<p>
+	{:else}
+		<p class="break-break-word" style="word-break: break-word">
 			Currently logged in as {$player1.publicKey}. If you would like to use a different keypair for
 			this game, then you can generate a new one by clicking the user icon in the top right.
 		</p>
-	</div>
-{/if}
+	{/if}
 
-<button
-	class="mx-auto m-2 p-2 rounded-lg border border-slate-800 bg-gray-200 hover:bg-gray-400"
-	on:click={createGame}>Create Game</button
->
+	<button
+		class="mx-auto m-2 p-2 rounded-lg border border-slate-800 bg-gray-200 hover:bg-gray-400"
+		on:click={createGame}>Create Game</button
+	>
+</div>

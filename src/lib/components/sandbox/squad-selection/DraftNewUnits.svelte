@@ -23,8 +23,6 @@
 	};
 </script>
 
-<div class="grid grid-cols-3 gap-4 mx-4">
-	{#each $units as unit}
-		<DraftUnitCard {unit} {openUnitDraftModal} />
-	{/each}
-</div>
+{#each $units as unit}
+	<DraftUnitCard {unit} {openUnitDraftModal} />
+{/each}
