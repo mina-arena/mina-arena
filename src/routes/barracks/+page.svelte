@@ -11,9 +11,4 @@
 	<div class="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-16">
 		<MyUnits {player} />
 	</div>
-
-	<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase">Available to draft</h1>
-	<div class="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-16">
-		<DraftNewUnits {player} />
-	</div>
 </div>
