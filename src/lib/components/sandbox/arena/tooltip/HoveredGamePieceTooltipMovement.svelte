@@ -13,11 +13,11 @@
 	});
 </script>
 
-<span
+<div
 	id="piece-hover-tooltip"
-	class="p-2 hidden fixed overflow-hidden border border-solid border-black rounded"
+	class="hidden fixed max-w-[300px] overflow-hidden p-4 rounded-2xl bg-stone-900 text-stone-700 drop-shadow-lg"
 >
 	{#if hoveredPiece}
 		<HoveredGamePieceTooltipUnitCard {hoveredPiece} />
 	{/if}
-</span>
+</div>

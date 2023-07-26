@@ -34,7 +34,10 @@
 				<div>Turn {currentGame.currentPhase?.turnNumber}</div>
 				<div>Phase: {currentGame.currentPhase?.name}</div>
 			{:else if currentGame.status === 'COMPLETED'}
-				<div><b>GAME OVER!</b> Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}</div>
+				<div class="text-center">
+					<h1 class="font-almendra-bold text-4xl my-12 uppercase">Game over!</h1>
+					Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}
+				</div>
 			{/if}
 			<Arena game={currentGame} {rerender} />
 		{/key}
