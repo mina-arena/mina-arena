@@ -9,25 +9,25 @@
 </script>
 
 <div>
-  <h3>Squads</h3>
+  <h1 class="font-almendra-bold text-4xl uppercase">Squads</h1>
   <div class="grid grid-cols-2 gap-6mx-auto">
     <div class="col-span-1">
-      <h4>Player 1</h4>
-      <table class="mx-auto mt-[20px]">
-        <tr class="[&>*]:px-[15px]">
+      <h3 class="font-almendra-bold text-2xl uppercase">Player 1</h3>
+      <table class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden">
+        <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-400">
           <th>Name</th>
           <th>Unit</th>
           <th>Cost</th>
         </tr>
         {#each $squads[player1].units as unit}
-          <tr class="[&>*]:px-[15px]">
+          <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-300">
             <td>{unit.name}</td>
             <td>{unit.unit.name}</td>
             <td>{unit.unit.pointsCost}</td>
           </tr>
         {/each}
         {#each $squads[player1].playerUnits as playerUnit}
-          <tr class="[&>*]:px-[15px]">
+          <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-300">
             <td>{playerUnit.name}</td>
             <td>{playerUnit.unit.name}</td>
             <td>{playerUnit.unit.pointsCost}</td>
@@ -36,22 +36,22 @@
       </table>
     </div>
     <div class="col-span-1">
-      <h4>Player 2</h4>
-      <table class="mx-auto mt-[20px]">
-        <tr class="[&>*]:px-[15px]">
+      <h3 class="font-almendra-bold text-2xl uppercase">Player 2</h3>
+      <table class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden">
+        <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-400">
           <th>Name</th>
           <th>Unit</th>
           <th>Cost</th>
         </tr>
         {#each $squads[player2].units as unit}
-          <tr class="[&>*]:px-[15px]">
+          <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-300">
             <td>{unit.name}</td>
             <td>{unit.unit.name}</td>
             <td>{unit.unit.pointsCost}</td>
           </tr>
         {/each}
         {#each $squads[player2].playerUnits as playerUnit}
-          <tr class="[&>*]:px-[15px]">
+          <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-300">
             <td>{playerUnit.name}</td>
             <td>{playerUnit.unit.name}</td>
             <td>{playerUnit.unit.pointsCost}</td>
@@ -61,4 +61,4 @@
     </div>
   </div>
 </div>
-<button class="rounded p-2 mt-[30px]" on:click={startGame}>Complete Draft</button>
+<button class="bg-stone-700 hover:bg-stone-900 text-stone-300 rounded py-2 px-4 mt-16" on:click={startGame}>Complete Draft</button>

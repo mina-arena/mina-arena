@@ -65,49 +65,45 @@
 	</div>
 </div>
 
-<div class="grid grid-cols-12 mx-auto gap-16">
-	<div class="col-span-6 lg:col-span-9">
-		<div class="py-6 col-span-3">
+<div class="grid grid-cols-12 mx-auto my-8 gap-16">
+	<div class="col-span-6 lg:col-span-8 2xl:col-span-9">
+		<div class="grid lg:grid-cols-2 2xl:grid-cols-3 gap-16">
 			{#if pageSelected === 'UNIT'}
-				<div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-16">
 					<DraftNewUnits {player} />
-				</div>
 			{:else if pageSelected === 'PLAYER_UNIT'}
-				<div class="grid lg:grid-cols-2 xl:grid-cols-3 gap-16">
 					<MyUnits {player} />
-				</div>
 			{/if}
 		</div>
 	</div>
-	<div class="col-span-6 lg:col-span-3">
-		<div class="fixed">
+	<div class="col-span-6 lg:col-span-4 xl:col-span-3">
+		<div class="sticky top-16">
 			Your Squad:
 			{#key $squads[player]}
 				<div class="py-10 mb-10">
-					<table class="mx-auto">
-						<tr class="[&>*]:px-[15px]">
+					<table class="mx-auto border-spacing-y-[1px] text-[16px] table-fixed w-full border-separate rounded-xl overflow-hidden">
+						<tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-400">
 							<th>Name</th>
 							<th>Unit</th>
 							<th>Cost</th>
 						</tr>
 						{#each currentSquad().units as unit}
-							<tr class="[&>*]:px-[15px]">
+							<tr class="[&>*]:p-2 [&>*]:bg-stone-300">
 								<td>{unit.name}</td>
 								<td>{unit.unit.name}</td>
 								<td>{unit.unit.pointsCost}</td>
 							</tr>
 						{/each}
 						{#each currentSquad().playerUnits as playerUnit}
-							<tr class="[&>*]:px-[15px]">
+							<tr class="[&>*]:p-2 [&>*]:bg-stone-300">
 								<td>{playerUnit.name}</td>
 								<td>{playerUnit.unit.name}</td>
 								<td>{playerUnit.unit.pointsCost}</td>
 							</tr>
 						{/each}
-						<tr class="[&>*]:px-[15px]">
+						<tr class="[&>*]:p-2 [&>*]:bg-stone-400">
 							<td />
 							<td />
-							<td><span class={totalCost() > 100 ? 'text-red-400' : ''}>{totalCost()}</span>/100</td>
+							<td class="font-bold"><span class={totalCost() > 100 ? 'text-red-400' : ''}>{totalCost()}</span>/100</td>
 						</tr>
 					</table>
 				</div>
