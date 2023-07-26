@@ -27,7 +27,7 @@
 		<img class="rounded" alt={playerUnit.name} src={imagePathForUnit(playerUnit.unit)} />
 		<div class="absolute flex items-center justify-center -right-2 -bottom-2">
 			<i class="absolute text-[64px] fa-solid fa-heart" title="Armor Save Roll" />
-			<span class="absolute text-[#fff] z-10">{playerUnit.unit.maxHealth}</span>
+			<span class="absolute text-white">{playerUnit.unit.maxHealth}</span>
 		</div>
 	</div>
 	<div class="font-almendra-bold uppercase bg-stone-300 p-2 mb-2 rounded text-center">

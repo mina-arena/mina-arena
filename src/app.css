@@ -42,6 +42,10 @@
   }
 }
 
+
+/*
+ * Home page
+ */
 .backdrop {
   position: fixed;
   z-index: 1;
@@ -49,7 +53,6 @@
   bottom: 0;
   right: 0;
   left: 0;
-  background: rgba(0, 0, 0, 0.50)
 }
 
 .modal {
@@ -69,7 +72,7 @@
 
 
 /*
- * Home page title
+ * Home page
  */
 .home-title {
   position: relative;
@@ -110,6 +113,5 @@
 @layer utilities {
   ._input {
     border: 1px solid lightgrey;
-    border-radius: 1px;
   }
 }
