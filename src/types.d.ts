@@ -42,6 +42,8 @@ type GamePhase = {
     }
   }
   gamePieceActions: GamePieceAction[];
+  initialPhaseState: string | null;
+  finalPhaseState: string | null;
 }
 
 type GamePieceAction = {
@@ -61,6 +63,7 @@ type GamePieceAction = {
     resolvedAttack?: ResolvedAttack;
     totalDamageDealt?: number;
     totalDamageAverage?: number;
+    rollInput?: string;
   }
 }
 
