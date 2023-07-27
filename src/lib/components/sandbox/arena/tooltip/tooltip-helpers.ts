@@ -47,9 +47,10 @@ export const showHoveredPieceTooltip = (
   }
   tooltip.style.top = (tooltipAbsolutePosition.y + 20 + yOffset) + 'px';
   tooltip.style.left = (tooltipAbsolutePosition.x + 20) + 'px';
-  
+
   tooltip.style.display = 'block';
-  tooltip.style.backgroundColor = playerColor;
+  tooltip.style.borderColor = playerColor;
+  tooltip.style.borderWidth = '4px';
 }
 
 export const hideHoveredPieceTooltip = () => {
