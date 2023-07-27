@@ -62,10 +62,10 @@
 </script>
 
 <div class="p-12 text-center">
-	<h1 class="font-almendra-bold text-4xl uppercase">Sandbox mode</h1>
+	<h2 class="text-2xl uppercase">Sandbox mode</h2>
 	<div>
 		{#if playerTurn <= maxPlayers}
-			<h3 class="text-xl">Select your squad</h3>
+			<h1 class="font-almendra-bold text-4xl uppercase">Select your squad</h1>
 			<p>Drafting for {truncateMinaPublicKey(currentPlayer)}</p>
 			<SquadSelection player={currentPlayer} {selectSquad} resetSquad={resetSquadForCurrentPlayer} />
 		{:else}
