@@ -24,14 +24,13 @@
 {#if isOpen}
 	<div class="modal">
 		<div
-			class="w-[500px] h-[400px] rounded-md p-4 bg-white flex flex-col justify-center pointer-events-auto"
+			class="w-[500px] h-[400px] rounded-xl p-16 bg-stone-300 flex flex-col text-center justify-center pointer-events-auto"
 		>
-			<div>Draft new {unit.name}</div>
-			<div>
-				<label>Name:</label>
-				<input class="_input" type="text" bind:value={drafteeName} />
-			</div>
-			<button class="rounded p-2" on:click={draft}>Draft Unit</button>
+			<h2 class="font-almendra-bold text-3xl mb-8">Draft new {unit.name}</h2>
+
+			<input class="_input p-2 mb-4 rounded-md" autofocus type="text" placeholder="Name your {unit.name}" bind:value={drafteeName} />
+
+			<button class="bg-stone-700 text-stone-300 w-auto rounded p-2" on:click={draft}>Draft Unit</button>
 		</div>
 	</div>
 {/if}

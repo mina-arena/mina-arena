@@ -49,25 +49,25 @@
 
 {#if isOpen}
 	<div class="modal">
-		<div class="w-[650px] max-h-screen overflow-y-scroll rounded-md p-4 bg-light flex flex-col pointer-events-auto">
-			<div class="mx-auto [&>*]:p-4">
-				<div><h2 class="text-center text-xl font-semibold">User Management</h2></div>
-				<div>
+		<div class="w-[650px] max-h-screen overflow-y-auto rounded-md p-8 md:p-12 lg:p-16 bg-light flex flex-col pointer-events-auto">
+			<div class="mx-auto">
+				<h2 class="text-center font-almendra-bold text-3xl mb-8">User Management</h2>
+				<p>
 					In Mina Arena, you sign your actions with a private key. The most secure way to do this is
 					with an integration like Auro Wallet connected to a hardware signing device. Since this is
 					a game with no financial risk, we will key pairs directly. Mina Arena uses browser storage
 					to store your key from session to session, or if you like, you can store your own key and
 					enter it here.
-				</div>
-				<div>
+				</p>
+				<p>
 					Mina Arena will NOT store your private key on our server, but it is highly recommended to
 					generate a new key with no Mina attached to play the game with.
-				</div>
+				</p>
 			</div>
-			<div class="flex mx-auto rounded p-2 bg-primary-light [&>*]:mx-2">
-				<div class="font-semibold">Current Keypair:</div>
-				<div>{truncateMinaPublicKey($player1.publicKey)}</div>
-				<div>{truncateMinaPublicKey($player1.privateKey)}</div>
+			<div class="rounded p-6 bg-primary-light">
+				<div class="font-semibold">Current Keypair</div>
+				<div>Public: {truncateMinaPublicKey($player1.publicKey)}</div>
+				<div>Private: {truncateMinaPublicKey($player1.privateKey)}</div>
 			</div>
 			<div class="mx-auto m-2">
 				<button
