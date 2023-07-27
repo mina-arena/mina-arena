@@ -26,32 +26,58 @@
 		if (!log || !loggedPhase) return;
 
 		let actionLogText = '';
+		let snarkyActionLogText = '';
 		actionLogText += `Previous Phase: ${loggedPhase.name}<br/><br/>`;
+
+		let initialPhaseState = '';
+		let finalPhaseState = '';
+		if (loggedPhase.initialPhaseState) {
+			const json = JSON.parse(loggedPhase.initialPhaseState);
+			Object.keys(json).forEach((k) => {
+				initialPhaseState += `${k}=>${json[k]}<br/>`;
+			});
+		}
+		if (loggedPhase.finalPhaseState) {
+			const json = JSON.parse(loggedPhase.finalPhaseState);
+			Object.keys(json).forEach((k) => {
+				finalPhaseState += `${k}=>${json[k]}<br/>`;
+			});
+		}
+		snarkyActionLogText += `SnarkyJS Transition From:<br/>${initialPhaseState}<br/><br/>`;
+		snarkyActionLogText += `SnarkyJS Transition To:<br/> ${finalPhaseState}<br/><br/>`;
 
 		if (loggedPhase.gamePieceActions.length > 0) {
 			const actionsByPieceId = phaseActionsByPieceId(loggedPhase.gamePieceActions);
 
 			// Iterate over actions for each piece
 			Object.keys(actionsByPieceId).forEach((pieceId: string) => {
-				const groupedActions = groupedPieceActions(actionsByPieceId[pieceId]);				
+				const groupedActions = groupedPieceActions(actionsByPieceId[pieceId]);
 				groupedActions.pieceActionsWithoutTarget.forEach((action) => {
 					switch (action.actionType) {
-					case 'MOVE':
-						actionLogText += movementActionLogText(action);
-						break;
+						case 'MOVE':
+							actionLogText += movementActionLogText(action);
+							break;
 					}
 				});
 				Object.keys(groupedActions.pieceActionsByTargetIdByType).forEach((actionType: string) => {
 					const pieceActionsByTargetId = groupedActions.pieceActionsByTargetIdByType[actionType];
 					Object.keys(pieceActionsByTargetId).forEach((targetPieceId: string) => {
 						const pieceActionsAtTarget = pieceActionsByTargetId[targetPieceId];
+
+						let additionalLog, additionalSnarkyLog;
 						switch (actionType) {
-						case 'RANGED_ATTACK':
-							actionLogText += rangedAttackActionLogText(pieceActionsAtTarget);
-							break;
-						case 'MELEE_ATTACK':
-							actionLogText += meleeAttackActionLogText(pieceActionsAtTarget);
-							break;
+							case 'RANGED_ATTACK':
+								[additionalLog, additionalSnarkyLog] =
+									rangedAttackActionLogText(pieceActionsAtTarget);
+								actionLogText += additionalLog;
+								snarkyActionLogText += additionalSnarkyLog;
+								break;
+							case 'MELEE_ATTACK':
+								[additionalLog, additionalSnarkyLog] =
+									meleeAttackActionLogText(pieceActionsAtTarget);
+								actionLogText += additionalLog;
+								snarkyActionLogText += additionalSnarkyLog;
+								break;
 						}
 					});
 				});
@@ -59,6 +85,9 @@
 		} else {
 			actionLogText += 'No actions were made.';
 		}
+
+		actionLogText += '<br/><br/>';
+		actionLogText += snarkyActionLogText;
 
 		log.innerHTML += actionLogText;
 	});
@@ -71,7 +100,7 @@
 			actionsByPieceId[pieceId].push(action);
 		});
 		return actionsByPieceId;
-	}
+	};
 
 	type GroupedPieceActions = {
 		pieceActionsWithoutTarget: GamePieceAction[];
@@ -91,23 +120,25 @@
 				case 'RANGED_ATTACK':
 					const rangedTargetId = action.actionData.targetGamePiece?.id;
 					if (!rangedTargetId) break;
-					if (!pieceActionsByTargetIdByType[action.actionType]) pieceActionsByTargetIdByType[action.actionType] = {};
-					if (!pieceActionsByTargetIdByType[action.actionType][rangedTargetId]) pieceActionsByTargetIdByType[action.actionType][rangedTargetId] = [];
+					if (!pieceActionsByTargetIdByType[action.actionType])
+						pieceActionsByTargetIdByType[action.actionType] = {};
+					if (!pieceActionsByTargetIdByType[action.actionType][rangedTargetId])
+						pieceActionsByTargetIdByType[action.actionType][rangedTargetId] = [];
 					pieceActionsByTargetIdByType[action.actionType][rangedTargetId].push(action);
 					break;
 				case 'MELEE_ATTACK':
 					const meleeTargetId = action.actionData.targetGamePiece?.id;
 					if (!meleeTargetId) break;
-					if (!pieceActionsByTargetIdByType[action.actionType]) pieceActionsByTargetIdByType[action.actionType] = {};
-					if (!pieceActionsByTargetIdByType[action.actionType][meleeTargetId]) pieceActionsByTargetIdByType[action.actionType][meleeTargetId] = [];
+					if (!pieceActionsByTargetIdByType[action.actionType])
+						pieceActionsByTargetIdByType[action.actionType] = {};
+					if (!pieceActionsByTargetIdByType[action.actionType][meleeTargetId])
+						pieceActionsByTargetIdByType[action.actionType][meleeTargetId] = [];
 					pieceActionsByTargetIdByType[action.actionType][meleeTargetId].push(action);
 					break;
 			}
 		});
 		return { pieceActionsWithoutTarget, pieceActionsByTargetIdByType };
-	}
-
-	
+	};
 
 	const movementActionLogText = (action: GamePieceAction): string => {
 		let text = '';
@@ -118,15 +149,24 @@
 		return `${text}<br/>`;
 	};
 
-	const rangedAttackActionLogText = (actions: GamePieceAction[]): string => {
+	const rangedAttackActionLogText = (actions: GamePieceAction[]): string[] => {
 		let text = '';
+		let snarkyActionLogText = '';
 		const attacks: ResolvedAttack[] = [];
-		actions.forEach(a => {
+		actions.forEach((a) => {
+			let diceRolls = '';
+			if (a.actionData.rollInput) {
+				const json = JSON.parse(a.actionData.rollInput);
+				Object.keys(json).forEach((k) => {
+					diceRolls += `${k}=>${JSON.stringify(json[k])}<br/>`;
+				});
+			}
+			snarkyActionLogText += `Encrypted Dice Roll Input:<br/>${diceRolls}<br/><br/>`;
 			if (a.actionData.resolvedAttack) attacks.push(a.actionData.resolvedAttack);
 		});
 		const attackingPiece = actions[0].gamePiece;
 		const targetPiece = actions[0].actionData.targetGamePiece;
-		if (!attackingPiece || !targetPiece || !attacks) return '';
+		if (!attackingPiece || !targetPiece || !attacks) return ['', ''];
 
 		const attackingPlayerUnit = attackingPiece.playerUnit;
 		const targetPlayerUnit = targetPiece.playerUnit;
@@ -186,7 +226,7 @@
 		}
 
 		let totalDmg = 0;
-		actions.forEach(action => totalDmg += action.actionData.totalDamageDealt || 0);
+		actions.forEach((action) => (totalDmg += action.actionData.totalDamageDealt || 0));
 		text += `Damage: ${totalDmg} (avg. ${actions[0].actionData.totalDamageAverage?.toFixed(1)})`;
 
 		if (totalDmg && totalDmg > 0) {
@@ -197,18 +237,27 @@
 			}
 		}
 
-		return `${text}<br/><br/>`;
+		return [`${text}<br/><br/>`, `${snarkyActionLogText}<br/><br/>`];
 	};
 
-	const meleeAttackActionLogText = (actions: GamePieceAction[]): string => {
+	const meleeAttackActionLogText = (actions: GamePieceAction[]): string[] => {
 		let text = '';
+		let snarkyActionLogText = '';
 		const attacks: ResolvedAttack[] = [];
-		actions.forEach(a => {
+		actions.forEach((a) => {
+			let diceRolls = '';
+			if (a.actionData.rollInput) {
+				const json = JSON.parse(a.actionData.rollInput);
+				Object.keys(json).forEach((k) => {
+					diceRolls += `${k}=>${JSON.stringify(json[k])}<br/>`;
+				});
+			}
+			snarkyActionLogText += `Encrypted Dice Roll Input:<br/>${diceRolls}<br/><br/>`;
 			if (a.actionData.resolvedAttack) attacks.push(a.actionData.resolvedAttack);
 		});
 		const attackingPiece = actions[0].gamePiece;
 		const targetPiece = actions[0].actionData.targetGamePiece;
-		if (!attackingPiece || !targetPiece || !attacks) return '';
+		if (!attackingPiece || !targetPiece || !attacks) return ['', ''];
 
 		const attackingPlayerUnit = attackingPiece.playerUnit;
 		const targetPlayerUnit = targetPiece.playerUnit;
@@ -268,7 +317,7 @@
 		}
 
 		let totalDmg = 0;
-		actions.forEach(action => totalDmg += action.actionData.totalDamageDealt || 0);
+		actions.forEach((action) => (totalDmg += action.actionData.totalDamageDealt || 0));
 		text += `Damage: ${totalDmg} (avg. ${actions[0].actionData.totalDamageAverage?.toFixed(1)})`;
 
 		if (totalDmg && totalDmg > 0) {
@@ -279,8 +328,11 @@
 			}
 		}
 
-		return `${text}<br/><br/>`;
+		return [`${text}<br/><br/>`, `${snarkyActionLogText}<br/><br/>`];
 	};
 </script>
 
-<div id="action-log" class="h-96 border border-slate-400 mx-auto p-2 overflow-y-auto" />
+<div
+	id="action-log"
+	class="w-[32rem] h-96 border border-slate-400 mx-auto p-2 overflow-y-auto overflow-x-scroll"
+/>

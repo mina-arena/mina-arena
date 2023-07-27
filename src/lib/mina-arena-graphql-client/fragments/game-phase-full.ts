@@ -10,6 +10,8 @@ export const GamePhaseFullFragment = gql`
         minaPublicKey
       }
     }
+    initialPhaseState,
+    finalPhaseState,
     gamePieceActions {
       id
       actionType
@@ -40,6 +42,7 @@ export const GamePhaseFullFragment = gql`
             damageDealt
             averageDamage
           }
+          rollInput
           targetGamePiece {
             id
             health
@@ -67,6 +70,7 @@ export const GamePhaseFullFragment = gql`
             damageDealt
             averageDamage
           }
+          rollInput
           targetGamePiece {
             id
             health
