@@ -5,6 +5,7 @@
 
 	import Arena from './Arena.svelte';
 	import { truncateMinaPublicKey } from '$lib/utils';
+	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	let gameId = Number($page.params.gameId);
 	let currentGame: Game;
@@ -12,7 +13,11 @@
 	let loaded = false;
 
 	onMount(async () => {
-		currentGame = await minaArenaClient.getGame(gameId);
+		try {
+			currentGame = await minaArenaClient.getGame(gameId);
+		} catch (err) {
+			$error = String(err);
+		}
 		console.log(currentGame);
 		loaded = true;
 	});
@@ -22,7 +27,11 @@
 	};
 
 	const rerender = async () => {
-		currentGame = await minaArenaClient.getGame(currentGame.id);
+		try {
+			currentGame = await minaArenaClient.getGame(currentGame.id);
+		} catch (err) {
+			$error = String(err);
+		}
 	};
 </script>
 

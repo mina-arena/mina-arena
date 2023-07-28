@@ -4,6 +4,8 @@
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import HoveredGamePieceTooltipMovement from './tooltip/HoveredGamePieceTooltipMovement.svelte';
 	import SubmitPhaseButton from './SubmitPhaseButton.svelte';
+	import { player1, dummyPlayer } from '$lib/stores/sandbox/playerStore';
+	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	export let game: Game;
 	export let playerColors: Array<string>;
@@ -218,13 +220,19 @@
 				if (moveOrder.move) moveActions.push(moveOrder.move);
 			});
 		isLoading = true;
-		await minaArenaClient.submitMovePhase(
-			currentPlayerMinaPubKey,
-			game.id,
-			game.currentPhase!.id,
-			moveActions
-		);
-		await rerender();
+		const player = currentPlayerMinaPubKey === $player1.publicKey ? $player1 : $dummyPlayer;
+		try {
+			await minaArenaClient.submitMovePhase(
+				currentPlayerMinaPubKey,
+				game.id,
+				game.currentPhase!.id,
+				moveActions,
+				player.publicKey
+			);
+		} catch (err) {
+			$error = String(err);
+		}
+		rerender();
 	};
 
 	const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {

@@ -5,15 +5,20 @@
 	import { units } from '$lib/stores/sandbox/unitStore';
 	import DraftUnitModal from '$lib/components/modals/DraftUnitModal.svelte';
 	import DraftUnitCard from './DraftUnitCard.svelte';
+	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	export let player: string;
 
 	const minaArenaClient = new MinaArenaClient();
 	onMount(() => {
-		if ($units.length === 0) {
-			minaArenaClient.getUnits().then((resp) => {
-				$units = resp;
-			});
+		try {
+			if ($units.length === 0) {
+				minaArenaClient.getUnits().then((resp) => {
+					$units = resp;
+				});
+			}
+		} catch (err) {
+			$error = String(err);
 		}
 	});
 
