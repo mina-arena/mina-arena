@@ -9,6 +9,7 @@
 	import { playerUnits } from '$lib/stores/sandbox/playerUnitStore';
 	import { truncateMinaPublicKey } from '$lib/utils';
 	import { dummyPlayer, player1 as player1Store } from '$lib/stores/sandbox/playerStore';
+	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	let playerTurn = 1;
 	const player1 = $player1Store.publicKey;
@@ -20,40 +21,52 @@
 	const minaArenaClient = new MinaArenaClient();
 
 	onMount(() => {
-		if ($units.length === 0) {
-			minaArenaClient.getUnits().then((resp) => {
-				$units = resp;
-			});
+		try {
+			if ($units.length === 0) {
+				minaArenaClient.getUnits().then((resp) => {
+					$units = resp;
+				});
+			}
+			resetSquad(player1);
+			resetSquad(player2);
+		} catch (err) {
+			$error = String(err);
 		}
-		resetSquad(player1);
-		resetSquad(player2);
 	});
 
 	const resetSquad = (playerKey: string) => {
 		$squads[playerKey] = { units: [], playerUnits: [] };
-	}
+	};
 
 	const resetSquadForCurrentPlayer = () => {
 		resetSquad(currentPlayer);
-	}
+	};
 
 	const selectSquad = async () => {
-		if (currentPlayer === player1) {
-			await minaArenaClient.createGamePieces(player1, $squads[player1], Number(gameId));
-			playerTurn++;
-			currentPlayer = player2;
-			updatePlayerUnits();
-		} else {
-			await minaArenaClient.createGamePieces(player2, $squads[player2], Number(gameId));
-			playerTurn++;
+		try {
+			if (currentPlayer === player1) {
+				await minaArenaClient.createGamePieces(player1, $squads[player1], Number(gameId));
+				playerTurn++;
+				currentPlayer = player2;
+				updatePlayerUnits();
+			} else {
+				await minaArenaClient.createGamePieces(player2, $squads[player2], Number(gameId));
+				playerTurn++;
+			}
+		} catch (err) {
+			$error = String(err);
 		}
 	};
 
 	const updatePlayerUnits = () => {
-		$playerUnits[currentPlayer] = [];
-		minaArenaClient.getPlayerUnits(currentPlayer).then((resp) => {
-			$playerUnits[currentPlayer] = resp;
-		});
+		try {
+			$playerUnits[currentPlayer] = [];
+			minaArenaClient.getPlayerUnits(currentPlayer).then((resp) => {
+				$playerUnits[currentPlayer] = resp;
+			});
+		} catch (err) {
+			$error = String(err);
+		}
 	};
 
 	export let startGame: () => {};
@@ -67,9 +80,13 @@
 		{#if playerTurn <= maxPlayers}
 			<h1 class="font-almendra-bold text-4xl uppercase">Select your squad</h1>
 			<p>Drafting for {truncateMinaPublicKey(currentPlayer)}</p>
-			<SquadSelection player={currentPlayer} {selectSquad} resetSquad={resetSquadForCurrentPlayer} />
+			<SquadSelection
+				player={currentPlayer}
+				{selectSquad}
+				resetSquad={resetSquadForCurrentPlayer}
+			/>
 		{:else}
-			<CompleteDraft startGame={startGame} />
+			<CompleteDraft {startGame} />
 		{/if}
 	</div>
 </div>

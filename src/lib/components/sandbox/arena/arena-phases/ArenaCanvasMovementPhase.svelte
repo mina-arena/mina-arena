@@ -5,6 +5,7 @@
 	import HoveredGamePieceTooltipMovement from '../tooltip/HoveredGamePieceTooltipMovement.svelte';
 	import SubmitPhaseButton from '../SubmitPhaseButton.svelte';
 	import { player1, dummyPlayer } from '$lib/stores/sandbox/playerStore';
+	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	export let game: Game;
 	export let playerColors: Array<string>;
@@ -220,14 +221,18 @@
 			});
 		isLoading = true;
 		const player = currentPlayerMinaPubKey === $player1.publicKey ? $player1 : $dummyPlayer;
-		await minaArenaClient.submitMovePhase(
-			player.publicKey,
-			game.id,
-			game.currentPhase!.id,
-			moveActions,
-			player.privateKey
-		);
-		await rerender();
+		try {
+			await minaArenaClient.submitMovePhase(
+				player.publicKey,
+				game.id,
+				game.currentPhase!.id,
+				moveActions,
+				player.privateKey
+			);
+		} catch (err) {
+			$error = String(err);
+		}
+		rerender();
 	};
 
 	const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {

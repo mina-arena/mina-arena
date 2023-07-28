@@ -1,14 +1,19 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
+	import { error } from '$lib/stores/sandbox/errorsStore';
 	import { player1, dummyPlayer, player1Default } from '$lib/stores/sandbox/playerStore';
 
 	const isDummyPlayer = $player1.publicKey === player1Default.publicKey;
 	const createGame = async () => {
-		const minaArenaClient = new MinaArenaClient();
-		const game = await minaArenaClient.createGame([$player1.publicKey, $dummyPlayer.publicKey]);
-		console.log(game.id);
-		goto(`/sandbox/games/${game.id}`);
+		try {
+			const minaArenaClient = new MinaArenaClient();
+			const game = await minaArenaClient.createGame([$player1.publicKey, $dummyPlayer.publicKey]);
+			console.log(game.id);
+			goto(`/sandbox/games/${game.id}`);
+		} catch (err) {
+			$error = String(err);
+		}
 	};
 </script>
 
