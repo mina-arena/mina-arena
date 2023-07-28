@@ -297,15 +297,17 @@
 </script>
 
 <div class="flex-grow flex justify-center items-center">
-	<canvas
-			id="canvas"
-			width={game.arena.width}
-			height={game.arena.height}
-			class="mx-auto drop-shadow-lg rounded-2xl border-[10px] border-stone-800"
-			on:mousemove={onMouseMove}
-			on:mousedown={onMouseDown}
-			on:mouseup={onMouseUp}
-	/>
+	<div class="mx-auto drop-shadow-lg rounded-2xl border-[10px] border-stone-800 box-border">
+		<canvas
+				id="canvas"
+				width={game.arena.width}
+				height={game.arena.height}
+				class=""
+				on:mousemove={onMouseMove}
+				on:mousedown={onMouseDown}
+				on:mouseup={onMouseUp}
+		/>
+	</div>
 </div>
 <div class="flex absolute">
 	<SubmitPhaseButton {isLoading} submitPhaseCallback={submitPhase} />

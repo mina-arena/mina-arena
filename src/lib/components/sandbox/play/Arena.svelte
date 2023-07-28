@@ -16,7 +16,7 @@
 
 <div class="flex-grow flex bg-arena-landscape-blurred bg-cover">
 	<ArenaCanvas {game} playerColors={legendConfig.colors} {rerender} />
-	<div class="flex flex-col items-center bg-stone-400 max-w-[33vw] p-12 m-16 border-[16px] border-black rounded-[32px]" style="box-shadow: 0 0 60px #000">
+	<div class="flex flex-col items-center bg-stone-400 max-w-[33vw] 2xl:max-w-[25vw] p-12 m-16 border-[16px] border-black rounded-[32px]" style="box-shadow: 0 0 60px #000">
 		<h1 class="font-almendra-bold uppercase m-0">Turn 1</h1>
 		<h2 class="font-almendra-bold uppercase text-3xl mt-2">Movement phase</h2>
 		<ArenaLegend {playerPublicKeys} playerColors={legendConfig.colors} />
