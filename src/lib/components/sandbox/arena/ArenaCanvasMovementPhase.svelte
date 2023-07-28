@@ -5,7 +5,7 @@
 	import HoveredGamePieceTooltipMovement from './tooltip/HoveredGamePieceTooltipMovement.svelte';
 	import SubmitPhaseButton from './SubmitPhaseButton.svelte';
 	import { player1, dummyPlayer } from '$lib/stores/sandbox/playerStore';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	export let game: Game;
 	export let playerColors: Array<string>;
@@ -230,7 +230,7 @@
 				player.publicKey
 			);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 		rerender();
 	};

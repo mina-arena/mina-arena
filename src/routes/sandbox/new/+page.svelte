@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 	import { player1, dummyPlayer, player1Default } from '$lib/stores/sandbox/playerStore';
 
 	const isDummyPlayer = $player1.publicKey === player1Default.publicKey;
@@ -12,7 +12,7 @@
 			console.log(game.id);
 			goto(`/sandbox/games/${game.id}`);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 </script>

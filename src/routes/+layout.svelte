@@ -3,7 +3,7 @@
 	import '../app.css';
 	import Header from '$lib/components/Header.svelte';
 	import UserModal from '$lib/components/modals/UserModal.svelte';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	const openUserModal = () => {
 		openModal(UserModal, {});
@@ -17,8 +17,8 @@
 <main class="h-[100vh] flex flex-col">
 	<Header {openUserModal} />
 	<div class="w-full text-red-700">
-		{#if $error}
-			<div>{$error}</div>
+		{#if $errorString}
+			<div>{$errorString}</div>
 		{/if}
 	</div>
 	<div class="w-full flex flex-col flex-grow">
