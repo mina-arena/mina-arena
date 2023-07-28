@@ -6,6 +6,7 @@
 	import HoveredGamePieceTooltipMelee from '../tooltip/HoveredGamePieceTooltipMelee.svelte';
 	import SubmitPhaseButton from '../SubmitPhaseButton.svelte';
 	import { player1, dummyPlayer } from '$lib/stores/sandbox/playerStore';
+	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	export let game: Game;
 	export let playerColors: Array<string>;
@@ -63,7 +64,7 @@
 		Utils.drawArenaBackground(ctx);
 		drawPieces();
 		drawMeleePhase(canvas, orders, selectedPiece);
-	}
+	};
 
 	afterUpdate(onUpdate);
 
@@ -229,6 +230,7 @@
 
 	const submitPhase = async () => {
 		const meleeAttackActions: Array<MeleeAttackAction> = [];
+		let isError = false;
 		await Promise.all(
 			Object.values(orders)
 				.flat()
@@ -243,27 +245,45 @@
 					);
 					for (let i = 0; i < numAttacks; i++) {
 						if (!meleeOrder.meleeAttack) return;
+						console.log('Rolling Dice...');
 						const diceRoll = await rollDiceForAttack();
+						console.log('Roll: ', diceRoll);
+						if (!diceRoll) {
+							orders = {};
+							isError = true;
+							return;
+						}
 						let attack = JSON.parse(JSON.stringify(meleeOrder.meleeAttack));
 						attack.action.diceRolls = diceRoll;
 						meleeAttackActions.push(attack);
 					}
 				})
 		);
+		if (isError) {
+			return rerender();
+		}
 		isLoading = true;
 		const player = currentPlayerMinaPubKey === $player1.publicKey ? $player1 : $dummyPlayer;
-		await minaArenaClient.submitMeleePhase(
-			player.publicKey,
-			game.id,
-			game.currentPhase!.id,
-			meleeAttackActions,
-			player.privateKey
-		);
-		await rerender();
+		try {
+			await minaArenaClient.submitMeleePhase(
+				player.publicKey,
+				game.id,
+				game.currentPhase!.id,
+				meleeAttackActions,
+				player.privateKey
+			);
+		} catch (err) {
+			$error = String(err);
+		}
+		rerender();
 	};
 
 	const rollDiceForAttack = async () => {
-		return await new DiceRollServiceClient().getDiceRolls();
+		try {
+			return await new DiceRollServiceClient().getDiceRolls();
+		} catch (err) {
+			$error = String(err);
+		}
 	};
 
 	const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {

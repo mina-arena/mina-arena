@@ -6,6 +6,7 @@
 	import HoveredGamePieceTooltipShooting from '../tooltip/HoveredGamePieceTooltipShooting.svelte';
 	import SubmitPhaseButton from '../SubmitPhaseButton.svelte';
 	import { player1, dummyPlayer } from '$lib/stores/sandbox/playerStore';
+	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	export let game: Game;
 	export let playerColors: Array<string>;
@@ -64,7 +65,7 @@
 		drawShootingPhaseUnderPieces(canvas, orders, selectedPiece);
 		drawPieces();
 		drawShootOrders(ctx, orders);
-	}
+	};
 
 	afterUpdate(onUpdate);
 
@@ -242,6 +243,7 @@
 	const submitPhase = async () => {
 		const rangedAttackActions: Array<RangedAttackAction> = [];
 
+		let isError = false;
 		isLoading = true;
 		await Promise.all(
 			Object.values(orders)
@@ -258,25 +260,41 @@
 					for (let i = 0; i < numAttacks; i++) {
 						if (!shootOrder.rangedAttack) return;
 						const diceRoll = await rollDiceForAttack();
+						if (!diceRoll) {
+							orders = {};
+							isError = true;
+							return;
+						}
 						let attack = JSON.parse(JSON.stringify(shootOrder.rangedAttack));
 						attack.action.diceRolls = diceRoll;
 						rangedAttackActions.push(attack);
 					}
 				})
 		);
+		if (isError) {
+			return rerender();
+		}
 		const player = currentPlayerMinaPubKey === $player1.publicKey ? $player1 : $dummyPlayer;
-		await minaArenaClient.submitShootingPhase(
-			player.publicKey,
-			game.id,
-			game.currentPhase!.id,
-			rangedAttackActions,
-			player.privateKey
-		);
-		await rerender();
+		try {
+			await minaArenaClient.submitShootingPhase(
+				player.publicKey,
+				game.id,
+				game.currentPhase!.id,
+				rangedAttackActions,
+				player.privateKey
+			);
+		} catch (err) {
+			$error = String(err);
+		}
+		rerender();
 	};
 
 	const rollDiceForAttack = async () => {
-		return await new DiceRollServiceClient().getDiceRolls();
+		try {
+			return await new DiceRollServiceClient().getDiceRolls();
+		} catch (err) {
+			$error = String(err);
+		}
 	};
 
 	const onGamePieceHovered = (piece: GamePiece, mouseAbsolutePoint: Point) => {
