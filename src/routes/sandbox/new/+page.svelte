@@ -17,7 +17,7 @@
 	};
 </script>
 
-<div class="flex-grow p-16 lg:p-24 xl:px-[30vw] mx-auto text-center bg-stone-400">
+<div class="flex-grow p-16 lg:p-24 xl:px-[30vw] mx-auto text-center text-stone-300 bg-stone-400 bg-chainmail bg-cover">
 	<h1 class="font-almendra-bold text-4xl uppercase">Sandbox mode</h1>
 
 	{#if isDummyPlayer}
@@ -38,7 +38,7 @@
 	{/if}
 
 	<button
-		class="mx-auto m-2 p-2 rounded-lg border border-slate-800 bg-gray-200 hover:bg-gray-400"
+			class="font-almendra-bold uppercase text-center py-4 px-5 m-2 rounded-lg home-button"
 		on:click={createGame}>Create Game</button
 	>
 </div>
