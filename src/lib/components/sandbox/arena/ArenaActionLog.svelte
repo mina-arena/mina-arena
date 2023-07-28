@@ -334,5 +334,6 @@
 
 <div
 	id="action-log"
-	class="w-[32rem] h-96 border border-slate-400 mx-auto p-2 overflow-y-auto overflow-x-scroll"
+	class="w-full h-[30vh] min-h-[200px] bg-stone-500 rounded-2xl mx-auto p-6 overflow-y-auto overflow-x-scroll"
+	style="box-shadow: inset 0 4px 4px rgba(0,0,0,0.25); word-break: break-word"
 />

@@ -11,7 +11,7 @@
 	<div>
 		<div>
 			<div class="w-3 h-3 bg-primary border border-zinc-600" />
-			Player 1: {truncateMinaPublicKey(playerPublicKeys[0])}
+			<div class="active-player">&rarr;</div> Player 1: {truncateMinaPublicKey(playerPublicKeys[0])}
 		</div>
 	</div>
 	<br />

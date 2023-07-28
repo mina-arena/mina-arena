@@ -240,33 +240,29 @@
 	};
 </script>
 
-<table>
-	<tr>
-		<canvas
+<div class="flex-grow flex justify-center items-center">
+	<canvas
 			id="canvas"
 			width={game.arena.width}
 			height={game.arena.height}
-			class="border border-slate-400 mx-auto"
+			class="mx-auto drop-shadow-lg rounded-2xl border-[10px] border-stone-800"
 			on:mousemove={onMouseMove}
 			on:mousedown={onMouseDown}
 			on:mouseup={onMouseUp}
-		/>
-	</tr>
-	<tr>
-		<div class="flex">
-			<SubmitPhaseButton {isLoading} submitPhaseCallback={submitPhase} />
-			{#if selectedPiece}
-				<div />
-			{/if}
-			{#if hoveredPiece}
-				<div />
-			{/if}
-			{#if orders}
-				<div />
-			{/if}
-		</div>
-	</tr>
-</table>
+	/>
+</div>
+<div class="flex absolute">
+	<SubmitPhaseButton {isLoading} submitPhaseCallback={submitPhase} />
+	{#if selectedPiece}
+		<div />
+	{/if}
+	{#if hoveredPiece}
+		<div />
+	{/if}
+	{#if orders}
+		<div />
+	{/if}
+</div>
 <HoveredGamePieceTooltipMovement
 	{hoveredPiece}
 	tooltipAbsolutePosition={hoveredPieceTooltipPosition}

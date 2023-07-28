@@ -14,21 +14,19 @@
 	export let rerender: () => {};
 </script>
 
-<div class="flex justify-between">
+<div class="flex-grow flex bg-arena-landscape-blurred bg-cover">
 	<ArenaCanvas {game} playerColors={legendConfig.colors} {rerender} />
-	<table>
-		<tr>
-			<ArenaLegend {playerPublicKeys} playerColors={legendConfig.colors} />
-		</tr>
-		<tr>
-			<ArenaActionLog {game} {playerPublicKeys} playerColors={legendConfig.colors} />
-		</tr>
-	</table>
+	<div class="flex flex-col items-center bg-stone-400 max-w-[33vw] p-12 m-16 border-[16px] border-black rounded-[32px]" style="box-shadow: 0 0 60px #000">
+		<h1 class="font-almendra-bold uppercase m-0">Turn 1</h1>
+		<h2 class="font-almendra-bold uppercase text-3xl mt-2">Movement phase</h2>
+		<ArenaLegend {playerPublicKeys} playerColors={legendConfig.colors} />
+		<ArenaActionLog {game} {playerPublicKeys} playerColors={legendConfig.colors} />
+	</div>
 </div>
 <div style="display: none;">
 	<img
 		id="arena-bg-img"
-		src="/images/battlefield_dirt_650x550.png"
+		src="/images/battlefield.jpg"
 		width={game.arena.width}
 		height={game.arena.height}
 	/>

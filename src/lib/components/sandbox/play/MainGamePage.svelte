@@ -26,13 +26,15 @@
 	};
 </script>
 
-<div class="w-[90%] mx-auto">
+<div class="flex-grow flex bg-stone-700">
 	{#if loaded}
 		{#key currentGame}
 			{#if currentGame.status === 'IN_PROGRESS'}
+				<!--
 				<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
 				<div>Turn {currentGame.currentPhase?.turnNumber}</div>
 				<div>Phase: {currentGame.currentPhase?.name}</div>
+				-->
 			{:else if currentGame.status === 'COMPLETED'}
 				<div class="text-center">
 					<h1 class="font-almendra-bold text-4xl my-12 uppercase">Game over!</h1>
