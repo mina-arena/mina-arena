@@ -16,7 +16,8 @@ type Game = {
   arena: {
     width: number;
     height: number;
-  }
+  };
+  createdAt: Date;
 }
 
 type GamePiece = {

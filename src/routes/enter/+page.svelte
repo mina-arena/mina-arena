@@ -10,16 +10,21 @@
 
 	const minaArenaClient = new MinaArenaClient();
 	let myGames: Game[] = [];
+	let myGamesLoading = true;
+
 	onMount(() => {
 		minaArenaClient.getPlayerGames(player1, ['IN_PROGRESS']).then((resp) => {
 			myGames = resp;
+			myGamesLoading = false;
 		});
 	});
 </script>
 
 <div class="p-12">
 	<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase">Choose your path</h1>
-	{#if myGames}
+	{#if myGamesLoading}
+		<p class="mx-auto w-fit"><i class="fa fa-solid fa-refresh fa-spin"></i> Loading...</p>
+	{:else if myGames}
 		<div class="mx-auto w-fit">
 			<p>Your games in progress:</p>
 			<table class="mx-auto border border-slate-300">
