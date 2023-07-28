@@ -7,7 +7,7 @@
 	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	const minaArenaClient = new MinaArenaClient();
-	let currentGame: Game = { id: Number($page.params.gameId) };
+	let currentGame: Game = { id: Number($page.params.gameId) } as Game;
 
 	onMount(() => {
 		refreshGame();
