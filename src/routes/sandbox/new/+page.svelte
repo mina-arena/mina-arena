@@ -12,7 +12,7 @@
 	};
 </script>
 
-<div class="p-16 lg:p-24 xl:max-w-[60vw] mx-auto text-center">
+<div class="flex-grow p-16 lg:p-24 xl:px-[30vw] mx-auto text-center bg-stone-400">
 	<h1 class="font-almendra-bold text-4xl uppercase">Sandbox mode</h1>
 
 	{#if isDummyPlayer}

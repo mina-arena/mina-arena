@@ -18,9 +18,9 @@
 	/>
 </Modals>
 
-<main class="h-[100vh] flex flex-col">
+<main class="min-h-screen flex flex-col">
 	<Header {openUserModal} />
-	<div class="w-full flex flex-col flex-grow">
+	<div class="w-full min-h-full flex flex-col flex-grow">
 		<slot />
 	</div>
 </main>
