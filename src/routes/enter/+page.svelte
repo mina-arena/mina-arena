@@ -25,9 +25,9 @@
 			<table class="mx-auto border border-slate-300">
 				<tr class="[&>*]:p-2 [&>*]:text-center border-b border-slate-300">
 					<th>Your Turn?</th>
-					<th>Opponent</th>
-					<th>Turn #</th>
+					<th>Turn</th>
 					<th>Phase</th>
+					<th>Opponent</th>
 					<th>Actions</th>
 				</tr>
 				{#if myGames.length > 0}
@@ -35,9 +35,9 @@
 						{@const opponents = game.gamePlayers?.filter(gp => (gp.player.minaPublicKey !== player1))}
 						<tr class="[&>*]:p-2 [&>*]:text-center border-b border-slate-300">
 							<td class="text-red-600">{game.currentPhase?.gamePlayer.player.minaPublicKey === player1 ? 'Your Turn!' : ''}</td>
-							<td>{opponents ? truncateMinaPublicKey(opponents[0].player.minaPublicKey) : ''}</td>
-							<td>{game.currentPhase?.turnNumber}</td>
+							<td>Turn {game.currentPhase?.turnNumber}</td>
 							<td>{game.currentPhase?.name}</td>
+							<td>{opponents ? truncateMinaPublicKey(opponents[0].player.minaPublicKey) : ''}</td>
 							<td>
 								<NavItem href="/sandbox/games/{game.id}">Join</NavItem>
 							</td>
