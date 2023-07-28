@@ -251,7 +251,7 @@
 				id="canvas"
 				width={game.arena.width}
 				height={game.arena.height}
-				class=""
+				class="rounded-lg"
 				on:mousemove={onMouseMove}
 				on:mousedown={onMouseDown}
 				on:mouseup={onMouseUp}
