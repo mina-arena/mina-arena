@@ -61,7 +61,7 @@
 	let currentPlayer = player1;
 </script>
 
-<div class="p-12 text-center">
+<div class="flex-grow p-12 text-center bg-stone-400">
 	<h2 class="text-2xl uppercase">Sandbox mode</h2>
 	<div>
 		{#if playerTurn <= maxPlayers}

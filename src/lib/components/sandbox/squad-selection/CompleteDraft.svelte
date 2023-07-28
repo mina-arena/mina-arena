@@ -14,7 +14,7 @@
     <div class="col-span-1">
       <h3 class="font-almendra-bold text-2xl uppercase">Player 1</h3>
       <table class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden">
-        <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-400">
+        <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-100">
           <th>Name</th>
           <th>Unit</th>
           <th>Cost</th>
@@ -38,7 +38,7 @@
     <div class="col-span-1">
       <h3 class="font-almendra-bold text-2xl uppercase">Player 2</h3>
       <table class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden">
-        <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-400">
+        <tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-100">
           <th>Name</th>
           <th>Unit</th>
           <th>Cost</th>
