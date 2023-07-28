@@ -4,7 +4,7 @@
 	import { page } from '$app/stores';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import MainGamePage from '$lib/components/sandbox/play/MainGamePage.svelte';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	const minaArenaClient = new MinaArenaClient();
 	let currentGame: Game = { id: Number($page.params.gameId) } as Game;
@@ -18,7 +18,7 @@
 			const game: Game = await minaArenaClient.startGame(currentGame.id);
 			currentGame = game;
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 
@@ -27,7 +27,7 @@
 			const game: Game = await minaArenaClient.getGameStatus(currentGame.id);
 			currentGame = game;
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 </script>

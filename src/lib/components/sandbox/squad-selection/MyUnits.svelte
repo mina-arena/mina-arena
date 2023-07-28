@@ -4,7 +4,7 @@
 	import { playerUnits } from '$lib/stores/sandbox/playerUnitStore';
 	import { squads } from '$lib/stores/sandbox/squadStore';
 	import MyUnitCard from './MyUnitCard.svelte';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	export let player: string;
 
@@ -18,7 +18,7 @@
 				$playerUnits[player] = resp;
 			});
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	});
 

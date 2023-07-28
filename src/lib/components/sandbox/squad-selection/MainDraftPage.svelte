@@ -9,7 +9,7 @@
 	import { playerUnits } from '$lib/stores/sandbox/playerUnitStore';
 	import { truncateMinaPublicKey } from '$lib/utils';
 	import { dummyPlayer, player1 as player1Store } from '$lib/stores/sandbox/playerStore';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	let playerTurn = 1;
 	const player1 = $player1Store.publicKey;
@@ -30,7 +30,7 @@
 			resetSquad(player1);
 			resetSquad(player2);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	});
 
@@ -54,7 +54,7 @@
 				playerTurn++;
 			}
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 
@@ -65,7 +65,7 @@
 				$playerUnits[currentPlayer] = resp;
 			});
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 

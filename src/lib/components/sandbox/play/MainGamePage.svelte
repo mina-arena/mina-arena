@@ -5,7 +5,7 @@
 
 	import Arena from './Arena.svelte';
 	import { truncateMinaPublicKey } from '$lib/utils';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	let gameId = Number($page.params.gameId);
 	let currentGame: Game;
@@ -16,7 +16,7 @@
 		try {
 			currentGame = await minaArenaClient.getGame(gameId);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 		console.log(currentGame);
 		loaded = true;
@@ -30,7 +30,7 @@
 		try {
 			currentGame = await minaArenaClient.getGame(currentGame.id);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 </script>
