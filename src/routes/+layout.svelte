@@ -20,8 +20,6 @@
 		{#if $error}
 			<div class="w-full text-red-700">{$error}</div>
 		{/if}
-	</div>
-	<div class="w-full flex flex-col flex-grow">
 		<slot />
 	</div>
 </main>

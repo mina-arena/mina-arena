@@ -22,7 +22,7 @@
 
 	<div class="flex flex-col items-center lg:flex-row lg:items-stretch justify-center">
 		{#if myGames}
-			<div class="flex flex-col justify-center items-center text-center lg:w-1/4 max-w-md p-8 m-8 rounded-xl bg-white bg-opacity-50 drop-shadow-lg">
+			<div class="flex flex-col justify-center items-center text-center p-8 m-8 rounded-xl bg-white bg-opacity-50 drop-shadow-lg">
 				<h2 class="font-almendra-bold text-2xl mb-3">Games in progress</h2>
 				<table class="mx-auto border border-slate-300">
 					<tr class="[&>*]:p-2 [&>*]:text-center border-b border-slate-300">
