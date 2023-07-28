@@ -297,7 +297,7 @@
 </script>
 
 <div class="flex-grow flex justify-center items-center">
-	<div class="mx-auto drop-shadow-lg rounded-2xl border-[10px] border-stone-800 box-border">
+	<div class="canvas-wrapper mx-auto drop-shadow-lg rounded-2xl border-[10px] border-stone-800 box-border relative">
 		<canvas
 				id="canvas"
 				width={game.arena.width}
@@ -307,19 +307,20 @@
 				on:mousedown={onMouseDown}
 				on:mouseup={onMouseUp}
 		/>
+		<div class="flex absolute -bottom-11 left-[50%] -translate-x-1/2">
+			<SubmitPhaseButton {isLoading} submitPhaseCallback={submitPhase} />
+			{#if selectedPiece}
+				<div />
+			{/if}
+			{#if hoveredPiece}
+				<div />
+			{/if}
+			{#if orders}
+				<div />
+			{/if}
+		</div>
+
 	</div>
-</div>
-<div class="flex absolute">
-	<SubmitPhaseButton {isLoading} submitPhaseCallback={submitPhase} />
-	{#if selectedPiece}
-		<div />
-	{/if}
-	{#if hoveredPiece}
-		<div />
-	{/if}
-	{#if orders}
-		<div />
-	{/if}
 </div>
 <HoveredGamePieceTooltipMelee
 	{game}
