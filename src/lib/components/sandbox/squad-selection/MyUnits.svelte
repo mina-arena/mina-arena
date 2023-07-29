@@ -9,6 +9,7 @@
 	export let player: string;
 
 	let selected = new Set<number>();
+	let loadingPlayerUnits = true;
 
 	const minaArenaClient = new MinaArenaClient();
 
@@ -16,6 +17,7 @@
 		try {
 			minaArenaClient.getPlayerUnits(player).then((resp) => {
 				$playerUnits[player] = resp;
+				loadingPlayerUnits = false;
 			});
 		} catch (err) {
 			$errorString = String(err);
@@ -41,19 +43,27 @@
 	};
 </script>
 
-{#if $playerUnits[player]}
-	{#if $squads && $squads[player]}
-		{#each $playerUnits[player] as playerUnit}
-			<MyUnitCard
-				{playerUnit}
-				{removeItem}
-				{addItem}
-				selected={!!$squads[player].playerUnits.find((pu) => pu.id === playerUnit.id)}
-			/>
-		{/each}
+{#if loadingPlayerUnits}
+	<i class="fa fa-solid fa-refresh fa-spin"></i> Loading...
+{:else}
+	{#if $playerUnits[player] && $playerUnits[player].length > 0}
+		{#if $squads && $squads[player]}
+			{#each $playerUnits[player] as playerUnit}
+				<MyUnitCard
+					{playerUnit}
+					{removeItem}
+					{addItem}
+					selected={!!$squads[player].playerUnits.find((pu) => pu.id === playerUnit.id)}
+				/>
+			{/each}
+		{:else}
+			{#each $playerUnits[player] as playerUnit}
+				<MyUnitCard {playerUnit} viewOnly={true} />
+			{/each}
+		{/if}
 	{:else}
-		{#each $playerUnits[player] as playerUnit}
-			<MyUnitCard {playerUnit} viewOnly={true} />
-		{/each}
+		<p class="col-span-6 mt-[40px]">
+			No custom units, draft some using the Draft Units tab.
+		</p>
 	{/if}
 {/if}
