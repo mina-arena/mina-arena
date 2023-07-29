@@ -20,21 +20,21 @@
 
 <div
 	id="piece-hover-tooltip"
-	class="hidden fixed max-w-[300px] overflow-hidden p-4 rounded-2xl bg-stone-900 text-stone-700 drop-shadow-lg"
+	class="hidden fixed max-w-[500px] overflow-hidden p-4 rounded-2xl bg-stone-900 text-stone-700 drop-shadow-lg"
 >
 	{#if hoveredPiece}
 		{@const owner = hoveredPiece.gamePlayer.player.minaPublicKey}
 		{@const hoveredUnit = hoveredPiece.playerUnit.unit}
 
-		<HoveredGamePieceTooltipUnitCard {hoveredPiece} />
+		<HoveredGamePieceTooltipUnitCard {hoveredPiece} {selectedPiece} />
 
 		{#if selectedPiece}
-			<div class="border-t border-black">
+			<div class="border-t border-black bg-stone-300 rounded-b-2xl">
 				{#if owner === currentPlayerMinaPubKey}
 					{#if selectedPiece.id === hoveredPiece.id}
-						<div class="text-center">Selected unit</div>
+						<div class="text-center p-1">Selected unit</div>
 					{:else}
-						<div class="text-center">Friendly unit</div>
+						<div class="text-center p-1">Friendly unit</div>
 					{/if}
 				{:else}
 					{@const selectedUnit = selectedPiece.playerUnit.unit}
@@ -44,13 +44,13 @@
 					)}
 
 					{#if attackDistance > (selectedUnit.rangedRange || 0)}
-						<div class="text-center">Target out of range</div>
+						<div class="text-center p-1">Target out of range</div>
 					{:else}
 						{@const estDamage = estimatedRangedAttackDamage(selectedUnit, hoveredUnit)}
 						{@const estHealthAfter = Math.max(hoveredPiece.health - estDamage, 0)}
 
 						{#if !selectedUnit.rangedNumAttacks}
-							<div class="text-center">Selected unit has no ranged attack</div>
+							<div class="text-center p-1">Selected unit has no ranged attack</div>
 						{:else}
 							<div class="grid grid-cols-3 gap-4mx-auto">
 								<div class="col-span-2 border-r border-black p-[8px]">
