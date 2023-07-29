@@ -96,7 +96,7 @@
 				for this game, then you can generate a new one by clicking the user icon in the top right.
 			</p>
 			<button
-				class="mx-auto m-2 p-2 rounded-lg border border-slate-800 bg-gray-200 hover:bg-gray-400"
+				class="mx-auto m-2 p-2 rounded-lg border border-slate-800 text-black bg-gray-200 hover:bg-gray-400"
 				on:click={createGame}>Create Game</button
 			>
 		{/if}
