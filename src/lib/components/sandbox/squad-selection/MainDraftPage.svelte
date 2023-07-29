@@ -8,12 +8,15 @@
 	import { page } from '$app/stores';
 	import { playerUnits } from '$lib/stores/sandbox/playerUnitStore';
 	import { truncateMinaPublicKey } from '$lib/utils';
-	import { dummyPlayer, player1 as player1Store } from '$lib/stores/sandbox/playerStore';
 	import { errorString } from '$lib/stores/sandbox/errorsStore';
+	import {
+		player2 as player2Store,
+		player1 as player1Store
+	} from '$lib/stores/sandbox/playerStore';
 
 	let playerTurn = 1;
 	const player1 = $player1Store.publicKey;
-	const player2 = $dummyPlayer.publicKey;
+	const player2 = $player2Store.publicKey;
 
 	const gameId = $page.params.gameId;
 

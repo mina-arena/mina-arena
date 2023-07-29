@@ -1,11 +1,11 @@
 <script lang="ts">
 	import { afterUpdate, onMount } from 'svelte';
-	import * as Utils from '../../play/utils';
+	import * as Utils from '../play/utils';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-	import HoveredGamePieceTooltipMovement from '../tooltip/HoveredGamePieceTooltipMovement.svelte';
-	import SubmitPhaseButton from '../SubmitPhaseButton.svelte';
-	import { errorString } from '$lib/stores/sandbox/errorsStore';
+	import HoveredGamePieceTooltipMovement from './tooltip/HoveredGamePieceTooltipMovement.svelte';
+	import SubmitPhaseButton from './SubmitPhaseButton.svelte';
 	import { player1, player2 } from '$lib/stores/sandbox/playerStore';
+	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	export let game: Game;
 	export let playerColors: Array<string>;
@@ -183,9 +183,9 @@
 			move: {
 				gamePieceId: selectedPiece.id,
 				action: {
+					gamePieceNumber: selectedPiece.gamePieceNumber,
 					moveFrom: { x: selectedPiece.coordinates.x, y: selectedPiece.coordinates.y },
-					moveTo: { x: Math.round(canvasPoint.x), y: Math.round(canvasPoint.y) },
-					gamePieceNumber: selectedPiece.gamePieceNumber
+					moveTo: { x: Math.round(canvasPoint.x), y: Math.round(canvasPoint.y) }
 				}
 			}
 		};
@@ -223,14 +223,14 @@
 		const player = currentPlayerMinaPubKey === $player1.publicKey ? $player1 : $player2;
 		try {
 			await minaArenaClient.submitMovePhase(
-				player.publicKey,
+				currentPlayerMinaPubKey,
 				game.id,
 				game.currentPhase!.id,
 				moveActions,
-				player.privateKey
+				player.publicKey
 			);
 		} catch (err) {
-			$errorString = String(err);
+			$error = String(err);
 		}
 		rerender();
 	};
@@ -245,20 +245,20 @@
 	};
 </script>
 
-<div class="flex-grow flex justify-center items-center">
-	<div
-		class="canvas-wrapper mx-auto drop-shadow-lg rounded-2xl border-[10px] border-stone-800 box-border relative"
-	>
+<table>
+	<tr>
 		<canvas
 			id="canvas"
 			width={game.arena.width}
 			height={game.arena.height}
-			class="rounded-lg"
+			class="border border-slate-400 mx-auto"
 			on:mousemove={onMouseMove}
 			on:mousedown={onMouseDown}
 			on:mouseup={onMouseUp}
 		/>
-		<div class="flex absolute -bottom-11 left-[50%] -translate-x-1/2">
+	</tr>
+	<tr>
+		<div class="flex">
 			<SubmitPhaseButton {isLoading} submitPhaseCallback={submitPhase} />
 			{#if selectedPiece}
 				<div />
@@ -270,8 +270,8 @@
 				<div />
 			{/if}
 		</div>
-	</div>
-</div>
+	</tr>
+</table>
 <HoveredGamePieceTooltipMovement
 	{hoveredPiece}
 	tooltipAbsolutePosition={hoveredPieceTooltipPosition}

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { closeModal } from 'svelte-modals';
-	import { player1 } from '$lib/stores/sandbox/playerStore';
+	import { player1, player2, generateKeypair } from '$lib/stores/sandbox/playerStore';
 	import { truncateMinaPublicKey } from '$lib/utils';
 
 	// provided by Modals
@@ -11,21 +11,11 @@
 		return validRegex.test(key);
 	};
 
-	const generateKeypair = async () => {
-		// Importing snarky like this makes it so only this function gets slowed down, not every page load
-		const { PrivateKey } = await import('snarkyjs');
-		const privateKey = PrivateKey.random();
-		const publicKey = privateKey.toPublicKey();
-
-		return {
-			publicKey: publicKey.toBase58(),
-			privateKey: privateKey.toBase58()
-		};
-	};
-
 	const generateNewKeypair = async () => {
-		const keys = await generateKeypair();
-		player1.set(keys);
+		const p1Keys = await generateKeypair();
+		const p2Keys = await generateKeypair();
+		player1.set(p1Keys);
+		player2.set(p2Keys);
 	};
 
 	const setPrivateKey = async () => {
@@ -49,7 +39,9 @@
 
 {#if isOpen}
 	<div class="modal">
-		<div class="w-[650px] max-h-screen overflow-y-auto rounded-md p-8 md:p-12 lg:p-16 bg-light flex flex-col pointer-events-auto">
+		<div
+			class="w-[650px] max-h-screen overflow-y-auto rounded-md p-8 md:p-12 lg:p-16 bg-light flex flex-col pointer-events-auto"
+		>
 			<div class="mx-auto">
 				<h2 class="text-center font-almendra-bold text-3xl mb-8">User Management</h2>
 				<p>
