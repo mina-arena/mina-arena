@@ -19,7 +19,7 @@
 			<table
 				class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden"
 			>
-				<tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-400">
+				<tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-100">
 					<th>Name</th>
 					<th>Unit</th>
 					<th>Cost</th>
@@ -45,7 +45,7 @@
 			<table
 				class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden"
 			>
-				<tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-400">
+				<tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-100">
 					<th>Name</th>
 					<th>Unit</th>
 					<th>Cost</th>

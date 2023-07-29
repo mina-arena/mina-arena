@@ -8,11 +8,11 @@
 	import { page } from '$app/stores';
 	import { playerUnits } from '$lib/stores/sandbox/playerUnitStore';
 	import { truncateMinaPublicKey } from '$lib/utils';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 	import {
 		player2 as player2Store,
 		player1 as player1Store
 	} from '$lib/stores/sandbox/playerStore';
-	import { error } from '$lib/stores/sandbox/errorsStore';
 
 	let playerTurn = 1;
 	const player1 = $player1Store.publicKey;
@@ -33,7 +33,7 @@
 			resetSquad(player1);
 			resetSquad(player2);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	});
 
@@ -57,7 +57,7 @@
 				playerTurn++;
 			}
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 
@@ -68,7 +68,7 @@
 				$playerUnits[currentPlayer] = resp;
 			});
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 
@@ -77,7 +77,7 @@
 	let currentPlayer = player1;
 </script>
 
-<div class="p-12 text-center">
+<div class="flex-grow p-12 text-center bg-stone-400">
 	<h2 class="text-2xl uppercase">Sandbox mode</h2>
 	<div>
 		{#if playerTurn <= maxPlayers}

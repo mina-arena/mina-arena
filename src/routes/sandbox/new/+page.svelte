@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 	import { player1, player2, generateKeypair } from '$lib/stores/sandbox/playerStore';
 
 	let isLoggedIn = !($player1.publicKey === '') && !($player2.publicKey === '');
@@ -13,7 +13,7 @@
 			console.log(game.id);
 			goto(`/sandbox/games/${game.id}`);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 
@@ -52,22 +52,25 @@
 	let newPrivateKey = '';
 </script>
 
-<div class="p-16 lg:p-24 xl:max-w-[60vw] mx-auto text-center">
+<div
+	class="flex-grow p-16 lg:p-24 xl:px-[30vw] mx-auto text-center text-stone-300 bg-stone-400 bg-chainmail bg-cover"
+>
 	<h1 class="font-almendra-bold text-4xl uppercase">Sandbox mode</h1>
 	{#key $player1.publicKey}
 		{#if !isLoggedIn}
-			<p>Looks like you are not yet logged in!</p>
-			<p>
+			<p class="break-break-word" style="word-break: break-word">
+				Looks like you are not yet logged in!
+			</p>
+			<p class="break-break-word" style="word-break: break-word">
 				Mina Arena will create a public-private keypair for you and store it in your browser. We
 				won't track the keys on our backend, so if you clear your browser storage, you will not be
 				able to create actions in your existing games. Don't worry, you can always generate yourself
 				a new keypair by clicking the user icon in the top right corner.
 			</p>
-			<p>
+			<p class="break-break-word" style="word-break: break-word">
 				In sandbox mode, we will generate a second keypair to play as your opponent in the game. You
 				will control both sides' pieces, but they are two separate keypairs stored in your browser.
 			</p>
-			<p />
 			<div>
 				<button
 					class="rounded p-2 border border-solid border-neutral hover:bg-secondary"

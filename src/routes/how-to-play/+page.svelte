@@ -1,14 +1,14 @@
-<div class="instructions bg-paper-pattern text-stone-800">
+<div class="instructions bg-chainmail bg-cover bg-no-repeat bg-fixed text-stone-300">
   <div class="p-16 lg:p-24 xl:max-w-[60vw] mx-auto text-center">
     <h1 class="font-almendra-bold text-4xl uppercase">How to play Mina Arena</h1>
 
-    <h2 class="font-almendra-bold text-3xl uppercase">Squad Draft</h2>
-    <p class="">Before starting a game, you will draft your squad. Each unit in your squad has certain stats, strengths and weaknesses. Each unit also has a cost, and the total cost of your team cannot exceed 100.</p>
+    <h2 class="font-almendra-bold text-3xl uppercase mt-16">Squad Draft</h2>
+    <p>Before starting a game, you will draft your squad. Each unit in your squad has certain stats, strengths and weaknesses. Each unit also has a cost, and the total cost of your team cannot exceed 100.</p>
 
-    <h2 class="font-almendra-bold text-3xl">Gameplay</h2>
-    <p class="">Mina Arena is inspired by tabletop games like Warhammer and Axis and Allies. The game proceeds in <strong>Turns</strong>, and each turn is made up of <strong>Phases</strong>.</p>
+    <h2 class="font-almendra-bold text-3xl mt-16">Gameplay</h2>
+    <p>Mina Arena is inspired by tabletop games like Warhammer and Axis and Allies. The game proceeds in <strong>Turns</strong>, and each turn is made up of <strong>Phases</strong>.</p>
 
-    <h2 class="font-almendra-bold text-3xl">Phases</h2>
+    <h2 class="font-almendra-bold text-3xl mt-16">Phases</h2>
 
     <div class="md:grid md:grid-cols-3 md:gap-8 mt-6">
       <div>

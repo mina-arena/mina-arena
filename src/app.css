@@ -26,13 +26,6 @@
     margin-bottom: 0.25em;
   }
 
-  h1:not(:first-child),
-  h2:not(:first-child),
-  h3:not(:first-child),
-  h4:not(:first-child) {
-    margin-top: 2em;
-  }
-
   h1, h2 {
     text-transform: uppercase;
   }
@@ -81,7 +74,7 @@
   text-indent: -1000em;
 }
 
-.home-button {
+.home-button, .canvas-wrapper {
   background-color: rgba(223,39,0,1);
   background-image: linear-gradient(0deg, rgba(158,28,3,1) 0%, rgba(223,39,0,1) 100%);
   box-shadow: inset 0 0 20px rgba(0,0,0,0.25),
@@ -107,7 +100,7 @@
 
 
 .instructions {
-  text-shadow: 0 0 8px rgb(0,0,0,0.2), 0 1px 0 rgb(255,255,255,1);
+  text-shadow: 0 0 20px rgb(0,0,0,1), 0 1px 0 rgb(255,255,255,0.3);
 }
 
 @layer utilities {

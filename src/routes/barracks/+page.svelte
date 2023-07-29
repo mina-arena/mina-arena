@@ -6,7 +6,7 @@
 	const player = $player1.publicKey;
 </script>
 
-<div class="p-12 sm:px-16 xl:px-24 xl:pb-24">
+<div class="p-12 sm:px-16 xl:px-24 xl:pb-24 flex-grow bg-arena-landscape-blurred bg-cover">
 	<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase">Your units</h1>
 	<div class="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-16">
 		<MyUnits {player} />

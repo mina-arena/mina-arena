@@ -75,13 +75,12 @@
 			{/if}
 		</div>
 	</div>
-	<div class="col-span-6 lg:col-span-4 xl:col-span-3">
+	<div class="col-span-6 lg:col-span-4 2xl:col-span-3">
 		<div class="sticky top-16">
-			Your Squad:
+			<h2 class="font-almendra-bold text-2xl">Your Squad</h2>
 			{#key $squads[player]}
-				<div class="py-10 mb-10">
-					<table class="mx-auto border-spacing-y-[1px] text-[16px] table-fixed w-full border-separate rounded-xl overflow-hidden">
-						<tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-400">
+				<table class="my-4 mx-auto border-spacing-y-[1px] text-[16px] table-fixed w-full border-separate rounded-xl overflow-hidden">
+						<tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-200">
 							<th>Name</th>
 							<th>Unit</th>
 							<th>Cost</th>
@@ -100,13 +99,12 @@
 								<td>{playerUnit.unit.pointsCost}</td>
 							</tr>
 						{/each}
-						<tr class="[&>*]:p-2 [&>*]:bg-stone-400">
+						<tr class="[&>*]:p-2 [&>*]:bg-stone-200">
 							<td />
 							<td />
 							<td class="font-bold"><span class={totalCost() > 100 ? 'text-red-400' : ''}>{totalCost()}</span>/100</td>
 						</tr>
-					</table>
-				</div>
+			</table>
 			{/key}
 			<div class="grid grid-cols-2 mx-auto">
 				<div class="col-span-1">

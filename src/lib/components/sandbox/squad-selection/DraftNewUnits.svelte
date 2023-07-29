@@ -5,7 +5,7 @@
 	import { units } from '$lib/stores/sandbox/unitStore';
 	import DraftUnitModal from '$lib/components/modals/DraftUnitModal.svelte';
 	import DraftUnitCard from './DraftUnitCard.svelte';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	export let player: string;
 
@@ -18,7 +18,7 @@
 				});
 			}
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	});
 

@@ -14,8 +14,10 @@ module.exports = {
         '4xl': '3rem'
       },
       backgroundImage: {
+        'chainmail': 'url("/images/backgrounds/chainmail.webp")',
         'paper-pattern': 'url("/images/backgrounds/white-paper.jpg")',
-        'arena-landscape': 'url("/images/backgrounds/arena-landscape.webp")'
+        'arena-landscape': 'url("/images/backgrounds/arena-landscape.webp")',
+        'arena-landscape-blurred': 'url("/images/backgrounds/arena-landscape-blurred.jpg")'
       },
       dropShadow: {
         'lg': [

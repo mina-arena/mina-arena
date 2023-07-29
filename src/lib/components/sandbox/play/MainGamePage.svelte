@@ -5,7 +5,7 @@
 
 	import Arena from './Arena.svelte';
 	import { truncateMinaPublicKey } from '$lib/utils';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	let gameId = Number($page.params.gameId);
 	let currentGame: Game;
@@ -16,7 +16,7 @@
 		try {
 			currentGame = await minaArenaClient.getGame(gameId);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 		console.log(currentGame);
 		loaded = true;
@@ -30,18 +30,20 @@
 		try {
 			currentGame = await minaArenaClient.getGame(currentGame.id);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 </script>
 
-<div class="w-[90%] mx-auto">
+<div class="flex-grow flex bg-stone-700">
 	{#if loaded}
 		{#key currentGame}
 			{#if currentGame.status === 'IN_PROGRESS'}
+				<!--
 				<div>It's your turn: {truncateMinaPublicKey(currentPlayer())}</div>
 				<div>Turn {currentGame.currentPhase?.turnNumber}</div>
 				<div>Phase: {currentGame.currentPhase?.name}</div>
+				-->
 			{:else if currentGame.status === 'COMPLETED'}
 				<div class="text-center">
 					<h1 class="font-almendra-bold text-4xl my-12 uppercase">Game over!</h1>
