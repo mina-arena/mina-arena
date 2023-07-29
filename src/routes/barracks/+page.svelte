@@ -13,7 +13,7 @@
 
 <div class="p-12 sm:px-16 xl:px-24 xl:pb-24 flex-grow bg-arena-landscape-blurred bg-cover">
 	<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase">Barracks</h1>
-	<div class="flex mx-auto w-full">
+	<div class="flex mx-auto w-fit">
 		<div
 			on:click={() => {
 				pageSelected = 'MY_UNITS';
