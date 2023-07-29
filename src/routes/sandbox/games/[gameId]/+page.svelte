@@ -4,13 +4,14 @@
 	import { page } from '$app/stores';
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import MainGamePage from '$lib/components/sandbox/play/MainGamePage.svelte';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
+	import { player1, player2 } from '$lib/stores/sandbox/playerStore';
 
 	const minaArenaClient = new MinaArenaClient();
-	let currentGame: Game = { id: Number($page.params.gameId) };
+	let currentGame: Game = { id: Number($page.params.gameId) } as Game;
 
-	onMount(() => {
-		refreshGame();
+	onMount(async () => {
+		await refreshGame();
 	});
 
 	const startGame = async () => {
@@ -18,7 +19,7 @@
 			const game: Game = await minaArenaClient.startGame(currentGame.id);
 			currentGame = game;
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 
@@ -27,7 +28,19 @@
 			const game: Game = await minaArenaClient.getGameStatus(currentGame.id);
 			currentGame = game;
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
+		}
+
+		if ($player1.publicKey === '' || $player2.publicKey === '') {
+			$errorString = 'Error: Not logged in.  Please generate a new keypair.';
+		}
+
+		const gamePlayers = currentGame.gamePlayers?.map((gp) => gp.player.minaPublicKey);
+
+		if (gamePlayers) {
+			if (!gamePlayers.includes($player1.publicKey) || !gamePlayers.includes($player2.publicKey)) {
+				$errorString = 'Error: You are not logged in as a user of this game';
+			}
 		}
 	};
 </script>

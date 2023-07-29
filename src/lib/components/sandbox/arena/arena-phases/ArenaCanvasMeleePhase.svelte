@@ -5,8 +5,8 @@
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import HoveredGamePieceTooltipMelee from '../tooltip/HoveredGamePieceTooltipMelee.svelte';
 	import SubmitPhaseButton from '../SubmitPhaseButton.svelte';
-	import { player1, dummyPlayer } from '$lib/stores/sandbox/playerStore';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
+	import { player1, player2 } from '$lib/stores/sandbox/playerStore';
 
 	export let game: Game;
 	export let playerColors: Array<string>;
@@ -263,7 +263,7 @@
 			return rerender();
 		}
 		isLoading = true;
-		const player = currentPlayerMinaPubKey === $player1.publicKey ? $player1 : $dummyPlayer;
+		const player = currentPlayerMinaPubKey === $player1.publicKey ? $player1 : $player2;
 		try {
 			await minaArenaClient.submitMeleePhase(
 				player.publicKey,
@@ -273,7 +273,7 @@
 				player.privateKey
 			);
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 		rerender();
 	};
@@ -282,7 +282,7 @@
 		try {
 			return await new DiceRollServiceClient().getDiceRolls();
 		} catch (err) {
-			$error = String(err);
+			$errorString = String(err);
 		}
 	};
 
@@ -296,20 +296,20 @@
 	};
 </script>
 
-<table>
-	<tr>
+<div class="flex-grow flex justify-center items-center">
+	<div
+		class="canvas-wrapper mx-auto drop-shadow-lg rounded-2xl border-[10px] border-stone-800 box-border relative"
+	>
 		<canvas
 			id="canvas"
 			width={game.arena.width}
 			height={game.arena.height}
-			class="border border-slate-400 mx-auto"
+			class="rounded-lg"
 			on:mousemove={onMouseMove}
 			on:mousedown={onMouseDown}
 			on:mouseup={onMouseUp}
 		/>
-	</tr>
-	<tr>
-		<div class="flex">
+		<div class="flex absolute -bottom-11 left-[50%] -translate-x-1/2">
 			<SubmitPhaseButton {isLoading} submitPhaseCallback={submitPhase} />
 			{#if selectedPiece}
 				<div />
@@ -321,8 +321,8 @@
 				<div />
 			{/if}
 		</div>
-	</tr>
-</table>
+	</div>
+</div>
 <HoveredGamePieceTooltipMelee
 	{game}
 	{hoveredPiece}

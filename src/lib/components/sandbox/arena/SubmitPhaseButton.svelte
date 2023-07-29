@@ -8,7 +8,7 @@
 {#if isLoading}
   <button
     id="submit-phase-button"
-    class="mx-auto m-2 p-2 rounded-lg border border-slate-500 bg-gray-100 text-gray-700"
+    class="font-almendra-bold uppercase text-center py-4 px-5 m-2 rounded-lg home-button"
     disabled
   >
     <i class="fa-solid fa-arrows-rotate fa-spin"></i> Resolving...
@@ -16,7 +16,7 @@
 {:else}
   <button
     id="submit-phase-button"
-    class="mx-auto m-2 p-2 rounded-lg border border-slate-800 bg-gray-200 hover:bg-gray-400"
+    class="font-almendra-bold uppercase text-center py-4 px-5 m-2 rounded-lg home-button"
     on:click={submitPhaseCallback}
   >
     Submit Phase

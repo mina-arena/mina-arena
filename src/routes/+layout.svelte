@@ -3,7 +3,7 @@
 	import '../app.css';
 	import Header from '$lib/components/Header.svelte';
 	import UserModal from '$lib/components/modals/UserModal.svelte';
-	import { error } from '$lib/stores/sandbox/errorsStore';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	const openUserModal = () => {
 		openModal(UserModal, {});
@@ -14,14 +14,12 @@
 	<div slot="backdrop" class="backdrop bg-dark/75" on:click={closeModal} on:keypress={closeModal} />
 </Modals>
 
-<main class="h-[100vh] flex flex-col">
+<main class="min-h-screen flex flex-col">
 	<Header {openUserModal} />
-	<div class="w-full text-red-700">
-		{#if $error}
-			<div>{$error}</div>
+	<div class="w-full min-h-full flex flex-col flex-grow">
+		{#if $errorString}
+			<div class="w-full text-red-700">{$errorString}</div>
 		{/if}
-	</div>
-	<div class="w-full flex flex-col flex-grow">
 		<slot />
 	</div>
 </main>
