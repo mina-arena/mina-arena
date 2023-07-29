@@ -18,7 +18,7 @@
 	<Header {openUserModal} />
 	<div class="w-full min-h-full flex flex-col flex-grow">
 		{#if $errorString}
-			<div class="w-full text-red-700">{$errorString}</div>
+			<div class="w-full p-4 bg-red-800 text-sm text-center text-white drop-shadow-lg">{$errorString}</div>
 		{/if}
 		<slot />
 	</div>
