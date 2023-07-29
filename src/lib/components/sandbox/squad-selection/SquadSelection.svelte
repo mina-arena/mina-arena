@@ -45,8 +45,8 @@
 						pageSelected = 'PLAYER_UNIT';
 					}}
 			class={pageSelected === 'PLAYER_UNIT'
-						? 'border border-slate-600 rounded p-1 cursor-pointer bg-slate-100'
-						: 'border border-slate-300 rounded p-1 cursor-pointer'}
+						? 'border border-slate-600 rounded px-10 py-5 mr-5 cursor-pointer bg-slate-100'
+						: 'border border-slate-300 rounded px-10 py-5 mr-5 cursor-pointer'}
 	>
 		My Units
 	</div>
@@ -58,8 +58,8 @@
 						pageSelected = 'UNIT';
 					}}
 			class={pageSelected === 'UNIT'
-						? 'border border-slate-600 rounded p-1 cursor-pointer bg-slate-100'
-						: 'border border-slate-300 rounded p-1 cursor-pointer'}
+						? 'border border-slate-600 rounded px-10 py-5 cursor-pointer bg-slate-100'
+						: 'border border-slate-300 rounded px-10 py-5 cursor-pointer'}
 	>
 		Draft Units
 	</div>
