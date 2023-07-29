@@ -192,18 +192,20 @@
 		attacks.forEach((attack) => {
 			if (attack.hitRoll.success) {
 				hitRollsPassed.push(attack.hitRoll.roll);
+				
+				if (attack.woundRoll.success) {
+					woundRollsPassed.push(attack.woundRoll.roll);
+
+					if (attack.saveRoll.success) {
+						saveRollsPassed.push(attack.saveRoll.roll);
+					} else {
+						saveRollsFailed.push(attack.saveRoll.roll);
+					}
+				} else {
+					woundRollsFailed.push(attack.woundRoll.roll);
+				}
 			} else {
 				hitRollsFailed.push(attack.hitRoll.roll);
-			}
-			if (attack.woundRoll.success) {
-				woundRollsPassed.push(attack.woundRoll.roll);
-			} else {
-				woundRollsFailed.push(attack.woundRoll.roll);
-			}
-			if (attack.saveRoll.success) {
-				saveRollsPassed.push(attack.saveRoll.roll);
-			} else {
-				saveRollsFailed.push(attack.saveRoll.roll);
 			}
 		});
 
@@ -283,18 +285,20 @@
 		attacks.forEach((attack) => {
 			if (attack.hitRoll.success) {
 				hitRollsPassed.push(attack.hitRoll.roll);
+
+				if (attack.woundRoll.success) {
+					woundRollsPassed.push(attack.woundRoll.roll);
+
+					if (attack.saveRoll.success) {
+						saveRollsPassed.push(attack.saveRoll.roll);
+					} else {
+						saveRollsFailed.push(attack.saveRoll.roll);
+					}
+				} else {
+					woundRollsFailed.push(attack.woundRoll.roll);
+				}
 			} else {
 				hitRollsFailed.push(attack.hitRoll.roll);
-			}
-			if (attack.woundRoll.success) {
-				woundRollsPassed.push(attack.woundRoll.roll);
-			} else {
-				woundRollsFailed.push(attack.woundRoll.roll);
-			}
-			if (attack.saveRoll.success) {
-				saveRollsPassed.push(attack.saveRoll.roll);
-			} else {
-				saveRollsFailed.push(attack.saveRoll.roll);
 			}
 		});
 
