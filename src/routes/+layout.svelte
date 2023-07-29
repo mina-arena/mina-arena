@@ -16,9 +16,9 @@
 
 <main class="min-h-screen flex flex-col">
 	<Header {openUserModal} />
-	<div class="w-full text-red-700">
+	<div class="w-full min-h-full flex flex-col flex-grow">
 		{#if $errorString}
-			<div>{$errorString}</div>
+			<div class="w-full text-red-700">{$errorString}</div>
 		{/if}
 		<slot />
 	</div>
