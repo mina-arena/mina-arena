@@ -48,10 +48,8 @@
 {#if currentGame && currentGame.status}
 	{#if currentGame.status == 'PENDING'}
 		<MainDraftPage {startGame} />
-	{:else if currentGame.status == 'IN_PROGRESS'}
+	{:else if ['IN_PROGRESS', 'COMPLETED'].includes(currentGame.status)}
 		<MainGamePage />
-	{:else if currentGame.status == 'COMPLETED'}
-		<div>This game is over... stats/recap?</div>
 	{:else}
 		<div>Problems with this game</div>
 	{/if}

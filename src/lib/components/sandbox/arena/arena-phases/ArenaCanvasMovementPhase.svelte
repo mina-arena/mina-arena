@@ -259,7 +259,7 @@
 			on:mouseup={onMouseUp}
 		/>
 		<div class="flex absolute -bottom-11 left-[50%] -translate-x-1/2">
-			<SubmitPhaseButton {isLoading} submitPhaseCallback={submitPhase} />
+			<SubmitPhaseButton {isLoading} {game} submitPhaseCallback={submitPhase} />
 			{#if selectedPiece}
 				<div />
 			{/if}
