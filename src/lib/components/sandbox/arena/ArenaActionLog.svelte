@@ -162,6 +162,8 @@
 				});
 			}
 			snarkyActionLogText += `Encrypted Dice Roll Input:<br/>${diceRolls}<br/><br/>`;
+
+			// Ignore skipped attacks (due to target already being dead)
 			if (a.actionData.resolvedAttack) attacks.push(a.actionData.resolvedAttack);
 		});
 		const attackingPiece = actions[0].gamePiece;
@@ -181,6 +183,11 @@
 		const targetPieceTitle = `<span style="color: ${targetPlayerColor}">${targetPlayerUnit.name} (${targetPlayerUnit.unit.name})</span>`;
 
 		text += `${attackingPieceTitle} shoots x${attacks.length} at ${targetPieceTitle}<br/>`;
+
+		if (attacks.length === 0) {
+			text += `${targetPieceTitle} is already destroyed, skipping attack.`
+			return [`${text}<br/><br/>`];
+		}
 
 		let hitRollsPassed: number[] = [];
 		let hitRollsFailed: number[] = [];
@@ -255,6 +262,8 @@
 				});
 			}
 			snarkyActionLogText += `Encrypted Dice Roll Input:<br/>${diceRolls}<br/><br/>`;
+
+			// Ignore skipped attacks (due to target already being dead)
 			if (a.actionData.resolvedAttack) attacks.push(a.actionData.resolvedAttack);
 		});
 		const attackingPiece = actions[0].gamePiece;
@@ -274,6 +283,11 @@
 		const targetPieceTitle = `<span style="color: ${targetPlayerColor}">${targetPlayerUnit.name} (${targetPlayerUnit.unit.name})</span>`;
 
 		text += `${attackingPieceTitle} strikes x${attacks.length} at ${targetPieceTitle}<br/>`;
+
+		if (attacks.length === 0) {
+			text += `${targetPieceTitle} is already destroyed, skipping attack.`
+			return [`${text}<br/><br/>`];
+		}
 
 		let hitRollsPassed: number[] = [];
 		let hitRollsFailed: number[] = [];
