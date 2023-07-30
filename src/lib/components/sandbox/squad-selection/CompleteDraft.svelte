@@ -9,6 +9,20 @@
 	const player2 = $player2Store.publicKey;
 
 	export let startGame: () => {};
+
+	const totalCost = (minaPublicKey: string) => {
+		let cost = 0;
+		
+		$squads[minaPublicKey].units.forEach((draftee) => {
+			const { unit } = draftee;
+			cost += unit.pointsCost;
+		});
+		$squads[minaPublicKey].playerUnits.forEach((playerUnit) => {
+			const { unit } = playerUnit;
+			cost += unit.pointsCost;
+		});
+		return cost;
+	};
 </script>
 
 <div>
@@ -38,6 +52,11 @@
 						<td>{playerUnit.unit.pointsCost}</td>
 					</tr>
 				{/each}
+				<tr class="[&>*]:p-2 [&>*]:bg-stone-200">
+					<td />
+					<td />
+					<td class="font-bold"><span class={totalCost(player1) > 100 ? 'text-red-400' : ''}>{totalCost(player1)}</span>/100</td>
+				</tr>
 			</table>
 		</div>
 		<div class="col-span-1">
@@ -64,6 +83,11 @@
 						<td>{playerUnit.unit.pointsCost}</td>
 					</tr>
 				{/each}
+				<tr class="[&>*]:p-2 [&>*]:bg-stone-200">
+					<td />
+					<td />
+					<td class="font-bold"><span class={totalCost(player2) > 100 ? 'text-red-400' : ''}>{totalCost(player2)}</span>/100</td>
+				</tr>
 			</table>
 		</div>
 	</div>

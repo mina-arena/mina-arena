@@ -12,6 +12,7 @@ export const GetPlayerGamesQuery = gql`
       id
       status
       turnNumber
+      createdAt
       currentPhase {
         turnNumber
         name
@@ -23,6 +24,12 @@ export const GetPlayerGamesQuery = gql`
         }
       }
       gamePlayers {
+        player {
+          minaPublicKey
+          name
+        }
+      }
+      winningGamePlayer {
         player {
           minaPublicKey
           name

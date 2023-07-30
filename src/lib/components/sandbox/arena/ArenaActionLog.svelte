@@ -162,6 +162,8 @@
 				});
 			}
 			snarkyActionLogText += `Encrypted Dice Roll Input:<br/>${diceRolls}<br/><br/>`;
+
+			// Ignore skipped attacks (due to target already being dead)
 			if (a.actionData.resolvedAttack) attacks.push(a.actionData.resolvedAttack);
 		});
 		const attackingPiece = actions[0].gamePiece;
@@ -182,6 +184,11 @@
 
 		text += `${attackingPieceTitle} shoots x${attacks.length} at ${targetPieceTitle}<br/>`;
 
+		if (attacks.length === 0) {
+			text += `${targetPieceTitle} is already destroyed, skipping attack.`
+			return [`${text}<br/><br/>`];
+		}
+
 		let hitRollsPassed: number[] = [];
 		let hitRollsFailed: number[] = [];
 		let woundRollsPassed: number[] = [];
@@ -192,18 +199,20 @@
 		attacks.forEach((attack) => {
 			if (attack.hitRoll.success) {
 				hitRollsPassed.push(attack.hitRoll.roll);
+				
+				if (attack.woundRoll.success) {
+					woundRollsPassed.push(attack.woundRoll.roll);
+
+					if (attack.saveRoll.success) {
+						saveRollsPassed.push(attack.saveRoll.roll);
+					} else {
+						saveRollsFailed.push(attack.saveRoll.roll);
+					}
+				} else {
+					woundRollsFailed.push(attack.woundRoll.roll);
+				}
 			} else {
 				hitRollsFailed.push(attack.hitRoll.roll);
-			}
-			if (attack.woundRoll.success) {
-				woundRollsPassed.push(attack.woundRoll.roll);
-			} else {
-				woundRollsFailed.push(attack.woundRoll.roll);
-			}
-			if (attack.saveRoll.success) {
-				saveRollsPassed.push(attack.saveRoll.roll);
-			} else {
-				saveRollsFailed.push(attack.saveRoll.roll);
 			}
 		});
 
@@ -253,6 +262,8 @@
 				});
 			}
 			snarkyActionLogText += `Encrypted Dice Roll Input:<br/>${diceRolls}<br/><br/>`;
+
+			// Ignore skipped attacks (due to target already being dead)
 			if (a.actionData.resolvedAttack) attacks.push(a.actionData.resolvedAttack);
 		});
 		const attackingPiece = actions[0].gamePiece;
@@ -273,6 +284,11 @@
 
 		text += `${attackingPieceTitle} strikes x${attacks.length} at ${targetPieceTitle}<br/>`;
 
+		if (attacks.length === 0) {
+			text += `${targetPieceTitle} is already destroyed, skipping attack.`
+			return [`${text}<br/><br/>`];
+		}
+
 		let hitRollsPassed: number[] = [];
 		let hitRollsFailed: number[] = [];
 		let woundRollsPassed: number[] = [];
@@ -283,18 +299,20 @@
 		attacks.forEach((attack) => {
 			if (attack.hitRoll.success) {
 				hitRollsPassed.push(attack.hitRoll.roll);
+
+				if (attack.woundRoll.success) {
+					woundRollsPassed.push(attack.woundRoll.roll);
+
+					if (attack.saveRoll.success) {
+						saveRollsPassed.push(attack.saveRoll.roll);
+					} else {
+						saveRollsFailed.push(attack.saveRoll.roll);
+					}
+				} else {
+					woundRollsFailed.push(attack.woundRoll.roll);
+				}
 			} else {
 				hitRollsFailed.push(attack.hitRoll.roll);
-			}
-			if (attack.woundRoll.success) {
-				woundRollsPassed.push(attack.woundRoll.roll);
-			} else {
-				woundRollsFailed.push(attack.woundRoll.roll);
-			}
-			if (attack.saveRoll.success) {
-				saveRollsPassed.push(attack.saveRoll.roll);
-			} else {
-				saveRollsFailed.push(attack.saveRoll.roll);
 			}
 		});
 
