@@ -4,7 +4,7 @@
 	export let openUserModal: () => void;
 </script>
 
-<header class="relative">
+<header class="relative drop-shadow-md z-10">
 	<nav
 		class="flex bg-stone-800 px-4 py-2.5 justify-between items-center"
 	>
