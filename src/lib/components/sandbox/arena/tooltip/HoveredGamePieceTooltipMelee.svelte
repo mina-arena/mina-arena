@@ -24,21 +24,21 @@
 
 <div
 	id="piece-hover-tooltip"
-	class="hidden fixed max-w-[300px] overflow-hidden p-4 rounded-2xl bg-stone-900 text-stone-700 drop-shadow-lg"
+	class="hidden fixed max-w-[500px] overflow-hidden p-4 rounded-2xl bg-stone-900 text-stone-700 drop-shadow-lg"
 >
 	{#if hoveredPiece}
 		{@const owner = hoveredPiece.gamePlayer.player.minaPublicKey}
 		{@const hoveredUnit = hoveredPiece.playerUnit.unit}
 
-		<HoveredGamePieceTooltipUnitCard {hoveredPiece} />
+		<HoveredGamePieceTooltipUnitCard {hoveredPiece} {selectedPiece} />
 
 		{#if selectedPiece}
-			<div class="border-t border-black">
+			<div class="border-t border-black bg-stone-300 rounded-b-2xl">
 				{#if owner === currentPlayerMinaPubKey}
 					{#if selectedPiece.id === hoveredPiece.id}
-						<div class="text-center">Selected unit</div>
+						<div class="text-center p-1">Selected unit</div>
 					{:else}
-						<div class="text-center">Friendly unit</div>
+						<div class="text-center p-1">Friendly unit</div>
 					{/if}
 				{:else}
 					{@const attackDistance = distanceBetweenPoints(
@@ -46,7 +46,7 @@
 						hoveredPiece.coordinates
 					)}
 					{#if attackDistance > MELEE_ATTACK_RANGE}
-						<div class="text-center">Target out of range</div>
+						<div class="text-center p-1">Target out of range</div>
 					{:else}
 						{@const selectedUnit = selectedPiece.playerUnit.unit}
 						{@const estDamage = estimatedMeleeAttackDamage(selectedUnit, hoveredUnit)}
