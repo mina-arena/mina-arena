@@ -2,24 +2,32 @@
 	import { MinaArenaClient } from '$lib/mina-arena-graphql-client/MinaArenaClient';
 	import { onMount } from 'svelte';
 	import { truncateMinaPublicKey } from '$lib/utils';
+	import { errorString } from '$lib/stores/sandbox/errorsStore';
 
 	export let player: string;
 
 	const minaArenaClient = new MinaArenaClient();
 	let myGames: Game[] = [];
 	let myGamesLoading = true;
+	let error = false;
 
-	onMount(() => {
-		minaArenaClient.getPlayerGames(player, ['COMPLETED']).then((resp) => {
-			myGames = resp;
+	onMount(async () => {
+		try {
+			const myGamesResp = await minaArenaClient.getPlayerGames(player, ['COMPLETED']);
+			myGames = myGamesResp;
 			myGamesLoading = false;
-		});
+			error = false;
+		} catch (err) {
+			$errorString = String(err);
+			myGamesLoading = false;
+			error = true;
+		}
 	});
 </script>
 
 {#if myGamesLoading}
 	<p class="mx-auto w-fit"><i class="fa fa-solid fa-refresh fa-spin" /> Loading...</p>
-{:else if myGames}
+{:else if myGames && !error}
 	<div class="mx-auto mt-[30px] w-fit">
 		<table class="mx-auto border border-stone-500">
 			<tr class="[&>*]:p-2 [&>*]:text-center border-b border-stone-500 bg-stone-300">

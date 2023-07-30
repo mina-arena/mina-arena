@@ -1,5 +1,4 @@
 <script lang="ts">
-	import DraftNewUnits from '$lib/components/sandbox/squad-selection/DraftNewUnits.svelte';
 	import MyUnits from '$lib/components/sandbox/squad-selection/MyUnits.svelte';
 	import MyPastGames from '$lib/components/sandbox/management/MyPastGames.svelte';
 	import { player1 } from '$lib/stores/sandbox/playerStore';

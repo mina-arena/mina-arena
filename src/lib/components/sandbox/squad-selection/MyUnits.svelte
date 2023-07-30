@@ -10,17 +10,20 @@
 
 	let selected = new Set<number>();
 	let loadingPlayerUnits = true;
+	let error = false;
 
 	const minaArenaClient = new MinaArenaClient();
 
-	onMount(() => {
+	onMount(async () => {
 		try {
-			minaArenaClient.getPlayerUnits(player).then((resp) => {
-				$playerUnits[player] = resp;
-				loadingPlayerUnits = false;
-			});
+			const playerUnitsResp = await minaArenaClient.getPlayerUnits(player);
+			$playerUnits[player] = playerUnitsResp;
+			loadingPlayerUnits = false;
+			error = false;
 		} catch (err) {
 			$errorString = String(err);
+			loadingPlayerUnits = false;
+			error = true;
 		}
 	});
 
@@ -44,26 +47,22 @@
 </script>
 
 {#if loadingPlayerUnits}
-	<i class="fa fa-solid fa-refresh fa-spin"></i> Loading...
-{:else}
-	{#if $playerUnits[player] && $playerUnits[player].length > 0}
-		{#if $squads && $squads[player]}
-			{#each $playerUnits[player] as playerUnit}
-				<MyUnitCard
-					{playerUnit}
-					{removeItem}
-					{addItem}
-					selected={!!$squads[player].playerUnits.find((pu) => pu.id === playerUnit.id)}
-				/>
-			{/each}
-		{:else}
-			{#each $playerUnits[player] as playerUnit}
-				<MyUnitCard {playerUnit} viewOnly={true} />
-			{/each}
-		{/if}
+	<p class="mx-auto"><i class="fa fa-solid fa-refresh fa-spin" /> Loading...</p>
+{:else if $playerUnits[player] && $playerUnits[player].length > 0}
+	{#if $squads && $squads[player]}
+		{#each $playerUnits[player] as playerUnit}
+			<MyUnitCard
+				{playerUnit}
+				{removeItem}
+				{addItem}
+				selected={!!$squads[player].playerUnits.find((pu) => pu.id === playerUnit.id)}
+			/>
+		{/each}
 	{:else}
-		<p class="col-span-6 mt-[40px]">
-			No custom units, draft some using the Draft Units tab.
-		</p>
+		{#each $playerUnits[player] as playerUnit}
+			<MyUnitCard {playerUnit} viewOnly={true} />
+		{/each}
 	{/if}
+{:else if !error}
+	<p class="col-span-6 mt-[40px]">No custom units, draft some using the Draft Units tab.</p>
 {/if}
