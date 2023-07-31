@@ -20,7 +20,7 @@
 
 <div
 	id="piece-hover-tooltip"
-	class="hidden fixed max-w-[500px] overflow-hidden p-4 rounded-2xl bg-stone-900 text-stone-700 drop-shadow-lg"
+	class="hidden fixed z-10 max-w-[500px] overflow-hidden p-4 rounded-2xl bg-stone-900 text-stone-700 drop-shadow-lg"
 >
 	{#if hoveredPiece}
 		{@const owner = hoveredPiece.gamePlayer.player.minaPublicKey}
@@ -29,7 +29,7 @@
 		<HoveredGamePieceTooltipUnitCard {hoveredPiece} {selectedPiece} />
 
 		{#if selectedPiece}
-			<div class="border-t border-black bg-stone-300 rounded-b-2xl">
+			<div class="border-t border-black bg-stone-300 rounded-b-lg">
 				{#if owner === currentPlayerMinaPubKey}
 					{#if selectedPiece.id === hoveredPiece.id}
 						<div class="text-center p-1">Selected unit</div>
