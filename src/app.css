@@ -157,7 +157,15 @@
   }
 
   /* Slightly debossed text shadow */
-  .text-shadow {
+  .text-debossed {
     text-shadow: 0 -1px 0 rgba(0,0,0,0.5);
+  }
+
+  .text-embossed {
+    text-shadow: 0 1px 0 rgba(0,0,0,0.5);
+  }
+
+  .text-standoff-shadow {
+    text-shadow: 0 0 40px black;
   }
 }

@@ -77,11 +77,11 @@
 	let currentPlayer = player1;
 </script>
 
-<div class="flex-grow flex flex-col pt-12 bg-stone-700 text-center text-white">
-	<h2 class="text-2xl uppercase">Sandbox mode</h2>
+<div class="flex-grow flex flex-col pt-12 bg-stone-700 bg-arena-landscape-blurred bg-cover bg-fixed text-center text-white">
+	<h2 class="text-2xl uppercase text-standoff-shadow">Sandbox mode</h2>
 	{#if playerTurn <= maxPlayers}
-		<h1 class="font-almendra-bold text-4xl uppercase">Select your squad</h1>
-		<p>Drafting for {truncateMinaPublicKey(currentPlayer)}</p>
+		<h1 class="font-almendra-bold text-4xl uppercase text-standoff-shadow">Select your squad</h1>
+		<p class="text-standoff-shadow">Drafting for {truncateMinaPublicKey(currentPlayer)}</p>
 		<SquadSelection
 			player={currentPlayer}
 			{selectSquad}

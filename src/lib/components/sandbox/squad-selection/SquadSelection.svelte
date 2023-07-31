@@ -37,7 +37,7 @@
 </script>
 
 <!-- Tabs -->
-<div class="flex px-12 font-almendra-bold text-shadow uppercase">
+<div class="flex px-12 font-almendra-bold text-debossed uppercase">
 	<div
 			on:click={() => {
 						pageSelected = 'PLAYER_UNIT';
@@ -46,7 +46,7 @@
 						pageSelected = 'PLAYER_UNIT';
 					}}
 			class={pageSelected === 'PLAYER_UNIT'
-						? 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer bg-stone-400 drop-shadow-md border-t-[1px] border-white/40'
+						? 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer bg-white/25 drop-shadow-md border-t-[1px] border-white/40'
 						: 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer'}
 	>
 		My Units
@@ -59,22 +59,20 @@
 						pageSelected = 'UNIT';
 					}}
 			class={pageSelected === 'UNIT'
-						? 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer bg-stone-400 drop-shadow-md border-t-[1px] border-white/40'
+						? 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer bg-white/25 drop-shadow-md border-t-[1px] border-white/40'
 						: 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer'}
 	>
 		Draft Units
 	</div>
 </div>
 
-<div class="flex-grow grid grid-cols-12 p-12 mx-auto gap-16 bg-stone-400 relative z-10 text-stone-800">
+<div class="flex-grow grid grid-cols-12 p-12 mx-auto gap-16 bg-white/25 backdrop-blur relative z-10 text-stone-800">
 	<div class="col-span-6 lg:col-span-8 2xl:col-span-9">
-		<div class="grid lg:grid-cols-2 2xl:grid-cols-3 gap-16">
 			{#if pageSelected === 'UNIT'}
 					<DraftNewUnits {player} />
 			{:else if pageSelected === 'PLAYER_UNIT'}
 					<MyUnits {player} />
 			{/if}
-		</div>
 	</div>
 	<div class="col-span-6 lg:col-span-4 2xl:col-span-3">
 		<div class="sticky top-16">

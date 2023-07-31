@@ -28,6 +28,8 @@
 	};
 </script>
 
+<div class="grid lg:grid-cols-2 2xl:grid-cols-3 gap-16">
 {#each $units as unit}
 	<DraftUnitCard {unit} {openUnitDraftModal} />
 {/each}
+</div>

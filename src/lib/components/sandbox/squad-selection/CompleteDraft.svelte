@@ -26,7 +26,7 @@
 </script>
 
 <div>
-	<h1 class="font-almendra-bold text-4xl uppercase">Squads</h1>
+	<h1 class="font-almendra-bold text-4xl uppercase text-stand">Squads</h1>
 	<div class="flex flex-col lg:grid lg:grid-cols-2 lg:gap-6mx-auto">
 		<div class="col-span-1 mb-8">
 			<h3 class="font-almendra-bold text-2xl uppercase">Player 1</h3>

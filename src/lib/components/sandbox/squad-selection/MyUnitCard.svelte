@@ -19,7 +19,7 @@
 <div
 	on:click={() => addOrRemoveItem(playerUnit)}
 	on:keypress={() => addOrRemoveItem(playerUnit)}
-	class="relative flex flex-col p-4 rounded-2xl bg-stone-900 text-stone-700 col-span-1 {viewOnly
+	class="relative flex flex-col p-4 rounded-2xl bg-stone-900 text-stone-700 col-span-1 border-t-[1px] border-stone-400 {viewOnly
 		? ''
 		: 'cursor-pointer'} {selected ? 'bg-stone-600 scale-105 drop-shadow-lg' : ''}"
 >
