@@ -32,7 +32,7 @@
 			currentPlayer={game.currentPhase?.gamePlayer.player.minaPublicKey || ''}
 		/>
 
-		<div class="flex-grow flex w-full pr-16">
+		<div class="flex-grow flex w-full pr-16 -mt-3">
 			<div class="w-full flex-grow flex flex-col action-log-scroll">
 				<div class="scroll-top">&nbsp;</div>
 				<ArenaActionLog {game} {playerPublicKeys} playerColors={legendConfig.colors} />
