@@ -352,6 +352,6 @@
 
 <div
 	id="action-log"
-	class="flex-grow w-full h-[30vh] min-h-[200px] bg-[#E5CEA8] font-almendra-regular text-[1rem] mx-auto p-8 overflow-y-auto drop-shadow-lg"
+	class="flex-grow w-full h-[30vh] min-h-[200px] bg-[#E5CEA8] font-almendra-regular mx-auto p-8 overflow-y-auto drop-shadow-lg"
 	style="box-shadow: inset 0 0 20px #472600; word-break: break-word"
 />
