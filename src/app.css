@@ -119,7 +119,7 @@
 .scroll-top {
   position: relative;
   z-index: 1;
-  height: 72px;
+  height: 88px;
   background: url(/images/backgrounds/scroll/scroll-middle.png) 50% 50% / contain repeat-x;
   margin-bottom: -24px;
 }
