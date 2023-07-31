@@ -31,7 +31,7 @@
 		<div class="col-span-1">
 			<h3 class="font-almendra-bold text-2xl uppercase">Player 1</h3>
 			<table
-				class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden"
+				class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden text-stone-800"
 			>
 				<tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-100">
 					<th>Name</th>
@@ -62,7 +62,7 @@
 		<div class="col-span-1">
 			<h3 class="font-almendra-bold text-2xl uppercase">Player 2</h3>
 			<table
-				class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden"
+				class="mx-auto mt-[20px] border-spacing-y-[1px] border-separate rounded-xl overflow-hidden text-stone-800"
 			>
 				<tr class="[&>*]:py-2 [&>*]:px-8 [&>*]:bg-stone-100">
 					<th>Name</th>
@@ -93,6 +93,6 @@
 	</div>
 </div>
 <button
-	class="bg-stone-700 hover:bg-stone-900 text-stone-300 rounded py-2 px-4 mt-16"
+	class="bg-stone-800 hover:bg-stone-900 text-stone-300 rounded py-2 px-4 mt-16 mx-auto"
 	on:click={startGame}>Complete Draft</button
 >

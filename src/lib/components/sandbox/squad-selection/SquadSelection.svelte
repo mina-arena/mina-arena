@@ -36,7 +36,8 @@
 	};
 </script>
 
-<div class="flex">
+<!-- Tabs -->
+<div class="flex px-12 font-almendra-bold text-shadow uppercase">
 	<div
 			on:click={() => {
 						pageSelected = 'PLAYER_UNIT';
@@ -45,8 +46,8 @@
 						pageSelected = 'PLAYER_UNIT';
 					}}
 			class={pageSelected === 'PLAYER_UNIT'
-						? 'border border-slate-600 rounded px-10 py-5 mr-5 cursor-pointer bg-slate-100'
-						: 'border border-slate-300 rounded px-10 py-5 mr-5 cursor-pointer'}
+						? 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer bg-stone-400 drop-shadow-md border-t-[1px] border-white/40'
+						: 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer'}
 	>
 		My Units
 	</div>
@@ -58,14 +59,14 @@
 						pageSelected = 'UNIT';
 					}}
 			class={pageSelected === 'UNIT'
-						? 'border border-slate-600 rounded px-10 py-5 cursor-pointer bg-slate-100'
-						: 'border border-slate-300 rounded px-10 py-5 cursor-pointer'}
+						? 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer bg-stone-400 drop-shadow-md border-t-[1px] border-white/40'
+						: 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer'}
 	>
 		Draft Units
 	</div>
 </div>
 
-<div class="grid grid-cols-12 mx-auto my-8 gap-16">
+<div class="flex-grow grid grid-cols-12 p-12 mx-auto gap-16 bg-stone-400 relative z-10 text-stone-800">
 	<div class="col-span-6 lg:col-span-8 2xl:col-span-9">
 		<div class="grid lg:grid-cols-2 2xl:grid-cols-3 gap-16">
 			{#if pageSelected === 'UNIT'}

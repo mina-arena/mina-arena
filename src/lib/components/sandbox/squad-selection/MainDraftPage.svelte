@@ -77,19 +77,17 @@
 	let currentPlayer = player1;
 </script>
 
-<div class="flex-grow p-12 text-center bg-stone-400">
+<div class="flex-grow flex flex-col pt-12 bg-stone-700 text-center text-white">
 	<h2 class="text-2xl uppercase">Sandbox mode</h2>
-	<div>
-		{#if playerTurn <= maxPlayers}
-			<h1 class="font-almendra-bold text-4xl uppercase">Select your squad</h1>
-			<p>Drafting for {truncateMinaPublicKey(currentPlayer)}</p>
-			<SquadSelection
-				player={currentPlayer}
-				{selectSquad}
-				resetSquad={resetSquadForCurrentPlayer}
-			/>
-		{:else}
-			<CompleteDraft {startGame} />
-		{/if}
-	</div>
+	{#if playerTurn <= maxPlayers}
+		<h1 class="font-almendra-bold text-4xl uppercase">Select your squad</h1>
+		<p>Drafting for {truncateMinaPublicKey(currentPlayer)}</p>
+		<SquadSelection
+			player={currentPlayer}
+			{selectSquad}
+			resetSquad={resetSquadForCurrentPlayer}
+		/>
+	{:else}
+		<CompleteDraft {startGame} />
+	{/if}
 </div>
