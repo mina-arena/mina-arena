@@ -49,7 +49,7 @@
 {#if loadingPlayerUnits}
 	<p class="mx-auto"><i class="fa fa-solid fa-refresh fa-spin" /> Loading...</p>
 {:else if $playerUnits[player] && $playerUnits[player].length > 0}
-	<div class="grid sm:px-16 md:px-0 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-16">
+	<div class="grid sm:px-16 md:px-0 md:grid-cols-2 lg:grid-cols-3 gap-16">
 		{#if $squads && $squads[player]}
 		{#each $playerUnits[player] as playerUnit}
 			<MyUnitCard
