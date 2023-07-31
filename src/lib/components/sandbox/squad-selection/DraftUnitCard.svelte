@@ -21,7 +21,7 @@
 			<span class="absolute text-white">{unit.maxHealth}</span>
 		</div>
 	</div>
-	<div class="font-almendra-bold uppercase bg-stone-300 p-2 mb-2 rounded text-center">
+	<div class="font-almendra-bold uppercase leading-none bg-stone-300 p-2 mb-2 rounded text-center">
 		{unit.name}
 	</div>
 	<div class="bg-stone-300 p-2 rounded flex-grow flex justify-center">

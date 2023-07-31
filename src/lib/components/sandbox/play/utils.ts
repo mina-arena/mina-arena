@@ -7,7 +7,7 @@ const MISSILE_RANGE_CIRCLE_STROKE_COLOR = 'lightcoral';
 const MELEE_RANGE_CIRCLE_STROKE_COLOR = '#6b0000';
 const MELEE_RANGE_CIRCLE_FILL_COLOR = '#ffb0b0';
 
-export const PIECE_RADIUS = 12;
+export const PIECE_RADIUS = 16;
 export const MELEE_ATTACK_RANGE = 50;
 
 export const ARENA_BACKGROUND_IMAGE_PATH = '/images/battlefield_dirt_650x550.png';
@@ -121,7 +121,7 @@ export const drawPiece = (ctx: CanvasRenderingContext2D, piece: DrawnPiece, piec
   if (!iconData) return;
 
   ctx.font = '900 14px "Font Awesome 6 Pro"';
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = 'white';
   ctx.fillText(iconData.unicode, piece.x + iconData.xOffset, piece.y + iconData.yOffset);
 };
 

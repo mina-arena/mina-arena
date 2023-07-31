@@ -104,6 +104,52 @@
   text-shadow: 0 0 20px rgb(0,0,0,1), 0 1px 0 rgb(255,255,255,0.3);
 }
 
+
+
+
+.flag {
+  position: relative;
+  padding-left: 32px;
+  box-shadow: inset -20px -10px 40px rgba(0,0,0,0.3),
+              inset 0 1px 0 rgba(255,255,255,0.2),
+                    0 10px 20px rgba(0, 0, 0, 0.75);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%, 32px 50%);
+}
+
+.scroll-top {
+  position: relative;
+  z-index: 1;
+  height: 88px;
+  background: url(/images/backgrounds/scroll/scroll-middle.png) 50% 50% / contain repeat-x;
+  margin-bottom: -24px;
+}
+
+.scroll-top:before,
+.scroll-top:after {
+  content: '';
+  position: absolute;
+  height: 100%;
+  width: 56px;
+  top: 0;
+  bottom: 0;
+}
+
+.scroll-top:before {
+  left: -44px;
+  background: url(/images/backgrounds/scroll/scroll-left.png) 50% 50% / contain no-repeat;
+}
+
+.scroll-top:after {
+  right: -44px;
+  background: url(/images/backgrounds/scroll/scroll-right.png) 50% 50% / contain no-repeat;
+}
+
+.scroll + div {
+  box-shadow: inset 0 0 10px rgba(0,0,0,1);
+}
+
+
+
 @layer utilities {
   ._input {
     border: 1px solid lightgrey;

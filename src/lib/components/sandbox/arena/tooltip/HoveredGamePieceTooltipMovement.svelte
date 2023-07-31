@@ -15,7 +15,7 @@
 
 <div
 	id="piece-hover-tooltip"
-	class="hidden fixed max-w-[500px] overflow-hidden p-4 rounded-2xl bg-stone-900 text-stone-700 drop-shadow-lg"
+	class="hidden fixed z-10 max-w-[500px] overflow-hidden p-4 rounded-2xl bg-stone-900 text-stone-700 drop-shadow-lg"
 >
 	{#if hoveredPiece}
 		{@const selectedPiece = undefined}

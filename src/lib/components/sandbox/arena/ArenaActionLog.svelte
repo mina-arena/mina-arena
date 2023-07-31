@@ -9,8 +9,8 @@
 	export let playerColors: Array<string>;
 
 	const textColorByPlayerColor: Record<string, string> = {
-		pink: '#FF3030',
-		lightblue: '#5050FF'
+		pink: '#BD2104',
+		lightblue: '#003CB0'
 	};
 
 	const colorByPlayerKey: Record<string, string> = playerPublicKeys.reduce((acc, key) => {
@@ -352,6 +352,6 @@
 
 <div
 	id="action-log"
-	class="flex-grow w-full h-[30vh] min-h-[200px] bg-stone-400 rounded-xl border-b-[1px] border-b-stone-300 mx-auto p-2 overflow-y-auto"
-	style="box-shadow: inset 0 4px 4px rgba(0,0,0,0.25); word-break: break-word"
+	class="flex-grow w-full max-w-[400px] h-[30vh] min-h-[200px] bg-[#E5CEA8] font-almendra-regular mx-auto p-8 overflow-y-auto drop-shadow-lg"
+	style="box-shadow: inset 0 0 20px #472600; word-break: break-word"
 />

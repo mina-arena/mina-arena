@@ -45,9 +45,10 @@
 				<div>Phase: {currentGame.currentPhase?.name}</div>
 				-->
 			{:else if currentGame.status === 'COMPLETED'}
-				<div class="text-center">
-					<h1 class="font-almendra-bold text-4xl my-12 uppercase">Game over!</h1>
-					Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}
+				<div class="absolute z-10 top-0 bottom-0 left-0 right-0 flex flex-col items-center justify-center text-center bg-black/50 text-white">
+					<h1 class="font-almendra-bold text-4xl my-8 uppercase">Game over!</h1>
+					<p>Winner: {currentGame.winningGamePlayer?.player.minaPublicKey}</p>
+					<a href="/enter" class="font-almendra-bold uppercase text-center py-4 px-5 m-2 rounded-lg home-button">New game</a>
 				</div>
 			{/if}
 			<Arena game={currentGame} {rerender} />

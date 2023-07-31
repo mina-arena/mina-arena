@@ -8,16 +8,16 @@
 {#if hoveredPiece}
   {@const hoveredUnit = hoveredPiece.playerUnit.unit}
   {@const unitImagePath = imagePathForUnit(hoveredUnit)}
-  <div class="grid grid-cols-2">
+  <div class="grid grid-cols-2 gap-[1px]">
     <div class="col-span-1">
       {#if unitImagePath}
-        <img class="w-full {selectedPiece ? 'rounded-tl-2xl' : 'rounded-l-2xl'}" alt="Unit image" src={unitImagePath} width="300" height="300" />
+        <img class="w-full {selectedPiece ? 'rounded-tl-lg' : 'rounded-l-lg'} h-full" alt="Unit image" src={unitImagePath} width="300" height="300" />
       {:else}
         No image for unit
       {/if}
     </div>
-    <div class="bg-stone-300 p-2 col-span-1 {selectedPiece ? 'rounded-tr-2xl' : 'rounded-r-2xl'}">
-      <p class="font-almendra-bold uppercase text-center mb-[3px]">
+    <div class="bg-stone-300 p-4 col-span-1 {selectedPiece ? 'rounded-tr-lg' : 'rounded-r-lg'}">
+      <p class="font-almendra-bold uppercase leading-none text-center mb-2">
         {hoveredPiece.playerUnit.name} ({hoveredUnit.name})
       </p>
       <table class="mx-auto">
