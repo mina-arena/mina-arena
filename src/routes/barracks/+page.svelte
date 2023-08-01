@@ -46,7 +46,9 @@
 	{#if pageSelected === 'MY_UNITS'}
 		<div class="flex-grow p-12 sm:px-16 xl:px-24 xl:pb-24 bg-white/25 backdrop-blur">
 			<h1 class="font-almendra-bold text-3xl my-12 text-center uppercase">Your units</h1>
-			<MyUnits {player} />
+			<div class="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-16">
+				<MyUnits {player} />
+			</div>
 		</div>
 	{:else if pageSelected === 'MY_PAST_GAMES'}
 		<div class="flex-grow p-12 sm:px-16 xl:px-24 xl:pb-24 bg-white/25 backdrop-blur">

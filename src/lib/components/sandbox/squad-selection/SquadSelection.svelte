@@ -69,9 +69,13 @@
 <div class="flex-grow grid grid-cols-12 p-12 mx-auto gap-16 bg-white/25 backdrop-blur relative z-10 text-stone-800">
 	<div class="col-span-6 lg:col-span-8 2xl:col-span-9">
 			{#if pageSelected === 'UNIT'}
+				<div class="grid lg:grid-cols-2 2xl:grid-cols-3 gap-16">
 					<DraftNewUnits {player} />
+				</div>
 			{:else if pageSelected === 'PLAYER_UNIT'}
+				<div class="grid lg:grid-cols-2 2xl:grid-cols-3 gap-16">
 					<MyUnits {player} />
+				</div>
 			{/if}
 	</div>
 	<div class="col-span-6 lg:col-span-4 2xl:col-span-3">
