@@ -11,8 +11,8 @@ const IMAGE_PATH_BY_UNIT_NAME: Record<string, string> = {
 
 const DEFAULT_UNIT_IMAGE_PATH = '/images/archer.png';
 
-export const truncateMinaPublicKey = (key: string, front = 10, back = 10) => {
-  return key.slice(0, front) + '...' + key.slice(key.length - back);
+export const truncateMinaPublicKey = (key: string, front = 6, back = 6) => {
+  return key.slice(0, front) + ' … ' + key.slice(key.length - back);
 }
 
 export const imagePathForUnit = (unit: Unit): string => {
