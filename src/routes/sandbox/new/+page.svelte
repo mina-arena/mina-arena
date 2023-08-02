@@ -71,21 +71,19 @@
 				In sandbox mode, we will generate a second keypair to play as your opponent in the game. You
 				will control both sides' pieces, but they are two separate keypairs stored in your browser.
 			</p>
-			<div>
-				<button
-					class="rounded p-2 border border-solid border-neutral hover:bg-secondary"
-					on:click={generateNewKeypair}>Generate me a new Keypair!</button
-				>
-			</div>
+			<button
+					class="bg-stone-700 hover:bg-stone-600 text-stone-300 w-auto rounded py-2 px-4"
+				on:click={generateNewKeypair}>Generate me a new Keypair!</button
+			>
 			<div class="mx-auto">OR</div>
-			<div class="mx-auto flex rounded p-2 hover:bg-secondary [&>*]:mx-2">
+			<div class="mx-auto flex items-center rounded p-2 hover:bg-stone-600 [&>*]:mx-2">
 				<div>
 					<label>Input a Mina private key:</label>
-					<input class="_input" type="text" bind:value={newPrivateKey} />
+					<input class="_input p-2 text-black rounded-md" type="text" bind:value={newPrivateKey} />
 				</div>
 				<div>
 					<button
-						class="rounded p-2 border border-solid border-neutral hover:bg-secondary"
+						class="rounded p-2 border border-solid border-neutral hover:bg-stone-500"
 						on:click={setPrivateKey}>Set Private Key</button
 					>
 				</div>

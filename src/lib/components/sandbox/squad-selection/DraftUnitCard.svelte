@@ -12,7 +12,7 @@
 	on:keypress={() => {
 		openUnitDraftModal(unit);
 	}}
-	class="relative flex flex-col p-4 rounded-2xl bg-stone-900 text-stone-700 col-span-1 cursor-pointer border-t-[1px] border-stone-300"
+	class="relative flex flex-col p-4 rounded-2xl bg-stone-900 text-stone-700 col-span-1 cursor-pointer border-t-[1px] border-stone-400"
 >
 	<div class="relative w-full mb-2">
 		<img class="rounded" alt={unit.name} src={imagePathForUnit(unit)} />

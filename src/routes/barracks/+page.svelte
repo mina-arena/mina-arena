@@ -10,10 +10,12 @@
 	let pageSelected: PageSelected = 'MY_UNITS';
 </script>
 
-<div class="p-12 sm:px-16 xl:px-24 xl:pb-24 flex-grow bg-arena-landscape-blurred bg-cover">
-	<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase">Barracks</h1>
-	<div class="flex mx-auto w-fit">
-		<div
+<div class="flex-grow flex flex-col pt-12 bg-stone-700 bg-arena-landscape-blurred bg-cover bg-fixed text-center text-white">
+	<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase text-standoff-shadow">Barracks</h1>
+
+	<!-- Tabs -->
+	<div class="flex px-12 font-almendra-bold text-debossed uppercase">
+	<div
 			on:click={() => {
 				pageSelected = 'MY_UNITS';
 			}}
@@ -21,8 +23,8 @@
 				pageSelected = 'MY_UNITS';
 			}}
 			class={pageSelected === 'MY_UNITS'
-				? 'border border-stone-600 rounded px-10 py-5 mr-5 cursor-pointer bg-stone-100'
-				: 'border border-stone-300 rounded px-10 py-5 mr-5 cursor-pointer bg-stone-500 hover:bg-stone-300'}
+				? 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer bg-white/25 drop-shadow-md border-t-[1px] border-white/40'
+				: 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer'}
 		>
 			My Units
 		</div>
@@ -34,21 +36,23 @@
 				pageSelected = 'MY_PAST_GAMES';
 			}}
 			class={pageSelected === 'MY_PAST_GAMES'
-				? 'border border-stone-600 rounded px-10 py-5 cursor-pointer bg-stone-100'
-				: 'border border-stone-300 rounded px-10 py-5 cursor-pointer bg-stone-500 hover:bg-stone-300'}
+				? 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer bg-white/25 drop-shadow-md border-t-[1px] border-white/40'
+				: 'rounded-t-xl px-10 py-5 mr-5 cursor-pointer'}
 		>
 			Past Games
 		</div>
 	</div>
 
 	{#if pageSelected === 'MY_UNITS'}
-		<div class="p-12 sm:px-16 xl:px-24 xl:pb-24">
-			<h1 class="font-almendra-bold text-4xl my-12 text-center uppercase">Your units</h1>
+		<div class="flex-grow p-12 sm:px-16 xl:px-24 xl:pb-24 bg-white/25 backdrop-blur">
+			<h1 class="font-almendra-bold text-3xl my-12 text-center uppercase">Your units</h1>
 			<div class="grid sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-16">
 				<MyUnits {player} />
 			</div>
 		</div>
 	{:else if pageSelected === 'MY_PAST_GAMES'}
-		<MyPastGames {player} />
+		<div class="flex-grow p-12 sm:px-16 xl:px-24 xl:pb-24 bg-white/25 backdrop-blur">
+			<MyPastGames {player} />
+		</div>
 	{/if}
 </div>
