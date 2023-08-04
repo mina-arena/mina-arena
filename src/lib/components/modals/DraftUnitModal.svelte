@@ -23,11 +23,26 @@
 
 {#if isOpen}
 	<div class="modal">
-		<form on:submit|preventDefault={draft} class="w-[500px] h-[400px] rounded-xl p-16 bg-stone-300 flex flex-col text-center justify-center pointer-events-auto">
+		<form
+			on:submit|preventDefault={draft}
+			class="w-[500px] h-[400px] rounded-xl p-16 bg-stone-300 flex flex-col text-center justify-center pointer-events-auto"
+		>
 			<h2 class="font-almendra-bold text-3xl mb-8">Draft new {unit.name}</h2>
 
-			<input class="_input p-2 mb-4 rounded-md" autofocus type="text" placeholder="Name your {unit.name}" bind:value={drafteeName} />
-			<button class="bg-stone-700 text-stone-300 w-auto rounded p-2">Draft Unit</button>
+			<input
+				class="_input p-2 mb-4 rounded-md"
+				autofocus
+				type="text"
+				placeholder="Name your {unit.name} (required)"
+				bind:value={drafteeName}
+			/>
+			{#if drafteeName.length > 0}
+				<button class="bg-stone-700 text-stone-300 w-auto rounded p-2 cursor-pointer"
+					>Draft Unit</button
+				>
+			{:else}
+				<div class="bg-stone-400 text-stone-100 w-auto rounded p-2">Draft Unit</div>
+			{/if}
 		</form>
 	</div>
 {/if}

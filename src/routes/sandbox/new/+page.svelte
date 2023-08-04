@@ -72,7 +72,7 @@
 				will control both sides' pieces, but they are two separate keypairs stored in your browser.
 			</p>
 			<button
-					class="bg-stone-700 hover:bg-stone-600 text-stone-300 w-auto rounded py-2 px-4"
+				class="bg-stone-700 hover:bg-stone-600 text-stone-300 w-auto rounded py-2 px-4"
 				on:click={generateNewKeypair}>Generate me a new Keypair!</button
 			>
 			<div class="mx-auto">OR</div>
